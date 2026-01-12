@@ -1,0 +1,11 @@
+.main-container {
+    background-color: #1a1a1a;
+    min-height: calc(100vh - 56px);
+    padding: 0;
+}
+
+.content-wrapper {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    min-height: calc(100vh - 56px);
+}
