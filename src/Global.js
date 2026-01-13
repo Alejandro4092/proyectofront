@@ -1,4 +1,4 @@
 var Global={
-    apiFutbol:"https://apideportestajamar.azurewebsites.net/"
+    apiDeportes:"https://apideportestajamar.azurewebsites.net/"
 }
 export default Global

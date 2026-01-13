@@ -4,6 +4,8 @@ import NavbarComponent from './components/NavbarComponent'
 import Home from './components/Home'
 import './css/Router.css'
 import PerfilComponent from './components/PerfilComponent'
+import EventosComponent from './components/EventosComponent'
+import CrearEventoWrapper from './components/CrearEventoComponent'
 
 export class Router extends Component {
     render() {
@@ -14,6 +16,8 @@ export class Router extends Component {
                 <Routes>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/perfil' element={<PerfilComponent/>}/>
+                    <Route path='/eventos' element={<EventosComponent/>}/>
+                    <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
