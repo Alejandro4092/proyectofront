@@ -1,7 +1,7 @@
 .eventos-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    background: #000000;
 }
 
 .eventos-header {
@@ -10,12 +10,12 @@
     align-items: center;
     margin-bottom: 40px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e0d4f7;
+    border-bottom: 2px solid #b8a4e8;
 }
 
 .eventos-header h1 {
     font-size: 2.5rem;
-    color: #2d1b69;
+    color: #ffffff;
     font-weight: bold;
     margin: 0;
 }
@@ -159,7 +159,7 @@
     grid-column: 1 / -1;
     text-align: center;
     padding: 60px 20px;
-    color: #999;
+    color: #ffffff;
 }
 
 .no-eventos p {

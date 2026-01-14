@@ -1,7 +1,7 @@
 .crear-evento-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    background: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
