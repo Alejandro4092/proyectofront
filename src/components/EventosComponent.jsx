@@ -12,7 +12,8 @@ export class EventosComponent extends Component {
       eventos: [],
       eventosCursoEscolar: [],
       eventoById: null,
-      loading: false
+      loading: false,
+      eventoAEliminar: null
     };
   }
 
@@ -30,12 +31,21 @@ export class EventosComponent extends Component {
     });
   }
 
-  // DELETE: Elimina un evento
+  // DELETE: Elimina un evento con confirmación
   deleteEvento = (id) => {
+    this.setState({ eventoAEliminar: id });
+  }
+
+  confirmarEliminar = (id) => {
     let request = "api/Eventos/" + id;
     axios.delete(this.url + request).then(response => {
+      this.setState({ eventoAEliminar: null });
       this.loadEventosCursoEscolar();
     });
+  }
+
+  cancelarEliminar = () => {
+    this.setState({ eventoAEliminar: null });
   }
 
   formatearFecha = (fecha) => {
@@ -44,7 +54,7 @@ export class EventosComponent extends Component {
   }
 
   render() {
-    const { eventosCursoEscolar } = this.state;
+    const { eventosCursoEscolar, eventoAEliminar } = this.state;
 
     return (
       <div className="eventos-container">
@@ -69,7 +79,13 @@ export class EventosComponent extends Component {
                   </div>              
                 </div>
                 <div className="evento-card-footer">
-                  <button className="btn-editar">Ver Detalles</button>
+                  <Link to={`/editar-evento/${evento.idEvento}`} className="btn-editar">Editar</Link>
+                  <button 
+                    className="btn-eliminar"
+                    onClick={() => this.deleteEvento(evento.idEvento)}
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </div>
             ))
@@ -79,6 +95,29 @@ export class EventosComponent extends Component {
             </div>
           )}
         </div>
+
+        {eventoAEliminar && (
+          <div className="modal-overlay">
+            <div className="modal-contenido">
+              <h2>¿Eliminar evento?</h2>
+              <p>¿Estás seguro de que deseas eliminar este evento?</p>
+              <div className="modal-acciones">
+                <button 
+                  className="btn-confirmar-eliminar"
+                  onClick={() => this.confirmarEliminar(eventoAEliminar)}
+                >
+                  Eliminar
+                </button>
+                <button 
+                  className="btn-cancelar-modal"
+                  onClick={this.cancelarEliminar}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }

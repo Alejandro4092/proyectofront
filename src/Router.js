@@ -6,9 +6,15 @@ import './css/Router.css'
 import PerfilComponent from './components/PerfilComponent'
 import EventosComponent from './components/EventosComponent'
 import CrearEventoWrapper from './components/CrearEventoComponent'
+import { EditarEventoWrapper } from './components/EditarEventoComponent'
 
-export class Router extends Component {
+export default class Router extends Component {
     render() {
+        function EditarEvento() {
+            let params = useParams();
+            return <EditarEventoWrapper idEvento={params.id} />;
+        }
+
         return (
         <BrowserRouter>
             <NavbarComponent/>
@@ -18,11 +24,10 @@ export class Router extends Component {
                     <Route path='/perfil' element={<PerfilComponent/>}/>
                     <Route path='/eventos' element={<EventosComponent/>}/>
                     <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
+                    <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
         )
     }
 }
-
-export default Router
