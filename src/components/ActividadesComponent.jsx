@@ -9,6 +9,9 @@ export class ActividadesComponent extends Component {
     url = Global.apiDeportes;
     state = {
         actividades: [],
+        mostrarModal: false,
+        actividadSeleccionada: null,
+        esCapitan: false,
     };
     loadActividades = () => {
     let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
@@ -21,6 +24,28 @@ export class ActividadesComponent extends Component {
     };
     componentDidMount = () => {
         this.loadActividades();
+    };
+
+    abrirModal = (actividad) => {
+        this.setState({
+            mostrarModal: true,
+            actividadSeleccionada: actividad,
+        });
+    };
+
+    cerrarModal = () => {
+        this.setState({
+            mostrarModal: false,
+            actividadSeleccionada: null,
+            esCapitan: false,
+        });
+    };
+
+    postInscripcion= (e) => {
+        e.preventDefault();
+        console.log('Inscripción enviada para:', this.state.actividadSeleccionada);
+        console.log('Es capitán:', this.state.esCapitan);
+        this.cerrarModal();
     };
     render() {
     return (
@@ -44,13 +69,51 @@ export class ActividadesComponent extends Component {
                             </p>
                             <div className="actividad-tags">
                                 <span className="chip chip-primary">Posición: {actividad.posicion}</span>
-                                <button className="btn-inscribirse" onClick={(e) => e.preventDefault()}>Inscribirse</button>
+                                <button 
+                                    className="btn-inscribirse" 
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        this.abrirModal(actividad);
+                                    }}
+                                >
+                                    Inscribirse
+                                </button>
                             </div>
                         </article>
                     </NavLink>
                 ))}
             </div>
-        </div>
+            {this.state.mostrarModal && (
+                <div className="modal-overlay" onClick={this.cerrarModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={this.cerrarModal}>&times;</button>
+                        <h2>Inscribirse en {this.state.actividadSeleccionada?.nombreActividad}</h2>
+                        
+                        <form onSubmit={this.postInscripcion}>
+                            <div className="form-group">
+                                <label className="custom-switch">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={this.state.esCapitan}
+                                        onChange={(e) => this.setState({ esCapitan: e.target.checked })}
+                                    />
+                                    <span className="slider"></span>
+                                    <span className="label-text">¿Quieres ser capitán?</span>
+                                </label>
+                            </div>
+                            
+                            <div className="modal-actions">
+                                <button type="button" className="btn-cancel" onClick={this.cerrarModal}>
+                                    Cancelar
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    Confirmar inscripción
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}        </div>
         )
     }
 }
