@@ -6,7 +6,7 @@ import '../css/Actividades.css'
 
 
 export class ActividadesComponent extends Component {
-    url = Global.apiFutbol;
+    url = Global.apiDeportes;
     state = {
         actividades: [],
     };

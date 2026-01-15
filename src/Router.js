@@ -39,7 +39,6 @@ export default class Router extends Component {
                     <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
                     <Route path='/equipos' element={<ListaEquiposComponent/>}/>
                     <Route path='/equipo/:idEquipo/:idEventoActividad' element={<EquipoComponentElement/>}/>
-
                     <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
                 </Routes>
             </div>
