@@ -1,0 +1,73 @@
+.equipos-container {
+    padding: 30px;
+    color: #ffffff;
+}
+
+.equipos-container h1 {
+    color: #b8a4e8;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.equipos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+    justify-content: center;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.equipo-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+}
+
+.equipo-link:hover {
+    transform: translateY(-5px);
+}
+
+.cardEquipo {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-align: center;
+}
+
+.cardEquipo:hover {
+    box-shadow: 0 8px 15px rgba(184, 164, 232, 0.4);
+    border-color: #b8a4e8;
+}
+
+.cardEquipo h1 {
+    color: #e0d4f7;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.cardEquipo h2 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.no-equipos {
+    text-align: center;
+    color: #b8a4e8;
+    font-size: 1.5rem;
+    margin-top: 50px;
+    padding: 40px;
+    background-color: rgba(45, 27, 105, 0.2);
+    border-radius: 10px;
+}

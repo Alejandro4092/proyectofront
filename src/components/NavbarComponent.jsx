@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import '../css/NavbarComponent.css'
-import tajamarLogo from '../assets/images/tajamar.jpg'
+import tajamarLogo from '../assets/images/logo-tajamar-blanco-01.png'
 
 
 export class NavbarComponent extends Component {

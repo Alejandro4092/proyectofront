@@ -7,6 +7,8 @@ import PerfilComponent from './components/PerfilComponent'
 import EventosComponent from './components/EventosComponent'
 import CrearEventoWrapper from './components/CrearEventoComponent'
 import { EditarEventoWrapper } from './components/EditarEventoComponent'
+import ListaEquiposComponent from './components/ListaEquiposComponent'
+import { EquipoComponent } from './components/EquipoComponent'
 
 export default class Router extends Component {
     render() {
@@ -15,6 +17,11 @@ export default class Router extends Component {
             return <EditarEventoWrapper idEvento={params.id} />;
         }
 
+        function EquipoComponentElement(){
+            const {idEquipo} = useParams()
+            const {idEventoActividad} = useParams()
+            return <EquipoComponent idEquipo={idEquipo} idEventoActividad={idEventoActividad} />
+        }
         return (
         <BrowserRouter>
             <NavbarComponent/>
@@ -25,6 +32,9 @@ export default class Router extends Component {
                     <Route path='/eventos' element={<EventosComponent/>}/>
                     <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
                     <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
+                    <Route path='/equipos' element={<ListaEquiposComponent/>}/>
+                    <Route path='/equipo/:idEquipo/:idEventoActividad' element={<EquipoComponentElement/>}/>
+
                 </Routes>
             </div>
         </BrowserRouter>

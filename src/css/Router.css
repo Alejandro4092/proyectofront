@@ -2,6 +2,7 @@
     background-color: #1a1a1a;
     min-height: calc(100vh - 56px);
     padding: 0;
+    color:#ffffff;
 }
 
 .content-wrapper {
