@@ -68,7 +68,12 @@ export class EventosComponent extends Component {
         <div className="eventos-grid">
           {eventosCursoEscolar && eventosCursoEscolar.length > 0 ? (
             eventosCursoEscolar.map((evento) => (
-              <div key={evento.idEvento} className="evento-card">
+              <Link 
+                to={`/actividades/${evento.idEvento}`} 
+                key={evento.idEvento} 
+                className="evento-card"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
                 <div className="evento-card-header">
                   <h3>Evento #{evento.idEvento}</h3>                 
                 </div>
@@ -79,15 +84,19 @@ export class EventosComponent extends Component {
                   </div>              
                 </div>
                 <div className="evento-card-footer">
-                  <Link to={`/editar-evento/${evento.idEvento}`} className="btn-editar">Editar</Link>
+                  <Link to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</Link>
                   <button 
                     className="btn-eliminar"
-                    onClick={() => this.deleteEvento(evento.idEvento)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      this.deleteEvento(evento.idEvento);
+                    }}
                   >
                     Eliminar
                   </button>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="no-eventos">

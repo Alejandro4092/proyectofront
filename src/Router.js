@@ -27,6 +27,11 @@ export default class Router extends Component {
             let { idEvento } = useParams();
             return <ActividadesComponent idEvento={idEvento} />;
         }
+        function ListaEquiposElement() {
+            let { idEvento } = useParams();
+            let { idActividad } = useParams();
+            return <ListaEquiposComponent idEvento={idEvento} idActividad={idActividad} />;
+        }
         return (
         <BrowserRouter>
             <NavbarComponent/>
@@ -38,7 +43,8 @@ export default class Router extends Component {
                     <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
                     <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
                     <Route path='/equipos' element={<ListaEquiposComponent/>}/>
-                    <Route path='/equipo/:idEquipo/:idEventoActividad' element={<EquipoComponentElement/>}/>
+                    <Route path='/equipos/:idEvento/:idActividad/' element={<ListaEquiposElement/>}/>
+                    <Route path='/equipo/:idEquipo' element={<EquipoComponentElement/>}/>
                     <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
                 </Routes>
             </div>

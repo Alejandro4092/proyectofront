@@ -31,17 +31,23 @@ export class ActividadesComponent extends Component {
 
             <div className="actividades-grid">
                 {this.state.actividades.map((actividad) => (
-                    <article className="actividad-card" key={actividad.idEventoActividad}>
-                        <div className="actividad-title">{actividad.nombreActividad}</div>
-                        <div className="actividad-fecha">{actividad.fechaEvento}</div>
-                        <p className="actividad-desc">
-                            Mínimo de jugadores: {actividad.minimoJugadores}
-                        </p>
-                        <div className="actividad-tags">
-                            <span className="chip chip-primary">Posición: {actividad.posicion}</span>
-                            <button className="btn-inscribirse">Inscribirse</button>
-                        </div>
-                    </article>
+                    <NavLink 
+                        to={`/equipos/${actividad.idEvento}/${actividad.idActividad}`}
+                        key={actividad.idEventoActividad}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                        <article className="actividad-card">
+                            <div className="actividad-title">{actividad.nombreActividad}</div>
+                            <div className="actividad-fecha">{actividad.fechaEvento}</div>
+                            <p className="actividad-desc">
+                                Mínimo de jugadores: {actividad.minimoJugadores}
+                            </p>
+                            <div className="actividad-tags">
+                                <span className="chip chip-primary">Posición: {actividad.posicion}</span>
+                                <button className="btn-inscribirse" onClick={(e) => e.preventDefault()}>Inscribirse</button>
+                            </div>
+                        </article>
+                    </NavLink>
                 ))}
             </div>
         </div>

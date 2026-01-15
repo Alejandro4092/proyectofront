@@ -51,8 +51,8 @@ export class ListaEquiposComponent extends Component {
     }
 
     loadEquipos = () => {
-        let idActividad = 1;
-        let idEvento = 1;
+        let idActividad = this.props.idActividad;
+        let idEvento = this.props.idEvento;
         let request = "api/Equipos/EquiposActividadEvento/"+idActividad+"/"+idEvento
         axios.get(this.url + request).then(res => {
             this.setState({

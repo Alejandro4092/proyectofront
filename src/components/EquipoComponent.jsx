@@ -46,7 +46,7 @@ export class EquipoComponent extends Component {
 
     loadEquipo = () => {
         let idEquipo = this.props.idEquipo;
-        let idEventoActividad = this.props.idEventoActividad;
+        //let idEventoActividad = this.props.idEventoActividad;
         let request = "api/Equipos/" + idEquipo
         axios.get(this.url + request).then(res => {
             let color = this.getColorName(res.data.idColor)
