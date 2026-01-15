@@ -16,10 +16,22 @@ export class CrearEventoComponent extends Component {
 
   // POST: Crea un nuevo evento
   createEvento = (fecha) => {
-    // Convertir fecha a formato ISO
-    const fechaFormato = new Date(fecha).toISOString();
+    // El datetime-local devuelve formato "YYYY-MM-DDTHH:mm"
+    const fechaConSegundos = fecha + ':00';
+    const fechaLocal = new Date(fechaConSegundos);
+    const fechaFormato = fechaLocal.toLocaleString('es-ES', { 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit', 
+      hour: '2-digit', 
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false 
+    }).replace(/(\d+)\/(\d+)\/(\d+),?\s+(\d+):(\d+):(\d+)/, '$3-$2-$1 $4:$5:$6');
+    
     let request = "api/Eventos/create/" + encodeURIComponent(fechaFormato) + "?datofecha=" + encodeURIComponent(fechaFormato);
     axios.post(this.url + request).then(response => {
+      console.log(response.data);
       this.setState({
         mensaje: 'Evento creado exitosamente'
       });
