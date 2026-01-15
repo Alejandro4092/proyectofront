@@ -8,6 +8,7 @@ export class EquipoComponent extends Component {
     state = {
         equipoCompleto: false,
         eresMiembro: false,
+        eresCapitan: true,
         equipo: {},
         equipoPrueba: {
             "idEquipo": 1,
@@ -49,21 +50,25 @@ export class EquipoComponent extends Component {
         //let idEventoActividad = this.props.idEventoActividad;
         let request = "api/Equipos/" + idEquipo
         axios.get(this.url + request).then(res => {
-            let color = this.getColorName(res.data.idColor)
-            // let curso = this.getNombreCurso
-            let jugadoresEquipo = this.findJugadoresEquipo(res.data.idEquipo);
-
-            this.setState({
-                equipo: res.data,
-                colorName: color,
-                jugadores: jugadoresEquipo
+            // Esperar a que getColorName termine antes de hacer setState
+            this.getColorName(res.data.idColor).then(color => {
+                // let curso = this.getNombreCurso
+                this.findJugadoresEquipo(res.data.idEquipo).then(jugadoresEquipo => {
+                    console.log(color)
+                    this.setState({
+                        equipo: res.data,
+                        colorName: color,
+                        jugadores: jugadoresEquipo
+                    })
+                })
             })
         })
     }
 
     getColorName = (idColor) => {
         let request = "api/Colores/" + idColor
-        axios.get(this.url + request).then(res => {
+        // Retornar la promesa para poder usar .then() en loadEquipo
+        return axios.get(this.url + request).then(res => {
             let colorName = res.data.nombreColor
             console.log("color", colorName)
             return colorName;
@@ -71,8 +76,8 @@ export class EquipoComponent extends Component {
     }
 
     findJugadoresEquipo = (idEquipo) => {
-        let request = "api/MiembrosEquipos/" + idEquipo
-        axios.get(this.url + request).then(res => {
+        let request = "api/Equipos/UsuariosEquipo/" + idEquipo
+        return axios.get(this.url + request).then(res => {
             let players = res.data
             return players;
         })
@@ -90,7 +95,7 @@ export class EquipoComponent extends Component {
         return (
             <div className='equipo-detail-container'>
                 <div className='equipo-header'>
-                    <h1>{this.state.equipoPrueba.nombreEquipo}</h1>
+                    <h1>{this.state.equipo.nombreEquipo}</h1>
                 </div>
                 
                 <div className='equipo-actions'>
@@ -106,10 +111,11 @@ export class EquipoComponent extends Component {
                 <div className='equipo-info'>
                     <div className='equipo-stats'>
                         <div className='stat-item'>
-                            <h2>Color: <span className='color-badge'>{this.state.colorNamePrueba}</span></h2>
+                            <h2>Color: <span className='color-badge'>{this.state.colorName}</span></h2>
                         </div>
                         <div className='stat-item'>
-                            <h2>Mínimo de Jugadores: {this.state.equipoPrueba.minimoJugadores}</h2>
+                            <h2 style={{color: "#43da7d"}}>Mínimo de Jugadores: {this.state.equipo.minimoJugadores}</h2>
+                            <h2>Jugadores actuales: {this.state.jugadores.length}</h2>
                         </div>
                     </div>
                 </div>
@@ -118,11 +124,17 @@ export class EquipoComponent extends Component {
                     <h1>Jugadores</h1>
                     <div className='jugadores-grid'>
                         {
-                            this.state.jugadoresPrueba.map((jugador, index) => {
+                            this.state.jugadores.map((jugador, index) => {
                                 return(
                                     <div key={index} className='cardJugador'>
-                                        <h1>ID Equipo: {jugador.idEquipo}</h1>
-                                        <h1>ID Usuario: {jugador.idUsuario}</h1>
+                                        <h1>{jugador.usuario}</h1>
+                                        <img src={jugador.imagen} alt={jugador.usuario} />
+                                        <h1 style={{color: "#71d5f3"}}>Curso: {jugador.curso}</h1>
+                                        {
+                                            this.state.eresCapitan &&
+                                            <button className='btn-expulsar'>Expulsar jugador</button>
+                                        }
+                                        
                                     </div>
                                 )
                             })

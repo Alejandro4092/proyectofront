@@ -73,7 +73,7 @@ export class ListaEquiposComponent extends Component {
                             return(
                                 <NavLink 
                                     key={index}
-                                    to={"/equipo/" + equipo.idEquipo + "/" + equipo.idEventoActividad}
+                                    to={"/equipo/" + equipo.idEquipo}
                                     className='equipo-link'
                                 >
                                     <div className='cardEquipo'>

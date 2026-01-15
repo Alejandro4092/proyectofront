@@ -21,7 +21,7 @@ export default class Router extends Component {
         function EquipoComponentElement(){
             const {idEquipo} = useParams()
             const {idEventoActividad} = useParams()
-            return <EquipoComponent idEquipo={idEquipo} idEventoActividad={idEventoActividad} />
+            return <EquipoComponent idEquipo={idEquipo} />
         }
         function ActividadesElement() {
             let { idEvento } = useParams();

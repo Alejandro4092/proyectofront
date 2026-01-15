@@ -1,20 +1,21 @@
 .equipo-detail-container {
-    padding: 30px;
-    color: #ffffff;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 30px 40px;
+    min-height: calc(100vh - 100px);
+    background: #000000;
 }
 
 .equipo-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #b8a4e8;
 }
 
 .equipo-header h1 {
-    color: #b8a4e8;
-    font-size: 3rem;
+    color: #ffffff;
+    font-size: 2.5rem;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
 .equipo-actions {
@@ -77,10 +78,11 @@
 }
 
 .equipo-info {
-    background: linear-gradient(135deg, rgba(45, 27, 105, 0.4) 0%, rgba(26, 77, 122, 0.4) 100%);
+    background: linear-gradient(135deg, rgba(45, 27, 105, 0.2) 0%, rgba(26, 77, 122, 0.2) 100%);
     border-radius: 12px;
     padding: 30px;
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+    max-width: 1200px;
     border: 2px solid rgba(184, 164, 232, 0.3);
 }
 
@@ -91,48 +93,69 @@
 }
 
 .jugadores-section {
-    margin-top: 30px;
+    margin-top: 40px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .jugadores-section > h1 {
-    color: #b8a4e8;
+    color: #ffffff;
     font-size: 2rem;
     margin-bottom: 25px;
     text-align: center;
+    font-weight: bold;
 }
 
 .jugadores-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
     margin-top: 20px;
-    justify-content: center;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .cardJugador {
-    flex: 0 0 250px;
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
-    border-radius: 10px;
+    background: linear-gradient(135deg, #5552d8 0%, #4a2b8a 100%);
+    border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     border: 2px solid transparent;
+    transition: all 0.3s ease;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 280px;
 }
 
 .cardJugador:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(184, 164, 232, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(107, 60, 201, 0.4);
     border-color: #b8a4e8;
 }
 
 .cardJugador h1 {
-    color: #e0d4f7;
+    color: #ffffff;
     font-size: 1.2rem;
-    margin: 10px 0;
+    margin: 0;
+    font-weight: 600;
+    min-height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardJugador img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #757575;
+    flex-shrink: 0;
 }
 
 .equipo-stats {
@@ -167,4 +190,31 @@
     margin-left: 10px;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+.btn-expulsar {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: #ffffff;
+    border: 2px solid #ef4444;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-top: auto;
+    width: 100%;
+}
+
+.btn-expulsar:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 38, 38, 0.4);
+    border-color: #fca5a5;
+}
+
+.btn-expulsar:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
