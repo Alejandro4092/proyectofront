@@ -67,9 +67,9 @@ export class ListaEquiposComponent extends Component {
             <div className='equipos-container'>
                 <h1>Equipos</h1>
                 <div className='equipos-grid'>
-                    {console.log(this.state.equiposPrueba)}
+                    {console.log(this.state.equipos)}
                     {
-                        this.state.equiposPrueba.map((equipo, index) => {
+                        this.state.equipos.map((equipo, index) => {
                             return(
                                 <NavLink 
                                     key={index}
