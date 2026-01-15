@@ -10,6 +10,7 @@ import { EditarEventoWrapper } from './components/EditarEventoComponent'
 import ListaEquiposComponent from './components/ListaEquiposComponent'
 import { EquipoComponent } from './components/EquipoComponent'
 import ActividadesComponent from './components/ActividadesComponent'
+import LoginComponent from './components/LoginComponent'
 
 export default class Router extends Component {
     render() {
@@ -38,6 +39,7 @@ export default class Router extends Component {
             <div className="main-container">
                 <Routes>
                     <Route path='/' element={<Home/>}/>
+                    <Route path='/login' element={<LoginComponent/>}/>
                     <Route path='/perfil' element={<PerfilComponent/>}/>
                     <Route path='/eventos' element={<EventosComponent/>}/>
                     <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>

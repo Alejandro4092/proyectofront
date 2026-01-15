@@ -13,10 +13,10 @@
 
 .equipos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
     margin-top: 20px;
-    justify-content: center;
+    justify-items: center;
     max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
@@ -26,6 +26,8 @@
     text-decoration: none;
     color: inherit;
     transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 350px;
 }
 
 .equipo-link:hover {
@@ -40,6 +42,7 @@
     transition: all 0.3s ease;
     border: 2px solid transparent;
     text-align: center;
+    width: 100%;
 }
 
 .cardEquipo:hover {

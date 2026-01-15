@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react'
 import Global from '../Global';
 import '../css/EquipoComponent.css';
+import Swal from 'sweetalert2';
 
 export class EquipoComponent extends Component {
     url = Global.apiDeportes
@@ -79,6 +80,7 @@ export class EquipoComponent extends Component {
         let request = "api/Equipos/UsuariosEquipo/" + idEquipo
         return axios.get(this.url + request).then(res => {
             let players = res.data
+            console.log("jugadores", players)
             return players;
         })
     }
@@ -89,6 +91,40 @@ export class EquipoComponent extends Component {
 
     entrarAlEquipo = () => {
 
+    }
+
+    expulsarJugador = (idMiembroEquipo) => {
+        //solo capitan
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Deseas expulsar a este jugador del equipo?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, expulsar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let request = "api/MiembroEquipos/" + idMiembroEquipo
+                axios.delete(this.url + request).then(res => {
+                    console.log("borrado", res.data)
+                    Swal.fire(
+                        '¡Expulsado!',
+                        'El jugador ha sido expulsado del equipo.',
+                        'success'
+                    );
+                    this.loadEquipo();
+                }).catch(error => {
+                    console.error("Error al expulsar jugador:", error);
+                    Swal.fire(
+                        'Error',
+                        'No se pudo expulsar al jugador del equipo.',
+                        'error'
+                    );
+                });
+            }
+        });
     }
 
     render() {
@@ -128,11 +164,11 @@ export class EquipoComponent extends Component {
                                 return(
                                     <div key={index} className='cardJugador'>
                                         <h1>{jugador.usuario}</h1>
-                                        <img src={jugador.imagen} alt={jugador.usuario} />
+                                        <img src={jugador.imagen || "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"} alt={jugador.usuario} />
                                         <h1 style={{color: "#71d5f3"}}>Curso: {jugador.curso}</h1>
                                         {
                                             this.state.eresCapitan &&
-                                            <button className='btn-expulsar'>Expulsar jugador</button>
+                                            <button className='btn-expulsar' onClick={() => this.expulsarJugador(jugador.idMiembroEquipo) }>Expulsar jugador</button>
                                         }
                                         
                                     </div>

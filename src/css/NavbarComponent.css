@@ -63,6 +63,27 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Login Button */
+.login-button {
+    margin-right: 100px;
+}
+
+.login-button a {
+    color: #ffffff !important;
+    font-weight: 600;
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.login-button a:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
 .user-profile {
     display: flex;
     align-items: center;
@@ -103,9 +124,85 @@
     font-size: 1rem;
 }
 
+.user-profile-container {
+    position: relative;
+}
+
+.dropdown-arrow {
+    color: #ffffff;
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+    margin-left: 5px;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+    overflow: hidden;
+    z-index: 1000;
+    animation: dropdownFadeIn 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    padding: 12px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
+.dropdown-item span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0;
+}
+
 @media (max-width: 991px) {
     .user-profile {
         margin: 10px 0;
         justify-content: center;
+    }
+
+    .user-dropdown {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

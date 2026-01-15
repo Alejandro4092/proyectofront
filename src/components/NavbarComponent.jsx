@@ -7,12 +7,68 @@ import tajamarLogo from '../assets/images/logo-tajamar-blanco-01.png'
 
 export class NavbarComponent extends Component {
     state = {
-        rol: ""
+        rol: "",
+        logeado: false,
+        usuario: null,
+        dropdownOpen: false
     }
 
-
     componentDidMount = () => {
+        // Cargar el usuario desde localStorage
+        this.cargarUsuario();
 
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', this.handleClickOutside);
+        
+        // Escuchar evento de login
+        window.addEventListener('usuarioLogueado', this.cargarUsuario);
+    }
+
+    componentWillUnmount = () => {
+        document.removeEventListener('click', this.handleClickOutside);
+        window.removeEventListener('usuarioLogueado', this.cargarUsuario);
+    }
+
+    cargarUsuario = () => {
+        const usuarioString = localStorage.getItem('usuario');
+        const token = localStorage.getItem('token');
+        
+        if (usuarioString && token) {
+            const usuario = JSON.parse(usuarioString);
+            this.setState({
+                usuario: usuario,
+                rol: usuario.role,
+                logeado: true
+            });
+        } else {
+            this.setState({
+                usuario: null,
+                rol: "",
+                logeado: false
+            });
+        }
+    }
+
+    toggleDropdown = (e) => {
+        e.stopPropagation();
+        this.setState({ dropdownOpen: !this.state.dropdownOpen });
+    }
+
+    handleClickOutside = (e) => {
+        if (this.state.dropdownOpen && !e.target.closest('.user-profile-container')) {
+            this.setState({ dropdownOpen: false });
+        }
+    }
+
+    cerrarSesion = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        this.setState({
+            usuario: null,
+            rol: "",
+            logeado: false,
+            dropdownOpen: false
+        });
     }
 
     render() {
@@ -48,16 +104,35 @@ export class NavbarComponent extends Component {
                                 </li>
                             }
                         </ul>
-                        <div className="d-flex align-items-center">
-                            <NavLink to="/perfil" style={{ textDecoration: 'none' }}>
-                                <div className="user-profile">
+                        {
+                            this.state.logeado == false ?
+                            <div className="login-button">
+                                <NavLink to="/login">Login</NavLink>
+                            </div>
+                            :
+                            <div className="d-flex align-items-center user-profile-container">
+                                <div className="user-profile" onClick={this.toggleDropdown}>
                                     <div className="user-icon">
-                                        <img src="https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png" alt="User" />
+                                        <img src={this.state.usuario?.imagen || "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"} alt="User" />
                                     </div>
-                                    <span className="user-name">Pablo</span>
+                                    <span className="user-name">{this.state.usuario?.nombre}</span>
+                                    <span className={`dropdown-arrow ${this.state.dropdownOpen ? 'open' : ''}`}>▼</span>
                                 </div>
-                            </NavLink>
-                        </div>
+                                
+                                {this.state.dropdownOpen && (
+                                    <div className="user-dropdown">
+                                        <NavLink to="/perfil" className="dropdown-item" onClick={() => this.setState({ dropdownOpen: false })}>
+                                            <span>👤 Perfil</span>
+                                        </NavLink>
+                                        <div className="dropdown-divider"></div>
+                                        <div className="dropdown-item" onClick={this.cerrarSesion}>
+                                            <span>🚪 Cerrar sesión</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                        }
                     </div>
                 </div>
             </nav>
