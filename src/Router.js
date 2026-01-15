@@ -8,6 +8,10 @@ import ActividadesComponent from './components/ActividadesComponent'
 
 export class Router extends Component {
     render() {
+        function ActividadesElement() {
+            let { idEvento } = useParams();
+            return <ActividadesComponent idEvento={idEvento} />;
+        }
         return (
         <BrowserRouter>
             <NavbarComponent/>
@@ -15,7 +19,7 @@ export class Router extends Component {
                 <Routes>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/perfil' element={<PerfilComponent/>}/>
-                    <Route path='/actividades/:idEvento' element={<ActividadesComponent/>}/>
+                    <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
