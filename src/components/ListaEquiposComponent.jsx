@@ -3,6 +3,7 @@ import Global from '../Global.js';
 import axios from 'axios';
 import Equipo from './EquipoComponent.jsx';
 import { NavLink } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../css/ListaEquiposComponent.css';
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
@@ -53,41 +54,97 @@ export class ListaEquiposComponent extends Component {
     loadEquipos = () => {
         let idActividad = this.props.idActividad;
         let idEvento = this.props.idEvento;
-        let request = "api/Equipos/EquiposActividadEvento/"+idActividad+"/"+idEvento
+        let request = "api/Equipos/EquiposActividadEvento/" + idActividad + "/" + idEvento
         axios.get(this.url + request).then(res => {
+            console.log(res.data)
             this.setState({
                 equipos: res.data
             })
         })
     }
 
+    eliminarEquipo = (e, idEquipo, nombreEquipo) => {
+        e.preventDefault(); // Evitar que el NavLink navegue
+        e.stopPropagation(); // Evitar que se propague al NavLink
 
-    render() {
-        return (
-            <div className='equipos-container'>
-                <h1>Equipos</h1>
-                <div className='equipos-grid'>
-                    {console.log(this.state.equipos)}
-                    {
-                        this.state.equipos.map((equipo, index) => {
-                            return(
-                                <NavLink 
-                                    key={index}
-                                    to={"/equipo/" + equipo.idEquipo}
-                                    className='equipo-link'
-                                >
-                                    <div className='cardEquipo'>
-                                        <h1>{equipo.nombreEquipo}</h1>
-                                        <h2>Mínimo de Jugadores: {equipo.minimoJugadores}</h2>
-                                    </div>
-                                </NavLink>
-                            )
-                        })
-                    }
-                </div>
-            </div>
-        )
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Deseas eliminar el equipo "${nombreEquipo}"? Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let request = "api/Equipos/" + idEquipo;
+                axios.delete(this.url + request)
+                    .then(res => {
+                        console.log("Equipo eliminado:", res.data);
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El equipo ha sido eliminado correctamente.',
+                            'success'
+                        );
+                        // Recargar la lista de equipos
+                        this.loadEquipos();
+                    })
+                    .catch(error => {
+                        console.error("Error al eliminar equipo:", error);
+                        Swal.fire(
+                            'Error',
+                            error.response?.status === 404
+                                ? 'El equipo no fue encontrado.'
+                                : 'No se pudo eliminar el equipo. Inténtalo de nuevo.',
+                            'error'
+                        );
+                    });
+            }
+        });
     }
+
+
+render() {
+    return (
+        <div className='equipos-container'>
+            <div className='equipos-header'>
+                <h1>Equipos</h1>
+                <NavLink
+                    to={`/crear-equipo/${this.props.idEvento}/${this.props.idActividad}`}
+                    className='btn-crear-equipo'
+                >
+                    + Crear Equipo
+                </NavLink>
+            </div>
+            <div className='equipos-grid'>
+                {console.log(this.state.equipos)}
+                {
+                    this.state.equipos.map((equipo, index) => {
+                        return (
+                            <NavLink
+                                key={index}
+                                to={"/equipo/" + equipo.idEquipo}
+                                className='equipo-link'
+                            >
+                                <div className='cardEquipo'>
+                                    <h1>{equipo.nombreEquipo}</h1>
+                                    <h2>Mínimo de Jugadores: {equipo.minimoJugadores}</h2>
+                                    <button 
+                                        className='btn-eliminar-equipo'
+                                        onClick={(e) => this.eliminarEquipo(e, equipo.idEquipo, equipo.nombreEquipo)}
+                                    >
+                                        🗑️ Eliminar
+                                    </button>
+                                </div>
+                            </NavLink>
+                        )
+                    })
+                }
+            </div>
+        </div>
+    )
+}
 }
 
 export default ListaEquiposComponent

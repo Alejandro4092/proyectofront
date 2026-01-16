@@ -1,52 +1,24 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import '../css/NavbarComponent.css'
 import tajamarLogo from '../assets/images/logo-tajamar-blanco-01.png'
+import { AuthContext } from '../context/AuthContext'
 
 
 export class NavbarComponent extends Component {
+    static contextType = AuthContext;
+
     state = {
-        rol: "",
-        logeado: false,
-        usuario: null,
         dropdownOpen: false
     }
 
     componentDidMount = () => {
-        // Cargar el usuario desde localStorage
-        this.cargarUsuario();
-
         // Cerrar dropdown al hacer clic fuera
         document.addEventListener('click', this.handleClickOutside);
-        
-        // Escuchar evento de login
-        window.addEventListener('usuarioLogueado', this.cargarUsuario);
     }
 
     componentWillUnmount = () => {
         document.removeEventListener('click', this.handleClickOutside);
-        window.removeEventListener('usuarioLogueado', this.cargarUsuario);
-    }
-
-    cargarUsuario = () => {
-        const usuarioString = localStorage.getItem('usuario');
-        const token = localStorage.getItem('token');
-        
-        if (usuarioString && token) {
-            const usuario = JSON.parse(usuarioString);
-            this.setState({
-                usuario: usuario,
-                rol: usuario.role,
-                logeado: true
-            });
-        } else {
-            this.setState({
-                usuario: null,
-                rol: "",
-                logeado: false
-            });
-        }
     }
 
     toggleDropdown = (e) => {
@@ -61,24 +33,22 @@ export class NavbarComponent extends Component {
     }
 
     cerrarSesion = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        this.setState({
-            usuario: null,
-            rol: "",
-            logeado: false,
-            dropdownOpen: false
-        });
+        // Usar la función del contexto para cerrar sesión
+        this.context.cerrarSesion();
+        this.setState({ dropdownOpen: false });
     }
 
     render() {
+        // Obtener datos del contexto
+        const { usuario, rol, logeado } = this.context;
+
         return (
             <nav className="navbar navbar-expand-lg custom-navbar">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">
                         <img src={tajamarLogo} alt="Tajamar" className="navbar-logo" />
                     </a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="   Toggle navigation">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarScroll">
@@ -98,14 +68,14 @@ export class NavbarComponent extends Component {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/materialesSolicitados">Materiales solicitados</NavLink>
                             </li>
-                            {this.state.rol == "Profesor" || this.state.rol == "Admin" && 
+                            {(rol === "Profesor" || rol === "Admin") && 
                                 <li className="nav-item">
                                     <NavLink className="nav-link" to="/alumnos">Alumnos</NavLink>
                                 </li>
                             }
                         </ul>
                         {
-                            this.state.logeado == false ?
+                            !logeado ?
                             <div className="login-button">
                                 <NavLink to="/login">Login</NavLink>
                             </div>
@@ -113,9 +83,9 @@ export class NavbarComponent extends Component {
                             <div className="d-flex align-items-center user-profile-container">
                                 <div className="user-profile" onClick={this.toggleDropdown}>
                                     <div className="user-icon">
-                                        <img src={this.state.usuario?.imagen || "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"} alt="User" />
+                                        <img src={usuario?.imagen || "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"} alt="User" />
                                     </div>
-                                    <span className="user-name">{this.state.usuario?.nombre}</span>
+                                    <span className="user-name">{usuario?.nombre}</span>
                                     <span className={`dropdown-arrow ${this.state.dropdownOpen ? 'open' : ''}`}>▼</span>
                                 </div>
                                 
