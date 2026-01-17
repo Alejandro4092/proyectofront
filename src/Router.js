@@ -11,6 +11,7 @@ import ListaEquiposComponent from './components/ListaEquiposComponent'
 import { EquipoComponent } from './components/EquipoComponent'
 import ActividadesComponent from './components/ActividadesComponent'
 import LoginComponent from './components/LoginComponent'
+import PartidosComponent from './components/PartidosComponent'
 
 export default class Router extends Component {
     render() {
@@ -48,6 +49,7 @@ export default class Router extends Component {
                     <Route path='/equipos/:idEvento/:idActividad/' element={<ListaEquiposElement/>}/>
                     <Route path='/equipo/:idEquipo' element={<EquipoComponentElement/>}/>
                     <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
+                    <Route path='/partidos' element={<PartidosComponent/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

@@ -1,0 +1,207 @@
+.partidos-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.partidos-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.partidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.partido-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.partido-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.partido-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.evento-actividad {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.partido-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+    gap: 15px;
+}
+
+.equipo {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f5f5f5;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.equipo.ganador {
+    background: #f0f0f0;
+    border: 2px solid #667eea;
+    font-weight: 600;
+}
+
+.equipo.local.ganador {
+    background: #f0f0f0;
+    border: 2px solid #667eea;
+}
+
+.equipo.visitante.ganador {
+    background: #f0f0f0;
+    border: 2px solid #667eea;
+}
+
+.partido-card.local .equipo,
+.partido-card.visitante .equipo,
+.partido-card.empate .equipo {
+    border: 2px solid #667eea;
+}
+
+.nombre-equipo {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.puntos-equipo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #999;
+    min-width: 40px;
+}
+
+.partido-footer {
+    background: #f9f9f9;
+    padding: 12px 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
+
+.resultado-ganador {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.resultado-empate {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.cargando,
+.error,
+.sin-partidos {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.error {
+    color: #f44336;
+    background: #ffebee;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.sin-partidos {
+    color: #999;
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .partidos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .partido-content {
+        padding: 20px 15px;
+    }
+
+    .puntos-equipo {
+        font-size: 2rem;
+    }
+
+    .partidos-container h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .nombre-equipo {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .partidos-container {
+        padding: 15px;
+    }
+
+    .partidos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .partido-content {
+        padding: 15px 10px;
+    }
+
+    .puntos-equipo {
+        font-size: 1.8rem;
+    }
+
+    .partidos-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+}
