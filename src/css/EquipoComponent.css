@@ -92,6 +92,95 @@
     margin-bottom: 15px;
 }
 
+.color-badge {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-left: 10px;
+    border: 2px solid #b8a4e8;
+    display: inline-block;
+}
+
+.color-badge.clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.color-badge.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 164, 232, 0.5);
+    border-color: #e0d4f7;
+}
+
+.stat-item {
+    position: relative;
+}
+
+.stat-item h2 {
+    position: relative;
+}
+
+.colores-dropdown {
+    position: absolute;
+    top: 0;
+    left: 65%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    margin-left: 10px;
+    z-index: 1000;
+    min-width: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.colores-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.colores-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.colores-dropdown::-webkit-scrollbar-thumb {
+    background: #1a4d7a;
+    border-radius: 4px;
+}
+
+.colores-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+}
+
+.colores-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #1a4d7a;
+}
+
+.colores-dropdown h3 {
+    color: #2d1b69;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0d4f7;
+}
+
+.color-option {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.color-option:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(45, 27, 105, 0.4);
+}
+
 .jugadores-section {
     margin-top: 40px;
     max-width: 1200px;

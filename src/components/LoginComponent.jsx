@@ -3,8 +3,11 @@ import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import Global from '../Global';
 import '../css/LoginComponent.css';
+import { AuthContext } from '../context/AuthContext';
 
 export class LoginComponent extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.url = Global.apiDeportes;
@@ -25,7 +28,7 @@ export class LoginComponent extends Component {
     });
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     
     const { userName, password } = this.state;
@@ -38,66 +41,21 @@ export class LoginComponent extends Component {
 
     this.setState({ loading: true, errorMessage: '' });
 
-    const loginData = {
-      userName: userName,
-      password: password
-    };
+    // Usar la función login del contexto
+    const resultado = await this.context.login(userName, password);
 
-    let request = 'api/Auth/LoginEventos';
-
-    axios.post(this.url + request, loginData)
-      .then(response => {
-        // Guardar el token en localStorage
-        const token = response.data.response;
-        localStorage.setItem('token', token);
-        
-        console.log('Login exitoso:', response.data);
-        
-        // Obtener el perfil del usuario usando el token
-        this.getPerfilUsuario(token);
-      })
-      .catch(error => {
-        console.error('Error en login:', error);
-        this.setState({
-          errorMessage: 'Usuario o contraseña incorrectos',
-          loading: false,
-          password: '' // Limpiar contraseña
-        });
+    if (resultado.success) {
+      this.setState({
+        loginSuccess: true,
+        loading: false
       });
-  }
-
-  getPerfilUsuario = (token) => {
-    let request = 'api/UsuariosDeportes/Perfil';
-
-    // Configurar el header con el token Bearer
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    };
-
-    axios.get(this.url + request, config)
-      .then(response => {
-        // Guardar el usuario completo en localStorage
-        localStorage.setItem('usuario', JSON.stringify(response.data));
-        
-        console.log('Perfil obtenido:', response.data);
-        
-        // Disparar evento personalizado para notificar al navbar
-        window.dispatchEvent(new Event('usuarioLogueado'));
-        
-        this.setState({
-          loginSuccess: true,
-          loading: false
-        });
-      })
-      .catch(error => {
-        console.error('Error al obtener perfil:', error);
-        this.setState({
-          errorMessage: 'Error al obtener datos del usuario',
-          loading: false
-        });
+    } else {
+      this.setState({
+        errorMessage: resultado.error,
+        loading: false,
+        password: '' // Limpiar contraseña
       });
+    }
   }
 
   render() {
