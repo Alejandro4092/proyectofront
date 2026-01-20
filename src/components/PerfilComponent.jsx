@@ -1,9 +1,44 @@
 import React, { Component } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import '../css/PerfilComponent.css'
+import Global from '../Global';
+import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 export class PerfilComponent extends Component {
   static contextType = AuthContext;
+  url = Global.apiDeportes
+
+  state = {
+    actividades:[]
+  }
+
+  componentDidMount = () => {
+    this.loadActividadesUsuario();
+  }
+
+  loadActividadesUsuario = () => {
+    let token = this.context.token;
+    console.log(token)
+    let request = 'api/UsuariosDeportes/ActividadesUser'
+    axios.get(this.url + request, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(res => {
+      console.log(res.data)
+      this.setState({
+        actividades: res.data
+      })
+    })
+  }
+
+  formatearFecha = (fechaStr) => {
+    if (!fechaStr) return 'No especificada';
+    const fecha = new Date(fechaStr);
+    const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return fecha.toLocaleDateString('es-ES', opciones);
+  }
 
   render() {
     const { usuario } = this.context;
@@ -25,12 +60,12 @@ export class PerfilComponent extends Component {
           <div className="perfil-header">
             <h1>Mi Perfil</h1>
           </div>
-          
+
           <div className="perfil-content">
             <div className="perfil-imagen-section">
               {usuario.imagen ? (
-                <img 
-                  src={usuario.imagen} 
+                <img
+                  src={usuario.imagen}
                   alt={`${usuario.nombre} ${usuario.apellidos}`}
                   className="perfil-imagen"
                 />
@@ -78,16 +113,40 @@ export class PerfilComponent extends Component {
             <h2>Mis Actividades</h2>
           </div>
           <div className="actividades-content">
-            <div className="actividad-item">
-              <div className="actividad-icon">🏃</div>
-              <div className="actividad-info">
-                <h3>Running Club</h3>
-                <p className="actividad-fecha">Inscrito desde: 15/01/2026</p>
-                <span className="actividad-badge activo">Activo</span>
-              </div>
-            </div>
+            {this.state.actividades.map((actividad) => {
+              return (
+                <NavLink 
+                        to={`/equipos/${actividad.idEvento}/${actividad.idActividad}`}
+                        key={actividad.idEventoActividad}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="actividad-item">
+                    {/* <div className="actividad-icon"></div> */}
+                    <div className="actividad-info">
+                      <h3>{actividad.nombreActividad}</h3>
+                      <p className="actividad-fecha inscripcion">
+                        <span className="fecha-icon">📅</span>
+                        Inscrito desde: {this.formatearFecha(actividad.fechaInscripcion)}
+                      </p>
+                      <p className="actividad-fecha evento">
+                        <span className="fecha-icon">🎯</span>
+                        Fecha del Evento: {this.formatearFecha(actividad.fechaEvento)}
+                      </p>
+                      {
+                        actividad.quiereSerCapitan ? 
+                        <span className="capitan-badge">⭐ Quieres ser capitán</span>
+                        :
+                        <span className="capitan-badge no-capitan">👤 No quieres ser capitán</span>
+                      }
+                      {/* <span className="actividad-badge activo">Activo</span> */}
+                    </div>
+                  </div>
 
-            <div className="actividad-item">
+                </NavLink>
+              )
+            })}
+
+            {/* <div className="actividad-item">
               <div className="actividad-icon">⚽</div>
               <div className="actividad-info">
                 <h3>Fútbol Sala</h3>
@@ -103,7 +162,7 @@ export class PerfilComponent extends Component {
                 <p className="actividad-fecha">Inscrito desde: 20/11/2025</p>
                 <span className="actividad-badge activo">Activo</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

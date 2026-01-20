@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext'
 
 export class NavbarComponent extends Component {
     static contextType = AuthContext;
-
+    
     state = {
         dropdownOpen: false
     }
