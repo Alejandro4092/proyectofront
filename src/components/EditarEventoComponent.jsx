@@ -2,9 +2,13 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import Global from '../Global'
+import { AuthContext } from '../context/AuthContext'
+import Swal from 'sweetalert2'
 import '../css/CrearEventoComponent.css'
 
 export class EditarEventoComponent extends Component {
+  static contextType = AuthContext;
+
   url = Global.apiDeportes;
   state = {
     idEvento: null,
@@ -15,19 +19,19 @@ export class EditarEventoComponent extends Component {
   };
 
   loadEvento = () => {
+    let token = this.context.token;
     var idEvento = this.props.idEvento;
     var request = "api/Eventos/" + idEvento;
-    axios.get(this.url + request).then(response => {
+    axios.get(this.url + request, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
       const fechaEvento = new Date(response.data.fechaEvento);
       const fechaFormateada = fechaEvento.toISOString().slice(0, 16);
       this.setState({
         idEvento: idEvento,
         fecha: fechaFormateada,
-        cargando: false
-      });
-    }).catch(error => {
-      this.setState({
-        error: 'No se pudo cargar el evento',
         cargando: false
       });
     });
@@ -39,6 +43,16 @@ export class EditarEventoComponent extends Component {
 
   // PUT: Modifica un evento
   updateEvento = () => {
+    if (!this.context.logeado) {
+      Swal.fire({
+        title: 'No has iniciado sesión',
+        text: 'Debes iniciar sesión para editar un evento',
+        icon: 'warning',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    let token = this.context.token;
     const { idEvento, fecha } = this.state;
     const fechaFormato = new Date(fecha).toISOString();
     
@@ -49,7 +63,11 @@ export class EditarEventoComponent extends Component {
     };
 
     let request = "api/Eventos/update";
-    axios.put(this.url + request, eventoActualizado).then(response => {
+    axios.put(this.url + request, eventoActualizado, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
       this.setState({
         mensaje: 'Evento actualizado exitosamente'
       });

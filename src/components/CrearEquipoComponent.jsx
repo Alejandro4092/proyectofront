@@ -59,6 +59,16 @@ export class CrearEquipoComponent extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
+        if (!this.context.logeado) {
+            Swal.fire({
+                title: 'No has iniciado sesión',
+                text: 'Debes iniciar sesión para crear un equipo',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
         const { nombreEquipo, minimoJugadores, idColor } = this.state;
 
         // Validaciones
@@ -95,8 +105,13 @@ export class CrearEquipoComponent extends Component {
         };
 
         let request = "api/Equipos/create";
+        let token = this.context.token;
         
-        axios.post(this.url + request, nuevoEquipo)
+        axios.post(this.url + request, nuevoEquipo, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => {
                 console.log("Equipo creado:", res.data);
                 Swal.fire({

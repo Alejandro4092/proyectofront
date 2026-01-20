@@ -12,6 +12,7 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
+        usuarioActividades: []
     };
     loadActividades = () => {
     let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
@@ -20,6 +21,17 @@ export class ActividadesComponent extends Component {
         this.setState({
             actividades: response.data,
         });
+        });
+    };
+
+    loadUsuarioActividades = () => {
+        this.loadUsuarioActividades();
+        let request = "api/UsuariosDeportes/ActividadesUsuario";
+        axios.get(this.url + request).then((response) => {
+            console.log("Actividades del usuario:", response.data);
+            this.setState({
+                usuarioActividades: response.data
+            });
         });
     };
     componentDidMount = () => {
@@ -75,8 +87,9 @@ export class ActividadesComponent extends Component {
                                         e.preventDefault();
                                         this.abrirModal(actividad);
                                     }}
+                                    disabled={this.state.usuarioActividades.some(ua => ua.idActividad === actividad.idActividad)}
                                 >
-                                    Inscribirse
+                                    {this.state.usuarioActividades.some(ua => ua.idActividad === actividad.idActividad) ? 'Inscrito' : 'Inscribirse'}
                                 </button>
                             </div>
                         </article>

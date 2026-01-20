@@ -67,6 +67,16 @@ export class ListaEquiposComponent extends Component {
         e.preventDefault(); // Evitar que el NavLink navegue
         e.stopPropagation(); // Evitar que se propague al NavLink
 
+        if (!this.context.logeado) {
+            Swal.fire({
+                title: 'No has iniciado sesión',
+                text: 'Debes iniciar sesión para eliminar un equipo',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
         Swal.fire({
             title: '¿Estás seguro?',
             text: `¿Deseas eliminar el equipo "${nombreEquipo}"? Esta acción no se puede deshacer.`,
@@ -78,8 +88,13 @@ export class ListaEquiposComponent extends Component {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                let token = this.context.token;
                 let request = "api/Equipos/" + idEquipo;
-                axios.delete(this.url + request)
+                axios.delete(this.url + request, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
                     .then(res => {
                         console.log("Equipo eliminado:", res.data);
                         Swal.fire(

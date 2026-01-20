@@ -2,20 +2,31 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import Global from '../Global'
+import { AuthContext } from '../context/AuthContext'
+import Swal from 'sweetalert2'
 import '../css/CrearEventoComponent.css'
 
 export class CrearEventoComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.url = Global.apiDeportes;
-    this.state = {
-      fecha: '',
-      mensaje: null
-    };
-  }
+  static contextType = AuthContext;
+
+  url = Global.apiDeportes;
+  state = {
+    fecha: '',
+    mensaje: null
+  };
 
   // POST: Crea un nuevo evento
   createEvento = (fecha) => {
+    if (!this.context.logeado) {
+      Swal.fire({
+        title: 'No has iniciado sesión',
+        text: 'Debes iniciar sesión para crear un evento',
+        icon: 'warning',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    let token = this.context.token;
     // El datetime-local devuelve formato "YYYY-MM-DDTHH:mm"
     const fechaConSegundos = fecha + ':00';
     const fechaLocal = new Date(fechaConSegundos);
@@ -30,23 +41,14 @@ export class CrearEventoComponent extends Component {
     }).replace(/(\d+)\/(\d+)\/(\d+),?\s+(\d+):(\d+):(\d+)/, '$3-$2-$1 $4:$5:$6');
     
     let request = "api/Eventos/create/" + encodeURIComponent(fechaFormato) + "?datofecha=" + encodeURIComponent(fechaFormato);
-    axios.post(this.url + request).then(response => {
+    axios.post(this.url + request, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
       console.log(response.data);
       this.setState({
         mensaje: 'Evento creado exitosamente'
-      });
-      setTimeout(() => {
-        this.props.navigate('/eventos');
-      }, 1500);
-    });
-  }
-
-  // PUT: Modifica un evento
-  updateEvento = (evento) => {
-    let request = "api/Eventos/update";
-    axios.put(this.url + request, evento).then(response => {
-      this.setState({
-        mensaje: 'Evento actualizado exitosamente'
       });
       setTimeout(() => {
         this.props.navigate('/eventos');

@@ -289,6 +289,16 @@ export class EquipoComponent extends Component {
     }
 
     expulsarJugador = (idMiembroEquipo) => {
+        if (!this.context.logeado) {
+            Swal.fire({
+                title: 'No has iniciado sesión',
+                text: 'Debes iniciar sesión para expulsar jugadores',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
         //solo capitan
         Swal.fire({
             title: '¿Estás seguro?',

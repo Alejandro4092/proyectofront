@@ -2,20 +2,21 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import Global from '../Global'
+import { AuthContext } from '../context/AuthContext'
+import Swal from 'sweetalert2'
 import '../css/EventosComponent.css'
 
 export class EventosComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.url = Global.apiDeportes;
-    this.state = {
-      eventos: [],
-      eventosCursoEscolar: [],
-      eventoById: null,
-      loading: false,
-      eventoAEliminar: null
-    };
-  }
+  static contextType = AuthContext;
+
+  url = Global.apiDeportes;
+  state = {
+    eventos: [],
+    eventosCursoEscolar: [],
+    eventoById: null,
+    loading: false,
+    eventoAEliminar: null
+  };
 
   componentDidMount() {
     this.loadEventosCursoEscolar();
@@ -23,8 +24,13 @@ export class EventosComponent extends Component {
 
   // GET: Obtiene eventos del curso escolar
   loadEventosCursoEscolar = () => {
+    let token = this.context.token;
     let request = "api/Eventos/EventosCursoEscolar";
-    axios.get(this.url + request).then(response => {
+    axios.get(this.url + request, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
       this.setState({
         eventosCursoEscolar: response.data
       });
@@ -37,8 +43,22 @@ export class EventosComponent extends Component {
   }
 
   confirmarEliminar = (id) => {
+    if (!this.context.logeado) {
+      Swal.fire({
+        title: 'No has iniciado sesión',
+        text: 'Debes iniciar sesión para eliminar un evento',
+        icon: 'warning',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+    let token = this.context.token;
     let request = "api/Eventos/" + id;
-    axios.delete(this.url + request).then(response => {
+    axios.delete(this.url + request, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
       this.setState({ eventoAEliminar: null });
       this.loadEventosCursoEscolar();
     });
