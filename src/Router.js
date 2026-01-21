@@ -15,6 +15,7 @@ import PartidosComponent from './components/PartidosComponent'
 import CrearEquipoComponent from './components/CrearEquipoComponent'
 import { AuthProvider } from './context/AuthContext'
 import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosComponent'
+import GestionarActividadesComponent from './components/GestionarActividadesComponent'
 
 export default class Router extends Component {
     render() {
@@ -41,6 +42,10 @@ export default class Router extends Component {
             let { idActividad } = useParams();
             return <CrearEquipoComponent idEvento={idEvento} idActividad={idActividad} />;
         }
+        function GestionarActividadesElement() {
+            let { idEvento } = useParams();
+            return <GestionarActividadesComponent idEvento={idEvento} />;
+        }
         return (
         <AuthProvider>
             <BrowserRouter>
@@ -58,6 +63,7 @@ export default class Router extends Component {
                         <Route path='/equipos/:idEvento/:idActividad/' element={<ListaEquiposElement/>}/>
                         <Route path='/equipo/:idEquipo' element={<EquipoComponentElement/>}/>
                         <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
+                        <Route path='/gestionar-actividades/:idEvento' element={<GestionarActividadesElement/>}/>
                         <Route path='/partidos' element={<PartidosComponent/>}/>
                         <Route path='/materialesSolicitados' element={<MaterialesSolicitadosComponent/>}/>
 
