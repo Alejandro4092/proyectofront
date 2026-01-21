@@ -59,8 +59,26 @@ export class EventosComponent extends Component {
         'Authorization': `Bearer ${token}`
       }
     }).then(response => {
+      Swal.fire({
+        title: 'Eliminado',
+        text: 'Evento eliminado exitosamente',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+      });
       this.setState({ eventoAEliminar: null });
       this.loadEventosCursoEscolar();
+    }).catch(error => {
+      console.error('Error al eliminar:', error);
+      this.setState({ eventoAEliminar: null });
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.status === 403 
+          ? 'No tienes permisos para eliminar este evento. Verifica que tu usuario tenga rol de administrador.' 
+          : 'Error al eliminar el evento: ' + (error.response?.data || error.message),
+        icon: 'error',
+        confirmButtonText: 'Entendido'
+      });
     });
   }
 
