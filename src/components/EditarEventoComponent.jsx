@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
@@ -105,7 +105,7 @@ export class EditarEventoComponent extends Component {
       return (
         <div className="crear-evento-container">
           <div className="mensaje-error">{error}</div>
-          <Link to="/eventos" className="btn-volver">← Volver</Link>
+          <NavLink to="/eventos" className="btn-volver">← Volver</NavLink>
         </div>
       );
     }
@@ -115,7 +115,7 @@ export class EditarEventoComponent extends Component {
         <div className="crear-evento-wrapper">
           <div className="crear-evento-header">
             <h1>Editar Evento</h1>
-            <Link to="/eventos" className="btn-volver">← Volver</Link>
+            <NavLink to="/eventos" className="btn-volver">← Volver</NavLink>
           </div>
 
           {mensaje && (
@@ -146,9 +146,9 @@ export class EditarEventoComponent extends Component {
                 >
                   Actualizar Evento
                 </button>
-                <Link to="/eventos" className="btn-cancelar">
+                <NavLink to="/eventos" className="btn-cancelar">
                   Cancelar
-                </Link>
+                </NavLink>
               </div>
             </form>
           )}

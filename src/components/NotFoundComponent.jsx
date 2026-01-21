@@ -6,7 +6,7 @@ export class NotFoundComponent extends Component {
   render() {
     return (
       <div className='notfound'>
-        <img src={notfound} alt="404 Not Found"  style={{width:"50%", height:"50%"}}/>
+        <img src={notfound} alt="404 Not Found" />
       </div>
     )
   }

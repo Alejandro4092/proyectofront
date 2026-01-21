@@ -131,6 +131,11 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.95rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .btn-editar {
@@ -142,6 +147,7 @@
     background-color: #0d2d4a;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(26, 77, 122, 0.3);
+    color: white;
 }
 
 .btn-eliminar {

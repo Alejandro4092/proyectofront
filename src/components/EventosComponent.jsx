@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
@@ -98,15 +98,15 @@ export class EventosComponent extends Component {
       <div className="eventos-container">
         <div className="eventos-header">
           <h1>Eventos</h1>
-          <Link to="/crear-evento" className="btn-crear-evento">
+          <NavLink to="/crear-evento" className="btn-crear-evento">
             + Crear Evento
-          </Link>
+          </NavLink>
         </div>
 
         <div className="eventos-grid">
           {eventosCursoEscolar && eventosCursoEscolar.length > 0 ? (
             eventosCursoEscolar.map((evento) => (
-              <Link 
+              <NavLink 
                 to={`/actividades/${evento.idEvento}`} 
                 key={evento.idEvento} 
                 className="evento-card"
@@ -122,7 +122,7 @@ export class EventosComponent extends Component {
                   </div>              
                 </div>
                 <div className="evento-card-footer">
-                  <Link to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</Link>
+                  <NavLink to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</NavLink>
                   <button 
                     className="btn-eliminar"
                     onClick={(e) => {
@@ -134,7 +134,7 @@ export class EventosComponent extends Component {
                     Eliminar
                   </button>
                 </div>
-              </Link>
+              </NavLink>
             ))
           ) : (
             <div className="no-eventos">
