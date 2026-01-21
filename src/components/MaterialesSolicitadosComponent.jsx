@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Global from '../Global';
 import '../css/MaterialesSolicitadosComponent.css';
+import AuthContext from '../context/AuthContext';
 
 export class MaterialesSolicitadosComponent extends Component {
+    static contextType = AuthContext;
+    
     constructor(props) {
         super(props);
         this.state = {

@@ -5,7 +5,9 @@ import '../css/EquipoComponent.css';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../context/AuthContext';
 import { NavLink } from 'react-router-dom';
+import EquiposService from '../services/EquiposService';
 
+const serviceEquipos = new EquiposService();
 export class EquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -69,14 +71,13 @@ export class EquipoComponent extends Component {
     loadEquipo = async () => {
         try {
             let idEquipo = this.props.idEquipo;
-            let request = "api/Equipos/" + idEquipo;
             
-            const resEquipo = await axios.get(this.url + request);
-            const color = await this.getColorName(resEquipo.data.idColor);
-            const jugadoresEquipo = await this.findJugadoresEquipo(resEquipo.data.idEquipo);
+            const equipo = await serviceEquipos.getEquipo(idEquipo);
+            const color = await this.getColorName(equipo.idColor);
+            const jugadoresEquipo = await this.findJugadoresEquipo(equipo.idEquipo);
             
             this.setState({
-                equipo: resEquipo.data,
+                equipo: equipo,
                 colorName: color,
                 jugadores: jugadoresEquipo
             }, () => {
@@ -102,9 +103,7 @@ export class EquipoComponent extends Component {
 
     findJugadoresEquipo = async (idEquipo) => {
         try {
-            let request = "api/Equipos/UsuariosEquipo/" + idEquipo;
-            const res = await axios.get(this.url + request);
-            let players = res.data;
+            const players = await serviceEquipos.getJugadoresEquipo(idEquipo);
             console.log("jugadores", players);
             return players;
         } catch (error) {
@@ -141,11 +140,10 @@ export class EquipoComponent extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
                 let idEquipo = this.props.idEquipo;
-                let request = `api/Equipos/UpdateEquipacionEquipo/${idEquipo}/${idColor}`;
                 
-                axios.put(this.url + request)
-                    .then(res => {
-                        console.log("Color actualizado:", res.data);
+                serviceEquipos.actualizarColorEquipo(idEquipo, idColor)
+                    .then(data => {
+                        console.log("Color actualizado:", data);
                         Swal.fire(
                             '¡Actualizado!',
                             `El color del equipo se cambió a ${nombreColor}.`,
@@ -228,9 +226,8 @@ export class EquipoComponent extends Component {
                 let idUsuarioMiembro = this.state.usuarioMiembroEquipo.idMiembroEquipo
                 console.log("usuario miembro",idUsuarioMiembro)
             
-                let request = "api/MiembroEquipos/" + idUsuarioMiembro
-                axios.delete(this.url + request).then(res => {
-                    console.log("abandonado: "+res.data)
+                serviceEquipos.salirseEquipo(idUsuarioMiembro, this.context.token).then(data => {
+                    console.log("abandonado: "+data)
                     Swal.fire(
                         '¡Abandonaste!',
                         'Has salido del equipo.',
@@ -278,13 +275,9 @@ export class EquipoComponent extends Component {
                 let idEquipo = this.props.idEquipo;
                 let token = this.context.token;
                 console.log(token)
-                let request = "api/UsuariosDeportes/ApuntarmeEquipo/" + idEquipo
-                axios.post(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }).then(res => {
-                    console.log("insertado: "+res.data)
+                
+                serviceEquipos.apuntarseEquipo(idEquipo, token).then(data => {
+                    console.log("insertado: "+data)
                     Swal.fire(
                         '¡Inscrito!',
                         'Has entrado en el equipo.',
@@ -327,9 +320,8 @@ export class EquipoComponent extends Component {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                let request = "api/MiembroEquipos/" + idMiembroEquipo
-                axios.delete(this.url + request).then(res => {
-                    console.log("borrado", res.data)
+                serviceEquipos.expulsarJugador(idMiembroEquipo).then(data => {
+                    console.log("borrado", data)
                     Swal.fire(
                         '¡Expulsado!',
                         'El jugador ha sido expulsado del equipo.',
@@ -350,9 +342,8 @@ export class EquipoComponent extends Component {
 
     getEquipoById = async (idEquipo) => {
         try {
-            let request = "api/Equipos/" + idEquipo;
-            const res = await axios.get(this.url + request);
-            return res.data;
+            const equipo = await serviceEquipos.getEquipo(idEquipo);
+            return equipo;
         } catch (error) {
             console.error("Error al obtener equipo:", error);
             return { nombreEquipo: "Equipo no encontrado", idEquipo: idEquipo };
@@ -362,12 +353,11 @@ export class EquipoComponent extends Component {
     loadPartidos = async () => {
         try {
             let idEquipo = this.props.idEquipo;
-            let request = "api/PartidoResultado/PartidosEquipo/" + idEquipo;
-            const res = await axios.get(this.url + request);
+            const partidos = await serviceEquipos.getPartidosEquipo(idEquipo);
             
             // Obtener los equipos completos para cada partido
             const partidosConEquipos = await Promise.all(
-                res.data.map(async (partido) => {
+                partidos.map(async (partido) => {
                     const equipoLocal = await this.getEquipoById(partido.idEquipoLocal);
                     const equipoVisitante = await this.getEquipoById(partido.idEquipoVisitante);
                     return {
