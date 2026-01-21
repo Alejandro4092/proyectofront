@@ -1,35 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Global from '../Global';
 import '../css/PartidosComponent.css';
+import { NavLink } from 'react-router-dom';
 
-export const PartidosComponent = () => {
-    const [partidos, setPartidos] = useState([]);
-    const [equipos, setEquipos] = useState({});
-    const [cargando, setCargando] = useState(true);
-    const [error, setError] = useState(null);
-    const url = Global.apiDeportes;
+export class PartidosComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            partidos: [],
+            equipos: {},
+            cargando: true,
+            error: null
+        };
+        this.url = Global.apiDeportes;
+    }
 
-    useEffect(() => {
-        obtenerPartidos();
-    }, []);
+    componentDidMount() {
+        this.obtenerPartidos();
+    }
 
-    const obtenerPartidos = () => {
+    obtenerPartidos = () => {
         let request = "api/PartidoResultado";
-        axios.get(url + request)
+        axios.get(this.url + request)
             .then(response => {
-                setPartidos(response.data);
-                obtenerEquipos(response.data);
-                setCargando(false);
+                this.setState({ partidos: response.data });
+                this.obtenerEquipos(response.data);
+                this.setState({ cargando: false });
             })
             .catch(error => {
                 console.error('Error:', error);
-                setError('Error al cargar los partidos');
-                setCargando(false);
+                this.setState({
+                    error: 'Error al cargar los partidos',
+                    cargando: false
+                });
             });
-    };
+    }
 
-    const obtenerEquipos = (partidos) => {
+    obtenerEquipos = (partidos) => {
         const equiposUnicos = new Set();
         partidos.forEach(partido => {
             equiposUnicos.add(partido.idEquipoLocal);
@@ -40,123 +48,136 @@ export const PartidosComponent = () => {
         let equiposCargados = 0;
 
         if (equiposUnicos.size === 0) {
-            setEquipos({});
+            this.setState({ equipos: {} });
             return;
         }
 
         equiposUnicos.forEach(idEquipo => {
             let request = `api/Equipos/${idEquipo}`;
-            axios.get(url + request)
+            axios.get(this.url + request)
                 .then(response => {
                     equiposData[idEquipo] = response.data;
                     equiposCargados++;
                     if (equiposCargados === equiposUnicos.size) {
-                        setEquipos(equiposData);
+                        this.setState({ equipos: equiposData });
                     }
                 })
                 .catch(error => {
                     console.error(`Error al obtener equipo ${idEquipo}:`, error);
                     equiposCargados++;
                     if (equiposCargados === equiposUnicos.size) {
-                        setEquipos(equiposData);
+                        this.setState({ equipos: equiposData });
                     }
                 });
         });
-    };
+    }
 
-    const determinarGanador = (partido) => {
+    determinarGanador = (partido) => {
         if (partido.puntosLocal > partido.puntosVisitante) {
             return 'local';
         } else if (partido.puntosVisitante > partido.puntosLocal) {
             return 'visitante';
         }
         return 'empate';
-    };
-
-    if (cargando) {
-        return (
-            <div className="partidos-container">
-                <div className="cargando">Cargando partidos...</div>
-            </div>
-        );
     }
 
-    if (error) {
+    render() {
+        const { partidos, equipos, cargando, error } = this.state;
+
+        if (cargando) {
+            return (
+                <div className="partidos-container">
+                    <div className="cargando">Cargando partidos...</div>
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className="partidos-container">
+                    <div className="error">{error}</div>
+                </div>
+            );
+        }
+
+        if (partidos.length === 0) {
+            return (
+                <div className="partidos-container">
+                    <div className="sin-partidos">No hay partidos registrados</div>
+                </div>
+            );
+        }
+
         return (
             <div className="partidos-container">
-                <div className="error">{error}</div>
-            </div>
-        );
-    }
+                <h1>Resultados de Partidos</h1>
+                <div className="partidos-grid">
+                    {partidos.map((partido) => {
+                        const equipoLocal = equipos[partido.idEquipoLocal] || {};
+                        const equipoVisitante = equipos[partido.idEquipoVisitante] || {};
+                        const ganador = this.determinarGanador(partido);
 
-    if (partidos.length === 0) {
-        return (
-            <div className="partidos-container">
-                <div className="sin-partidos">No hay partidos registrados</div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="partidos-container">
-            <h1>Resultados de Partidos</h1>
-            <div className="partidos-grid">
-                {partidos.map((partido) => {
-                    const equipoLocal = equipos[partido.idEquipoLocal] || {};
-                    const equipoVisitante = equipos[partido.idEquipoVisitante] || {};
-                    const ganador = determinarGanador(partido);
-
-                    return (
-                        <div 
-                            key={partido.idPartidoResultado} 
-                            className={`partido-card ${ganador}`}
-                        >
-                            <div className="partido-header">
-                                <span className="evento-actividad">
-                                    Actividad ID: {partido.idEventoActividad}
-                                </span>
-                            </div>
-
-                            <div className="partido-content">
-                                <div className={`equipo local ${ganador === 'local' ? 'ganador' : ''}`}>
-                                    <div className="nombre-equipo">
-                                        {equipoLocal.nombreEquipo || `Equipo ${partido.idEquipoLocal}`}
-                                    </div>
-                                    <div className="puntos-equipo">
-                                        {partido.puntosLocal}
-                                    </div>
-                                </div>
-
-                                <div className="vs">VS</div>
-
-                                <div className={`equipo visitante ${ganador === 'visitante' ? 'ganador' : ''}`}>
-                                    <div className="nombre-equipo">
-                                        {equipoVisitante.nombreEquipo || `Equipo ${partido.idEquipoVisitante}`}
-                                    </div>
-                                    <div className="puntos-equipo">
-                                        {partido.puntosVisitante}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="partido-footer">
-                                {ganador === 'empate' ? (
-                                    <span className="resultado-empate">Empate</span>
-                                ) : (
-                                    <span className="resultado-ganador">
-                                        {ganador === 'local' 
-                                            ? equipoLocal.nombreEquipo || `Equipo ${partido.idEquipoLocal}`
-                                            : equipoVisitante.nombreEquipo || `Equipo ${partido.idEquipoVisitante}`
-                                        } gana
+                        return (
+                            <div
+                                key={partido.idPartidoResultado}
+                                className={`partido-card ${ganador}`}
+                            >
+                                <div className="partido-header">
+                                    <span className="evento-actividad">
+                                        Actividad ID: {partido.idEventoActividad}
                                     </span>
-                                )}
+                                </div>
+
+                                <div className="partido-content">
+                                    <NavLink
+                                        to={`/equipo/${equipoLocal.idEquipo}`}
+                                        className="equipo-link"
+                                    >
+                                        <div className={`equipo local ${ganador === 'local' ? 'ganador' : ''}`}>
+                                            <div className="nombre-equipo">
+                                                {equipoLocal.nombreEquipo || `Equipo ${partido.idEquipoLocal}`}
+                                            </div>
+                                            <div className="puntos-equipo">
+                                                {partido.puntosLocal}
+                                            </div>
+                                        </div>
+                                    </NavLink>
+
+                                    <div className="vs">VS</div>
+                                    <NavLink
+                                        to={`/equipo/${equipoVisitante.idEquipo}`}
+                                        className="equipo-link"
+                                    >
+                                        <div className={`equipo visitante ${ganador === 'visitante' ? 'ganador' : ''}`}>
+                                            <div className="nombre-equipo">
+                                                {equipoVisitante.nombreEquipo || `Equipo ${partido.idEquipoVisitante}`}
+                                            </div>
+                                            <div className="puntos-equipo">
+                                                {partido.puntosVisitante}
+                                            </div>
+                                        </div>
+                                    </NavLink>
+                                </div>
+
+                                <div className="partido-footer">
+                                    {ganador === 'empate' ? (
+                                        <span className="resultado-empate">Empate</span>
+                                    ) : (
+                                        <span className="resultado-ganador">
+                                            {ganador === 'local'
+                                                ? equipoLocal.nombreEquipo || `Equipo ${partido.idEquipoLocal}`
+                                                : equipoVisitante.nombreEquipo || `Equipo ${partido.idEquipoVisitante}`
+                                            } gana
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 export default PartidosComponent;
