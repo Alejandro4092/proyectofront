@@ -94,6 +94,10 @@
     border: 2px solid #667eea;
 }
 
+.partido-card.empate .equipo {
+    background: #b0b0b0;
+}
+
 .nombre-equipo {
     font-size: 0.95rem;
     font-weight: 600;
