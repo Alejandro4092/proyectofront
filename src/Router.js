@@ -15,6 +15,7 @@ import PartidosComponent from './components/PartidosComponent'
 import CrearEquipoComponent from './components/CrearEquipoComponent'
 import { AuthProvider } from './context/AuthContext'
 import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosComponent'
+import NotFoundComponent from './components/NotFoundComponent'
 
 export default class Router extends Component {
     render() {
@@ -60,6 +61,7 @@ export default class Router extends Component {
                         <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
                         <Route path='/partidos' element={<PartidosComponent/>}/>
                         <Route path='/materialesSolicitados' element={<MaterialesSolicitadosComponent/>}/>
+                        <Route path='*' element={<NotFoundComponent/>}/>
 
                     </Routes>
                 </div>
