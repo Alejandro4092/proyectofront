@@ -34,7 +34,7 @@ export class CrearEquipoComponent extends Component {
             });
             return;
         }
-
+        console.log(this.context.usuario)
         this.loadColores();
     }
 
@@ -49,6 +49,17 @@ export class CrearEquipoComponent extends Component {
             });
     }
 
+    getEventoActividad = async () => {
+        let request = "api/ActividadesEvento/FindIdEventoActividad/" + this.props.idEvento + "/" + this.props.idActividad;
+        try {
+            const res = await axios.get(this.url + request);
+            return res.data.idEventoActividad;
+        } catch (error) {
+            console.error("Error al obtener el id:", error);
+            throw error;
+        }
+    }
+
     handleInputChange = (e) => {
         const { name, value } = e.target;
         this.setState({
@@ -56,19 +67,18 @@ export class CrearEquipoComponent extends Component {
         });
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!this.context.logeado) {
+        if(this.context.role != "CAPITAN" || this.context.role != "ADMINISTRADOR"){
             Swal.fire({
-                title: 'No has iniciado sesión',
-                text: 'Debes iniciar sesión para crear un equipo',
-                icon: 'warning',
+                title: 'Error',
+                text: 'Debes ser capitán para crear un equipo',
+                icon: 'error',
                 confirmButtonText: 'Entendido'
             });
             return;
         }
-
         const { nombreEquipo, minimoJugadores, idColor } = this.state;
 
         // Validaciones
@@ -94,49 +104,52 @@ export class CrearEquipoComponent extends Component {
 
         this.setState({ loading: true });
 
-        // Preparar datos para enviar
-        const nuevoEquipo = {
-            idEquipo: 0, // El servidor lo asignará
-            idEventoActividad: parseInt(this.props.idActividad),
-            nombreEquipo: nombreEquipo.trim(),
-            minimoJugadores: parseInt(minimoJugadores),
-            idColor: parseInt(idColor),
-            idCurso: this.context.usuario.idCurso
-        };
+        try {
+            const idEventoActividadParam = await this.getEventoActividad();
 
-        let request = "api/Equipos/create";
-        let token = this.context.token;
-        
-        axios.post(this.url + request, nuevoEquipo, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(res => {
-                console.log("Equipo creado:", res.data);
-                Swal.fire({
-                    title: '¡Éxito!',
-                    text: 'El equipo ha sido creado correctamente',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                }).then(() => {
-                    // Redirigir a la lista de equipos
-                    this.setState({ 
-                        redirect: true, 
-                        redirectPath: `/equipos/${this.props.idEvento}/${this.props.idActividad}` 
-                    });
-                });
-            })
-            .catch(error => {
-                console.error("Error al crear equipo:", error);
-                this.setState({ loading: false });
-                Swal.fire({
-                    title: 'Error',
-                    text: 'No se pudo crear el equipo. Inténtalo de nuevo.',
-                    icon: 'error',
-                    confirmButtonText: 'Entendido'
+            // Preparar datos para enviar
+            const nuevoEquipo = {
+                idEquipo: 0, // El servidor lo asignará
+                idEventoActividad: idEventoActividadParam,
+                nombreEquipo: nombreEquipo.trim(),
+                minimoJugadores: parseInt(minimoJugadores),
+                idColor: parseInt(idColor),
+                idCurso: this.context.usuario.idCurso
+            };
+
+            let request = "api/Equipos/create";
+            let token = this.context.token;
+            
+
+            const res = await axios.post(this.url + request, nuevoEquipo, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log("Equipo creado:", res.data);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'El equipo ha sido creado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                // Redirigir a la lista de equipos
+                this.setState({
+                    redirect: true,
+                    redirectPath: `/equipos/${this.props.idEvento}/${this.props.idActividad}`
                 });
             });
+        } catch (error) {
+            console.error("Error al crear equipo:", error);
+            this.setState({ loading: false });
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo crear el equipo. Inténtalo de nuevo.',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+        }
     }
 
     render() {
@@ -204,20 +217,20 @@ export class CrearEquipoComponent extends Component {
                         </div>
 
                         <div className="form-actions">
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className="btn-crear"
                                 disabled={this.state.loading}
                             >
                                 {this.state.loading ? 'Creando equipo...' : 'Crear Equipo'}
                             </button>
-                            
-                            <button 
-                                type="button" 
+
+                            <button
+                                type="button"
                                 className="btn-cancelar"
-                                onClick={() => this.setState({ 
-                                    redirect: true, 
-                                    redirectPath: `/equipos/${this.props.idEvento}/${this.props.idActividad}` 
+                                onClick={() => this.setState({
+                                    redirect: true,
+                                    redirectPath: `/equipos/${this.props.idEvento}/${this.props.idActividad}`
                                 })}
                                 disabled={this.state.loading}
                             >
