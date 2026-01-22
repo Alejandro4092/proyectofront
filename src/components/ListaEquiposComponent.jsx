@@ -5,8 +5,14 @@ import Equipo from './EquipoComponent.jsx';
 import { NavLink } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../css/ListaEquiposComponent.css';
+import EquiposService from '../services/EquiposService.js';
+import AuthContext from '../context/AuthContext.js';
+
+const serviceEquipos = new EquiposService();
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
+    static contextType = AuthContext;
+    
 
     state = {
         equipos: [],
@@ -54,11 +60,11 @@ export class ListaEquiposComponent extends Component {
     loadEquipos = () => {
         let idActividad = this.props.idActividad;
         let idEvento = this.props.idEvento;
-        let request = "api/Equipos/EquiposActividadEvento/" + idActividad + "/" + idEvento
-        axios.get(this.url + request).then(res => {
-            console.log(res.data)
+        serviceEquipos.getEquiposActividad(idActividad, idEvento).then(data =>{
+            console.log("EQUIPOS DESDE SERVICE")
+            console.log("EQUIPOS DESDE SERVICE", data)
             this.setState({
-                equipos: res.data
+                equipos: data
             })
         })
     }
@@ -89,14 +95,9 @@ export class ListaEquiposComponent extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
                 let token = this.context.token;
-                let request = "api/Equipos/" + idEquipo;
-                axios.delete(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(res => {
-                        console.log("Equipo eliminado:", res.data);
+                serviceEquipos.eliminarEquipo(idEquipo, token)
+                    .then(data => {
+                        console.log("Equipo eliminado:", data);
                         Swal.fire(
                             '¡Eliminado!',
                             'El equipo ha sido eliminado correctamente.',

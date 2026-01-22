@@ -4,7 +4,10 @@ import Global from '../Global';
 import '../css/EquipoComponent.css';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../context/AuthContext';
+import { NavLink } from 'react-router-dom';
+import EquiposService from '../services/EquiposService';
 
+const serviceEquipos = new EquiposService();
 export class EquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -28,6 +31,7 @@ export class EquipoComponent extends Component {
         jugadores: [],
         colores: [],
         mostrarColores: false,
+        partidos: [],
         jugadoresPrueba: [
             {
                 "idMiembroEquipo": 1,
@@ -53,48 +57,59 @@ export class EquipoComponent extends Component {
         console.log(this.context.usuario)
         this.loadEquipo();
         this.loadColores();
+        this.loadPartidos();
     }
 
-    loadEquipo = () => {
-        let idEquipo = this.props.idEquipo;
-        //let idEventoActividad = this.props.idEventoActividad;
-        let request = "api/Equipos/" + idEquipo
-        axios.get(this.url + request).then(res => {
-            // Esperar a que getColorName termine antes de hacer setState
-            this.getColorName(res.data.idColor).then(color => {
-                // let curso = this.getNombreCurso
-                this.findJugadoresEquipo(res.data.idEquipo).then(jugadoresEquipo => {
-                    console.log(color)
-                    this.setState({
-                        equipo: res.data,
-                        colorName: color,
-                        jugadores: jugadoresEquipo
-                    }, () => {
-                        // Ejecutar checkMiembro después de que el estado se haya actualizado
-                        this.checkMiembro();
-                    })
-                })
-            })
-        })
+    componentDidUpdate = (prevProps) => {
+        // Si cambió el idEquipo, recargar los datos del equipo
+        if (prevProps.idEquipo !== this.props.idEquipo) {
+            this.loadEquipo();
+            this.loadPartidos();
+        }
     }
 
-    getColorName = (idColor) => {
-        let request = "api/Colores/" + idColor
-        // Retornar la promesa para poder usar .then() en loadEquipo
-        return axios.get(this.url + request).then(res => {
-            let colorName = res.data.nombreColor
-            console.log("color", colorName)
+    loadEquipo = async () => {
+        try {
+            let idEquipo = this.props.idEquipo;
+            
+            const equipo = await serviceEquipos.getEquipo(idEquipo);
+            const color = await this.getColorName(equipo.idColor);
+            const jugadoresEquipo = await this.findJugadoresEquipo(equipo.idEquipo);
+            
+            this.setState({
+                equipo: equipo,
+                colorName: color,
+                jugadores: jugadoresEquipo
+            }, () => {
+                this.checkMiembro();
+            });
+        } catch (error) {
+            console.error("Error al cargar equipo:", error);
+        }
+    }
+
+    getColorName = async (idColor) => {
+        try {
+            let request = "api/Colores/" + idColor;
+            const res = await axios.get(this.url + request);
+            let colorName = res.data.nombreColor;
+            console.log("color", colorName);
             return colorName;
-        })
+        } catch (error) {
+            console.error("Error al obtener color:", error);
+            return "";
+        }
     }
 
-    findJugadoresEquipo = (idEquipo) => {
-        let request = "api/Equipos/UsuariosEquipo/" + idEquipo
-        return axios.get(this.url + request).then(res => {
-            let players = res.data
-            console.log("jugadores", players)
+    findJugadoresEquipo = async (idEquipo) => {
+        try {
+            const players = await serviceEquipos.getJugadoresEquipo(idEquipo);
+            console.log("jugadores", players);
             return players;
-        })
+        } catch (error) {
+            console.error("Error al buscar jugadores:", error);
+            return [];
+        }
     }
 
     loadColores = () => {
@@ -125,11 +140,10 @@ export class EquipoComponent extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
                 let idEquipo = this.props.idEquipo;
-                let request = `api/Equipos/UpdateEquipacionEquipo/${idEquipo}/${idColor}`;
                 
-                axios.put(this.url + request)
-                    .then(res => {
-                        console.log("Color actualizado:", res.data);
+                serviceEquipos.actualizarColorEquipo(idEquipo, idColor)
+                    .then(data => {
+                        console.log("Color actualizado:", data);
                         Swal.fire(
                             '¡Actualizado!',
                             `El color del equipo se cambió a ${nombreColor}.`,
@@ -212,9 +226,8 @@ export class EquipoComponent extends Component {
                 let idUsuarioMiembro = this.state.usuarioMiembroEquipo.idMiembroEquipo
                 console.log("usuario miembro",idUsuarioMiembro)
             
-                let request = "api/MiembroEquipos/" + idUsuarioMiembro
-                axios.delete(this.url + request).then(res => {
-                    console.log("abandonado: "+res.data)
+                serviceEquipos.salirseEquipo(idUsuarioMiembro, this.context.token).then(data => {
+                    console.log("abandonado: "+data)
                     Swal.fire(
                         '¡Abandonaste!',
                         'Has salido del equipo.',
@@ -262,13 +275,9 @@ export class EquipoComponent extends Component {
                 let idEquipo = this.props.idEquipo;
                 let token = this.context.token;
                 console.log(token)
-                let request = "api/UsuariosDeportes/ApuntarmeEquipo/" + idEquipo
-                axios.post(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }).then(res => {
-                    console.log("insertado: "+res.data)
+                
+                serviceEquipos.apuntarseEquipo(idEquipo, token).then(data => {
+                    console.log("insertado: "+data)
                     Swal.fire(
                         '¡Inscrito!',
                         'Has entrado en el equipo.',
@@ -311,9 +320,8 @@ export class EquipoComponent extends Component {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                let request = "api/MiembroEquipos/" + idMiembroEquipo
-                axios.delete(this.url + request).then(res => {
-                    console.log("borrado", res.data)
+                serviceEquipos.expulsarJugador(idMiembroEquipo).then(data => {
+                    console.log("borrado", data)
                     Swal.fire(
                         '¡Expulsado!',
                         'El jugador ha sido expulsado del equipo.',
@@ -330,6 +338,51 @@ export class EquipoComponent extends Component {
                 });
             }
         });
+    }
+
+    getEquipoById = async (idEquipo) => {
+        try {
+            const equipo = await serviceEquipos.getEquipo(idEquipo);
+            return equipo;
+        } catch (error) {
+            console.error("Error al obtener equipo:", error);
+            return { nombreEquipo: "Equipo no encontrado", idEquipo: idEquipo };
+        }
+    }
+
+    loadPartidos = async () => {
+        try {
+            let idEquipo = this.props.idEquipo;
+            const partidos = await serviceEquipos.getPartidosEquipo(idEquipo);
+            
+            // Obtener los equipos completos para cada partido
+            const partidosConEquipos = await Promise.all(
+                partidos.map(async (partido) => {
+                    const equipoLocal = await this.getEquipoById(partido.idEquipoLocal);
+                    const equipoVisitante = await this.getEquipoById(partido.idEquipoVisitante);
+                    return {
+                        ...partido,
+                        equipoLocal: equipoLocal,
+                        equipoVisitante: equipoVisitante
+                    };
+                })
+            );
+            
+            this.setState({ partidos: partidosConEquipos });
+            console.log("Partidos cargados:", partidosConEquipos);
+        } catch (error) {
+            console.error("Error al cargar partidos:", error);
+            this.setState({ partidos: [] });
+        }
+    }
+
+    determinarGanador = (partido) => {
+        if (partido.puntosLocal > partido.puntosVisitante) {
+            return 'local';
+        } else if (partido.puntosVisitante > partido.puntosLocal) {
+            return 'visitante';
+        }
+        return 'empate';
     }
 
     render() {
@@ -403,6 +456,77 @@ export class EquipoComponent extends Component {
                             })
                         }
                     </div>
+                </div>
+
+                <div className='partidos-section'>
+                    <h1>Partidos del Equipo</h1>
+                    {this.state.partidos && this.state.partidos.length > 0 ? (
+                        <div className='ec-partidos-grid'>
+                            {this.state.partidos.map((partido, index) => {
+                                const ganador = this.determinarGanador(partido);
+                                
+                                return (
+                                    <div 
+                                        key={partido.idPartidoResultado || index} 
+                                        className={`ec-partido-card ${ganador}`}
+                                    >
+                                        <div className="ec-partido-header">
+                                            <span className="ec-evento-actividad">
+                                                Actividad ID: {partido.idEventoActividad}
+                                            </span>
+                                        </div>
+
+                                        <div className="ec-partido-content">
+                                            <NavLink
+                                                to={`/equipo/${partido.equipoLocal.idEquipo}`}
+                                                className="ec-equipo-link"
+                                            >
+                                                <div className={`ec-equipo local ${ganador === 'local' ? 'ganador' : ''}`}>
+                                                    <div className="ec-nombre-equipo">
+                                                        {partido.equipoLocal.nombreEquipo}
+                                                    </div>
+                                                    <div className="ec-puntos-equipo">
+                                                        {partido.puntosLocal}
+                                                    </div>
+                                                </div>
+                                            </NavLink>
+
+                                            <div className="ec-vs">VS</div>
+
+                                            <NavLink
+                                                to={`/equipo/${partido.equipoVisitante.idEquipo}`}
+                                                className="ec-equipo-link"
+                                            >
+                                                <div className={`ec-equipo visitante ${ganador === 'visitante' ? 'ganador' : ''}`}>
+                                                    <div className="ec-nombre-equipo">
+                                                        {partido.equipoVisitante.nombreEquipo}
+                                                    </div>
+                                                    <div className="ec-puntos-equipo">
+                                                        {partido.puntosVisitante}
+                                                    </div>
+                                                </div>
+                                            </NavLink>
+                                        </div>
+
+                                        <div className="ec-partido-footer">
+                                            {ganador === 'empate' ? (
+                                                <span className="ec-resultado-empate">Empate</span>
+                                            ) : (
+                                                <span className="ec-resultado-ganador">
+                                                    {ganador === 'local'
+                                                        ? partido.equipoLocal.nombreEquipo
+                                                        : partido.equipoVisitante.nombreEquipo
+                                                    } gana
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    ) : (
+                        <p className='no-partidos'>No hay partidos registrados para este equipo</p>
+                    )}
                 </div>
             </div>
         )

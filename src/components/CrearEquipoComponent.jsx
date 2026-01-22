@@ -4,8 +4,10 @@ import Global from '../Global';
 import { Navigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../context/AuthContext';
+import EquiposService from '../services/EquiposService';
 import '../css/CrearEquipoComponent.css';
 
+const serviceEquipos = new EquiposService();
 export class CrearEquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -70,15 +72,16 @@ export class CrearEquipoComponent extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(this.context.role != "CAPITAN" || this.context.role != "ADMINISTRADOR"){
-            Swal.fire({
-                title: 'Error',
-                text: 'Debes ser capitán para crear un equipo',
-                icon: 'error',
-                confirmButtonText: 'Entendido'
-            });
-            return;
-        }
+        // if(this.context.role != "CAPITAN" || this.context.role != "ADMINISTRADOR"){
+        //     Swal.fire({
+        //         title: 'Error',
+        //         text: 'Debes ser capitán para crear un equipo',
+        //         icon: 'error',
+        //         confirmButtonText: 'Entendido'
+        //     });
+        //     return;
+        // }
+        
         const { nombreEquipo, minimoJugadores, idColor } = this.state;
 
         // Validaciones
@@ -117,16 +120,8 @@ export class CrearEquipoComponent extends Component {
                 idCurso: this.context.usuario.idCurso
             };
 
-            let request = "api/Equipos/create";
-            let token = this.context.token;
-            
-
-            const res = await axios.post(this.url + request, nuevoEquipo, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            console.log("Equipo creado:", res.data);
+            const data = await serviceEquipos.crearEquipo(nuevoEquipo, this.context.token);
+            console.log("Equipo creado:", data);
 
             Swal.fire({
                 title: '¡Éxito!',

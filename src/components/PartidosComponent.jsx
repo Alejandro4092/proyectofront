@@ -3,8 +3,11 @@ import axios from 'axios';
 import Global from '../Global';
 import '../css/PartidosComponent.css';
 import { NavLink } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
 export class PartidosComponent extends Component {
+    static contextType = AuthContext;
+    
     constructor(props) {
         super(props);
         this.state = {

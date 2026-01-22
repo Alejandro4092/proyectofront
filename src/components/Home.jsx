@@ -3,8 +3,11 @@ import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import Global from '../Global'
 import '../css/Home.css'
+import AuthContext from '../context/AuthContext'
 
 export class Home extends Component {
+  static contextType = AuthContext;
+  
   constructor(props) {
     super(props);
     this.url = Global.apiDeportes;
