@@ -7,8 +7,10 @@ import Swal from 'sweetalert2';
 import '../css/ListaEquiposComponent.css';
 import EquiposService from '../services/EquiposService.js';
 import AuthContext from '../context/AuthContext.js';
+import CapitanService from '../services/CapitanService.js';
 
 const serviceEquipos = new EquiposService();
+const serviceCapitan = new CapitanService();
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
     static contextType = AuthContext;
@@ -77,20 +79,15 @@ export class ListaEquiposComponent extends Component {
         let idEventoActividad = await this.getEventoActividad();
         
         let token = this.context.token;
-        let request = "api/CapitanActividades/FindCapitanEventoActividad/"+idEventoActividad
         try {
-            const response = await axios.get(this.url + request, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const capitan = await serviceCapitan.getCapitanEventoActividad(idEventoActividad, token);
             
             let esCapi = false;
-            if(response.data.idUsuario == this.context.usuario.idUsuario){
+            if(capitan.idUsuario == this.context.usuario.idUsuario){
                 esCapi = true;
             }
             this.setState({
-                capitan: response.data,
+                capitan: capitan,
                 eresCapitan: esCapi
             });
         } catch (error) {
@@ -195,12 +192,16 @@ render() {
                                 <div className='cardEquipo'>
                                     <h1>{equipo.nombreEquipo}</h1>
                                     <h2>Mínimo de Jugadores: {equipo.minimoJugadores}</h2>
-                                    <button 
-                                        className='btn-eliminar-equipo'
-                                        onClick={(e) => this.eliminarEquipo(e, equipo.idEquipo, equipo.nombreEquipo)}
-                                    >
-                                        🗑️ Eliminar
-                                    </button>
+                                    {
+                                        this.state.eresCapitan != false &&
+                                        <button 
+                                            className='btn-eliminar-equipo'
+                                            onClick={(e) => this.eliminarEquipo(e, equipo.idEquipo, equipo.nombreEquipo)}
+                                        >
+                                            🗑️ Eliminar
+                                        </button>
+
+                                    }
                                 </div>
                             </NavLink>
                         )

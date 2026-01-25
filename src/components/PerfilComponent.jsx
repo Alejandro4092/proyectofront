@@ -4,6 +4,9 @@ import '../css/PerfilComponent.css'
 import Global from '../Global';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import CapitanService from '../services/CapitanService';
+
+const serviceCapitan = new CapitanService();
 
 export class PerfilComponent extends Component {
   static contextType = AuthContext;
@@ -22,16 +25,12 @@ export class PerfilComponent extends Component {
 
   checkCapitan = async () => {
     let token = this.context.token;
-    let request = "api/CapitanActividades"
-    axios.get(this.url + request, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(res => {
-      console.log(res.data)
+    try {
+      const capitanes = await serviceCapitan.getCapitanes(token);
+      console.log(capitanes)
       const actividadesCapitan = [];
       this.state.actividades.forEach(actividad => {
-        res.data.forEach(capitan => {
+        capitanes.forEach(capitan => {
           if(actividad.idEventoActividad == capitan.idEventoActividad ){
             actividadesCapitan.push(actividad.idEventoActividad)
           }
@@ -40,7 +39,9 @@ export class PerfilComponent extends Component {
       this.setState({
         actividadesCapitan: actividadesCapitan
       })
-    })
+    } catch (error) {
+      console.error('Error al cargar capitanes:', error);
+    }
   }
 
   esCapitanActividad = (idEventoActividad) => {

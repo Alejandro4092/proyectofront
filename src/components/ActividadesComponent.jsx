@@ -5,7 +5,9 @@ import axios from 'axios'
 import '../css/Actividades.css'
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import CapitanService from '../services/CapitanService';
 
+const serviceCapitan = new CapitanService();
 
 export class ActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -14,6 +16,8 @@ export class ActividadesComponent extends Component {
     state = {
         actividades: [],
         actividadesCapitan: [],
+        actividadesInscritas: [],
+        datosInscritos: [],
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
@@ -32,16 +36,11 @@ export class ActividadesComponent extends Component {
         if (!this.context.token) return;
         
         let token = this.context.token;
-        let request = "api/CapitanActividades"
         try {
-            const response = await axios.get(this.url + request, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const capitanes = await serviceCapitan.getCapitanes(token);
             const actividadesCapitan = [];
             this.state.actividades.forEach(actividad => {
-                response.data.forEach(capitan => {
+                capitanes.forEach(capitan => {
                     if(actividad.idEventoActividad == capitan.idEventoActividad){
                         if(capitan.idUsuario == this.context.usuario.idUsuario){
                             actividadesCapitan.push(actividad.idEventoActividad)
@@ -57,12 +56,102 @@ export class ActividadesComponent extends Component {
         }
     };
 
+    loadActividadesInscritas = async () => {
+        if (!this.context.token) return;
+        
+        let token = this.context.token;
+        let request = "api/UsuariosDeportes/ActividadesUser";
+        try {
+            const response = await axios.get(this.url + request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            // Filtrar solo las actividades del evento actual
+            const actividadesDelEvento = response.data.filter(
+                act => act.idEvento === parseInt(this.props.idEvento)
+            );
+            const idsInscritas = actividadesDelEvento.map(act => act.idEventoActividad);
+            this.setState({
+                actividadesInscritas: idsInscritas,
+                datosInscritos: actividadesDelEvento
+            });
+        } catch (error) {
+            console.error('Error al cargar actividades inscritas:', error);
+        }
+    };
+
     esCapitanActividad = (idEventoActividad) => {
         return this.state.actividadesCapitan.includes(idEventoActividad);
     };
+
+    estaInscrito = (idEventoActividad) => {
+        return this.state.actividadesInscritas.includes(idEventoActividad);
+    };
+
+    estaInscritoEnEvento = () => {
+        return this.state.actividadesInscritas.length > 0;
+    };
+
+    desinscribirse = async (idEventoActividad) => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas desinscribirte de esta actividad?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, desinscribirse',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                // Buscar el ID de la inscripción correspondiente al idEventoActividad
+                const inscripcion = this.state.datosInscritos.find(
+                    ins => ins.idEventoActividad === idEventoActividad
+                );
+
+                if (!inscripcion) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se encontró la inscripción'
+                    });
+                    return;
+                }
+
+                let token = this.context.token;
+                let request = "api/Inscripciones/" + inscripcion.id;
+                await axios.delete(this.url + request, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Desinscripción exitosa!',
+                    text: 'Te has desinscrito correctamente de la actividad',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                await this.loadActividadesInscritas();
+                await this.checkCapitan();
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.response?.data || 'Error al desinscribirse. Por favor, intenta de nuevo.'
+                });
+            }
+        }
+    };
+
     componentDidMount = async () => {
         await this.loadActividades();
         await this.checkCapitan();
+        await this.loadActividadesInscritas();
     };
 
     abrirModal = (actividad) => {
@@ -126,6 +215,7 @@ export class ActividadesComponent extends Component {
                 timer: 2000,
                 showConfirmButton: false
             });
+            await this.loadActividadesInscritas();
         } catch (error) {
             if (error.response?.status === 400) {
                 const mensajeError = error.response?.data?.message || error.response?.data || "";
@@ -166,6 +256,7 @@ export class ActividadesComponent extends Component {
     };
     render() {
         const esOrganizador = (this.context.rol || '').toLowerCase() === 'organizador';
+        console.log(this.context)
         return (
             <div className="actividades-wrapper">
                 <div className="actividades-head">
@@ -195,15 +286,30 @@ export class ActividadesComponent extends Component {
                                     {this.esCapitanActividad(actividad.idEventoActividad) && (
                                         <span className="chip chip-capitan">👑 Capitán</span>
                                     )}
-                                    <button
-                                        className="btn-inscribirse"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            this.abrirModal(actividad);
-                                        }}
-                                    >
-                                        Inscribirse
-                                    </button>
+                                    {this.estaInscrito(actividad.idEventoActividad) && (
+                                        <span className="chip chip-inscrito">✓ Inscrito</span>
+                                    )}
+                                    {this.estaInscrito(actividad.idEventoActividad) ? (
+                                        <button
+                                            className="btn-desinscribirse"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                this.desinscribirse(actividad.idEventoActividad);
+                                            }}
+                                        >
+                                            Desinscribirse
+                                        </button>
+                                    ) : !this.estaInscritoEnEvento() && (
+                                        <button
+                                            className="btn-inscribirse"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                this.abrirModal(actividad);
+                                            }}
+                                        >
+                                            Inscribirse
+                                        </button>
+                                    )}
                                 </div>
                             </article>
                         </NavLink>

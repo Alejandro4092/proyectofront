@@ -33,7 +33,7 @@
     margin: 0;
 }
 
-.btn-volver {
+.ga-btn-volver {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
     padding: 10px 20px;
@@ -46,7 +46,7 @@
     border: none;
 }
 
-.btn-volver:hover {
+.ga-btn-volver:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     color: #e0d4f7;
@@ -110,7 +110,7 @@
     cursor: pointer;
 }
 
-.btn-asociar {
+.ga-btn-asociar {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
     padding: 14px 30px;
@@ -124,12 +124,12 @@
     margin-top: 10px;
 }
 
-.btn-asociar:hover:not(:disabled) {
+.ga-btn-asociar:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.btn-asociar:disabled {
+.ga-btn-asociar:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
@@ -224,7 +224,7 @@
     font-weight: 600;
 }
 
-.btn-eliminar {
+.ga-btn-eliminar {
     background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
     color: white;
     padding: 10px 20px;
@@ -237,7 +237,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-eliminar:hover {
+.ga-btn-eliminar:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
@@ -275,7 +275,7 @@
         align-items: flex-start;
     }
 
-    .btn-eliminar {
+    .ga-btn-eliminar {
         width: 100%;
     }
 }

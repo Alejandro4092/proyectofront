@@ -168,7 +168,7 @@ export class GestionarActividadesComponent extends Component {
                 <div className="gestionar-actividades-wrapper">
                     <div className="gestionar-actividades-header">
                         <h1>Gestionar Actividades del Evento</h1>
-                        <Link to={`/actividades/${this.props.idEvento}`} className="btn-volver">
+                        <Link to={`/actividades/${this.props.idEvento}`} className="ga-btn-volver">
                             Volver
                         </Link>
                     </div>
@@ -226,7 +226,7 @@ export class GestionarActividadesComponent extends Component {
 
                                 <button 
                                     type="submit" 
-                                    className="btn-asociar"
+                                    className="ga-btn-asociar"
                                     disabled={this.state.loading}
                                 >
                                     {this.state.loading ? 'Asociando...' : 'Asociar Actividad'}
@@ -255,7 +255,7 @@ export class GestionarActividadesComponent extends Component {
                                                 </div>
                                             </div>
                                             <button
-                                                className="btn-eliminar"
+                                                className="ga-btn-eliminar"
                                                 onClick={() => this.eliminarActividad(
                                                     actividad.idEventoActividad,
                                                     actividad.nombreActividad
