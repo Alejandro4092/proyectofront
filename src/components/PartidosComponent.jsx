@@ -4,6 +4,11 @@ import Global from '../Global';
 import '../css/PartidosComponent.css';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import EquiposService from '../services/EquiposService';
+import PartidosService from '../services/PartidosService';
+
+const serviceEquipos = new EquiposService();
+const servicePartidos = new PartidosService();
 
 export class PartidosComponent extends Component {
     static contextType = AuthContext;
@@ -24,11 +29,10 @@ export class PartidosComponent extends Component {
     }
 
     obtenerPartidos = () => {
-        let request = "api/PartidoResultado";
-        axios.get(this.url + request)
-            .then(response => {
-                this.setState({ partidos: response.data });
-                this.obtenerEquipos(response.data);
+        servicePartidos.getPartidos()
+            .then(data => {
+                this.setState({ partidos: data });
+                this.obtenerEquipos(data);
                 this.setState({ cargando: false });
             })
             .catch(error => {
@@ -56,10 +60,9 @@ export class PartidosComponent extends Component {
         }
 
         equiposUnicos.forEach(idEquipo => {
-            let request = `api/Equipos/${idEquipo}`;
-            axios.get(this.url + request)
-                .then(response => {
-                    equiposData[idEquipo] = response.data;
+            serviceEquipos.getEquipo(idEquipo)
+                .then(data => {
+                    equiposData[idEquipo] = data;
                     equiposCargados++;
                     if (equiposCargados === equiposUnicos.size) {
                         this.setState({ equipos: equiposData });

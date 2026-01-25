@@ -69,19 +69,44 @@ export class CrearEquipoComponent extends Component {
         });
     }
 
+    checkCapitan = async (idEventoActividad) => {
+        let request = "api/CapitanActividades/FindCapitanEventoActividad/" + idEventoActividad;
+        let token = this.context.token;
+        try {
+            const response = await axios.get(this.url + request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log(this.context.usuario)
+            console.log(response.data)
+            if (this.context.usuario.idUsuario == response.data.idUsuario) {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+            return false;
+        }
+        return false;
+    }
+
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        // if(this.context.role != "CAPITAN" || this.context.role != "ADMINISTRADOR"){
-        //     Swal.fire({
-        //         title: 'Error',
-        //         text: 'Debes ser capitán para crear un equipo',
-        //         icon: 'error',
-        //         confirmButtonText: 'Entendido'
-        //     });
-        //     return;
-        // }
-        
+        const idEventoActividadParam = await this.getEventoActividad();
+        let esCapitan = await this.checkCapitan(idEventoActividadParam);
+        console.log(esCapitan);
+        console.log(idEventoActividadParam);
+        if (esCapitan == false) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Debes ser capitán para crear un equipo',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
         const { nombreEquipo, minimoJugadores, idColor } = this.state;
 
         // Validaciones
@@ -108,7 +133,7 @@ export class CrearEquipoComponent extends Component {
         this.setState({ loading: true });
 
         try {
-            const idEventoActividadParam = await this.getEventoActividad();
+
 
             // Preparar datos para enviar
             const nuevoEquipo = {

@@ -13,6 +13,7 @@ export class ActividadesComponent extends Component {
     url = Global.apiDeportes;
     state = {
         actividades: [],
+        actividadesCapitan: [],
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
@@ -20,13 +21,48 @@ export class ActividadesComponent extends Component {
     loadActividades = () => {
         let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
         axios.get(this.url + request).then((response) => {
+            console.log(response.data)
             this.setState({
                 actividades: response.data,
             });
         });
     };
-    componentDidMount = () => {
-        this.loadActividades();
+
+    checkCapitan = async () => {
+        if (!this.context.token) return;
+        
+        let token = this.context.token;
+        let request = "api/CapitanActividades"
+        try {
+            const response = await axios.get(this.url + request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const actividadesCapitan = [];
+            this.state.actividades.forEach(actividad => {
+                response.data.forEach(capitan => {
+                    if(actividad.idEventoActividad == capitan.idEventoActividad){
+                        if(capitan.idUsuario == this.context.usuario.idUsuario){
+                            actividadesCapitan.push(actividad.idEventoActividad)
+                        }
+                    }
+                });
+            });
+            this.setState({
+                actividadesCapitan: actividadesCapitan
+            });
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+        }
+    };
+
+    esCapitanActividad = (idEventoActividad) => {
+        return this.state.actividadesCapitan.includes(idEventoActividad);
+    };
+    componentDidMount = async () => {
+        await this.loadActividades();
+        await this.checkCapitan();
     };
 
     abrirModal = (actividad) => {
@@ -150,6 +186,9 @@ export class ActividadesComponent extends Component {
                                 </p>
                                 <div className="actividad-tags">
                                     <span className="chip chip-primary">Posición: {actividad.posicion}</span>
+                                    {this.esCapitanActividad(actividad.idEventoActividad) && (
+                                        <span className="chip chip-capitan">👑 Capitán</span>
+                                    )}
                                     <button
                                         className="btn-inscribirse"
                                         onClick={(e) => {

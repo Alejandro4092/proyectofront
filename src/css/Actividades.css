@@ -103,6 +103,12 @@
     color: #0e7490;
 }
 
+.chip-capitan {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+}
+
 .btn-inscribirse {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: #ffffff;

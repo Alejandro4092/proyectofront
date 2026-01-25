@@ -6,8 +6,10 @@ import Swal from 'sweetalert2';
 import { AuthContext } from '../context/AuthContext';
 import { NavLink } from 'react-router-dom';
 import EquiposService from '../services/EquiposService';
+import ColorService from '../services/ColorService';
 
 const serviceEquipos = new EquiposService();
+const serviceColor = new ColorService();
 export class EquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -90,9 +92,7 @@ export class EquipoComponent extends Component {
 
     getColorName = async (idColor) => {
         try {
-            let request = "api/Colores/" + idColor;
-            const res = await axios.get(this.url + request);
-            let colorName = res.data.nombreColor;
+            const colorName = await serviceColor.getColorName(idColor);
             console.log("color", colorName);
             return colorName;
         } catch (error) {
@@ -113,10 +113,9 @@ export class EquipoComponent extends Component {
     }
 
     loadColores = () => {
-        let request = "api/Colores";
-        axios.get(this.url + request)
-            .then(res => {
-                this.setState({ colores: res.data });
+        serviceColor.getColores()
+            .then(data => {
+                this.setState({ colores: data });
             })
             .catch(error => {
                 console.error("Error al cargar colores:", error);
