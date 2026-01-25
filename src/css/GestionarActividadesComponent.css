@@ -1,0 +1,281 @@
+.gestionar-actividades-container {
+    padding: 30px 40px;
+    min-height: calc(100vh - 100px);
+    background: #1a1a1a;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.gestionar-actividades-wrapper {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 1200px;
+    width: 100%;
+    border: 2px solid #e0d4f7;
+}
+
+.gestionar-actividades-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0d4f7;
+}
+
+.gestionar-actividades-header h1 {
+    font-size: 2rem;
+    color: #2d1b69;
+    font-weight: bold;
+    margin: 0;
+}
+
+.btn-volver {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: none;
+}
+
+.btn-volver:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #e0d4f7;
+}
+
+.gestionar-actividades-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Sección Asociar Actividad */
+.asociar-actividad-section {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #e0d4f7;
+}
+
+.asociar-actividad-section h2 {
+    color: #2d1b69;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.form-asociar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    padding: 12px 15px;
+    border: 2px solid #e0d4f7;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+    background: white;
+}
+
+.form-control:focus {
+    border-color: #2d1b69;
+    box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
+}
+
+.form-control select {
+    cursor: pointer;
+}
+
+.btn-asociar {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    padding: 14px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.btn-asociar:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-asociar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Sección Actividades Asociadas */
+.actividades-asociadas-section {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #e0d4f7;
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+
+.actividades-asociadas-section h2 {
+    color: #2d1b69;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.no-actividades {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 30px 0;
+}
+
+.actividades-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.actividades-lista::-webkit-scrollbar {
+    width: 8px;
+}
+
+.actividades-lista::-webkit-scrollbar-track {
+    background: #e0d4f7;
+    border-radius: 10px;
+}
+
+.actividades-lista::-webkit-scrollbar-thumb {
+    background: #2d1b69;
+    border-radius: 10px;
+}
+
+.actividades-lista::-webkit-scrollbar-thumb:hover {
+    background: #1a4d7a;
+}
+
+.actividad-item {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e0d4f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.actividad-item:hover {
+    border-color: #2d1b69;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-info h3 {
+    color: #2d1b69;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.actividad-detalles {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.detalle-badge {
+    background: linear-gradient(135deg, #e0d4f7 0%, #c8b7f0 100%);
+    color: #2d1b69;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn-eliminar {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .gestionar-actividades-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .gestionar-actividades-container {
+        padding: 20px;
+    }
+
+    .gestionar-actividades-wrapper {
+        padding: 25px;
+    }
+
+    .gestionar-actividades-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .gestionar-actividades-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .actividad-item {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .btn-eliminar {
+        width: 100%;
+    }
+}

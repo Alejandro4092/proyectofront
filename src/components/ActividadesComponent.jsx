@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Global from '../Global';
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import axios from 'axios'
 import '../css/Actividades.css'
 import AuthContext from '../context/AuthContext';
@@ -165,10 +165,16 @@ export class ActividadesComponent extends Component {
         this.cerrarModal();
     };
     render() {
+        const esOrganizador = (this.context.rol || '').toLowerCase() === 'organizador';
         return (
             <div className="actividades-wrapper">
                 <div className="actividades-head">
                     <h1 className="actividades-title">Actividades</h1>
+                    {esOrganizador && (
+                        <Link to={`/gestionar-actividades/${this.props.idEvento}`} className="btn-crear-evento">
+                            Gestionar Actividades
+                        </Link>
+                    )}
                 </div>
 
                 <div className="actividades-grid">

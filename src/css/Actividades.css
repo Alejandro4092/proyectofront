@@ -9,6 +9,11 @@
     margin: 0 auto 30px auto;
     padding-bottom: 20px;
     border-bottom: 2px solid #b8a4e8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 
@@ -18,6 +23,27 @@
     color: #ffffff;
     letter-spacing: -0.4px;
     font-weight: bold;
+}
+
+.btn-crear-evento {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+}
+
+.btn-crear-evento:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    color: #e0d4f7;
 }
 
 .actividades-sub {
