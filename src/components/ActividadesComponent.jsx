@@ -7,10 +7,12 @@ import Swal from 'sweetalert2';
 import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
 import InscripcionesService from '../services/InscripcionesService';
+import PrecioActividadService from '../services/PrecioActividadService';
 
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
+const servicePrecioActividad = new PrecioActividadService();
 
 export class ActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -24,6 +26,7 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
+        precios: [],
     };
     loadActividades = () => {
         serviceActividades.getActividadesEvento(this.props.idEvento)
@@ -94,6 +97,22 @@ export class ActividadesComponent extends Component {
         return this.state.actividadesInscritas.length > 0;
     };
 
+    loadPrecios = async () => {
+        try {
+            const precios = await servicePrecioActividad.getPreciosActividades();
+            this.setState({ precios });
+        } catch (error) {
+            console.error('Error al cargar precios:', error);
+        }
+    };
+
+    getPrecioActividad = (idEventoActividad) => {
+        const precio = this.state.precios.find(
+            p => p.idEventoActividad === idEventoActividad
+        );
+        return precio?.precioTotal;
+    };
+
     desinscribirse = async (idEventoActividad) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
@@ -148,6 +167,7 @@ export class ActividadesComponent extends Component {
         await this.loadActividades();
         await this.checkCapitan();
         await this.loadActividadesInscritas();
+        await this.loadPrecios();
     };
 
     abrirModal = (actividad) => {
@@ -268,6 +288,11 @@ export class ActividadesComponent extends Component {
                             style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                             <article className="actividad-card">
+                                {this.getPrecioActividad(actividad.idEventoActividad) && (
+                                    <div className="actividad-precio-badge">
+                                        <span className="chip chip-precio">Precio: {this.getPrecioActividad(actividad.idEventoActividad)}€</span>
+                                    </div>
+                                )}
                                 <div className="actividad-title">{actividad.nombreActividad}</div>
                                 <div className="actividad-fecha">{actividad.fechaEvento}</div>
                                 <p className="actividad-desc">
