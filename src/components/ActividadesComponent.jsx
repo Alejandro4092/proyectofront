@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
 import InscripcionesService from '../services/InscripcionesService';
+import axios from 'axios';
 
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
