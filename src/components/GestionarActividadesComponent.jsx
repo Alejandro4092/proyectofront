@@ -5,6 +5,9 @@ import axios from 'axios'
 import '../css/GestionarActividadesComponent.css'
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import ActividadesService from '../services/ActividadesService';
+
+const serviceActividades = new ActividadesService();
 
 export class GestionarActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -26,34 +29,27 @@ export class GestionarActividadesComponent extends Component {
 
     loadActividadesDisponibles = () => {
         let token = this.context.token;
-        let request = "api/Actividades";
-        axios.get(this.url + request, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }).then((response) => {
-            this.setState({
-                actividadesDisponibles: response.data,
+        serviceActividades.getActividades(token)
+            .then(data => {
+                this.setState({
+                    actividadesDisponibles: data,
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar actividades disponibles:', error);
             });
-        }).catch(error => {
-            console.error('Error al cargar actividades disponibles:', error);
-        });
     };
 
     loadActividadesAsociadas = () => {
-        let token = this.context.token;
-        let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
-        axios.get(this.url + request, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }).then((response) => {
-            this.setState({
-                actividadesAsociadas: response.data,
+        serviceActividades.getActividadesEvento(this.props.idEvento)
+            .then(data => {
+                this.setState({
+                    actividadesAsociadas: data,
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar actividades asociadas:', error);
             });
-        }).catch(error => {
-            console.error('Error al cargar actividades asociadas:', error);
-        });
     };
 
     handleChange = (e) => {
@@ -75,7 +71,6 @@ export class GestionarActividadesComponent extends Component {
         }
 
         let token = this.context.token;
-        let request = "api/EventoActividad";
         
         const datos = {
             idEventoActividad: 0,
@@ -88,11 +83,7 @@ export class GestionarActividadesComponent extends Component {
         this.setState({ loading: true });
 
         try {
-            await axios.post(this.url + request, datos, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            await serviceActividades.asociarEventoActividad(datos, token);
 
             Swal.fire({
                 icon: 'success',
@@ -134,14 +125,9 @@ export class GestionarActividadesComponent extends Component {
 
         if (result.isConfirmed) {
             let token = this.context.token;
-            let request = "api/EventoActividad/" + idEventoActividad;
 
             try {
-                await axios.delete(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                await serviceActividades.eliminarEventoActividad(idEventoActividad, token);
 
                 Swal.fire({
                     icon: 'success',

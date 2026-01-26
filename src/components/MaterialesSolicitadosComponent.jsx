@@ -3,6 +3,9 @@ import axios from 'axios';
 import Global from '../Global';
 import '../css/MaterialesSolicitadosComponent.css';
 import AuthContext from '../context/AuthContext';
+import MaterialesService from '../services/MaterialesService';
+
+const serviceMateriales = new MaterialesService();
 
 export class MaterialesSolicitadosComponent extends Component {
     static contextType = AuthContext;
@@ -22,11 +25,10 @@ export class MaterialesSolicitadosComponent extends Component {
     }
 
     obtenerMateriales = () => {
-        let request = "api/Materiales";
-        axios.get(this.url + request)
-            .then(response => {
+        serviceMateriales.getMateriales()
+            .then(data => {
                 this.setState({ 
-                    materiales: response.data,
+                    materiales: data,
                     cargando: false 
                 });
             })

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
 import '../css/CrearEventoComponent.css'
+import EventosService from '../services/EventosService'
+
+const serviceEventos = new EventosService();
 
 export class CrearEventoComponent extends Component {
   static contextType = AuthContext;
@@ -40,12 +42,7 @@ export class CrearEventoComponent extends Component {
       hour12: false 
     }).replace(/(\d+)\/(\d+)\/(\d+),?\s+(\d+):(\d+):(\d+)/, '$3-$2-$1 $4:$5:$6');
     
-    let request = "api/Eventos/create/" + encodeURIComponent(fechaFormato) + "?datofecha=" + encodeURIComponent(fechaFormato);
-    axios.post(this.url + request, {}, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => {
+    serviceEventos.crearEvento(fechaFormato, token).then(response => {
       console.log(response.data);
       this.setState({
         mensaje: 'Evento creado exitosamente'

@@ -5,8 +5,10 @@ import Global from '../Global';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import CapitanService from '../services/CapitanService';
+import ActividadesService from '../services/ActividadesService';
 
 const serviceCapitan = new CapitanService();
+const serviceActividades = new ActividadesService();
 
 export class PerfilComponent extends Component {
   static contextType = AuthContext;
@@ -51,17 +53,15 @@ export class PerfilComponent extends Component {
   loadActividadesUsuario = async () => {
     let token = this.context.token;
     console.log(token)
-    let request = 'api/UsuariosDeportes/ActividadesUser'
-    axios.get(this.url + request, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(res => {
-      console.log(res.data)
+    try {
+      const actividades = await serviceActividades.getActividadesUsuario(token);
+      console.log(actividades)
       this.setState({
-        actividades: res.data
+        actividades: actividades
       })
-    })
+    } catch (error) {
+      console.error('Error al cargar actividades del usuario:', error);
+    }
   }
 
   formatearFecha = (fechaStr) => {

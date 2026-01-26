@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import Global from '../Global';
 import { NavLink, Link } from 'react-router-dom'
-import axios from 'axios'
 import '../css/Actividades.css'
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import CapitanService from '../services/CapitanService';
+import ActividadesService from '../services/ActividadesService';
+import InscripcionesService from '../services/InscripcionesService';
 
 const serviceCapitan = new CapitanService();
+const serviceActividades = new ActividadesService();
+const serviceInscripciones = new InscripcionesService();
 
 export class ActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -23,13 +26,16 @@ export class ActividadesComponent extends Component {
         esCapitan: false,
     };
     loadActividades = () => {
-        let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
-        axios.get(this.url + request).then((response) => {
-            console.log(response.data)
-            this.setState({
-                actividades: response.data,
+        serviceActividades.getActividadesEvento(this.props.idEvento)
+            .then(data => {
+                console.log(data)
+                this.setState({
+                    actividades: data,
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar actividades:', error);
             });
-        });
     };
 
     checkCapitan = async () => {
@@ -60,15 +66,10 @@ export class ActividadesComponent extends Component {
         if (!this.context.token) return;
         
         let token = this.context.token;
-        let request = "api/UsuariosDeportes/ActividadesUser";
         try {
-            const response = await axios.get(this.url + request, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const actividades = await serviceActividades.getActividadesUsuario(token);
             // Filtrar solo las actividades del evento actual
-            const actividadesDelEvento = response.data.filter(
+            const actividadesDelEvento = actividades.filter(
                 act => act.idEvento === parseInt(this.props.idEvento)
             );
             const idsInscritas = actividadesDelEvento.map(act => act.idEventoActividad);
@@ -122,12 +123,7 @@ export class ActividadesComponent extends Component {
                 }
 
                 let token = this.context.token;
-                let request = "api/Inscripciones/" + inscripcion.id;
-                await axios.delete(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                await serviceInscripciones.desinscribirse(inscripcion.id, token);
 
                 Swal.fire({
                     icon: 'success',
@@ -203,11 +199,7 @@ export class ActividadesComponent extends Component {
         try {
             let token = this.context.token;
             console.log(token)
-            const response = await axios.post(this.url + request, datos, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            await serviceInscripciones.inscribirse(datos, token);
             Swal.fire({
                 icon: 'success',
                 title: '¡Inscripción exitosa!',
