@@ -7,11 +7,13 @@ import { AuthContext } from '../context/AuthContext';
 import EquiposService from '../services/EquiposService';
 import CapitanService from '../services/CapitanService.js';
 import ColorService from '../services/ColorService.js';
+import ActividadesService from '../services/ActividadesService.js';
 import '../css/CrearEquipoComponent.css';
 
 const serviceEquipos = new EquiposService();
 const serviceCapitan = new CapitanService();
 const serviceColor = new ColorService();
+const serviceActividades = new ActividadesService();
 
 export class CrearEquipoComponent extends Component {
     static contextType = AuthContext;
@@ -57,10 +59,8 @@ export class CrearEquipoComponent extends Component {
 
     
     getEventoActividad = async () => {
-        let request = "api/ActividadesEvento/FindIdEventoActividad/" + this.props.idEvento + "/" + this.props.idActividad;
         try {
-            const res = await axios.get(this.url + request);
-            return res.data.idEventoActividad;
+            return await serviceActividades.getEventoActividad(this.props.idEvento, this.props.idActividad);
         } catch (error) {
             console.error("Error al obtener el id:", error);
             throw error;
