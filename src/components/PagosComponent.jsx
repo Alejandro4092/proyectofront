@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import AuthContext from '../context/AuthContext';
 import PagosService from '../services/PagosService';
 import GestionEventoService from '../services/GestionEventoService';
+import PrecioActividadService from '../services/PrecioActividadService';
+import TablaPagosAgrupadosComponent from './TablaPagosAgrupadosComponent';
 import '../css/PagosComponent.css';
 
 const servicePagos = new PagosService();
 const serviceGestionEvento = new GestionEventoService();
+const servicePrecioActividad = new PrecioActividadService();
 
 export class PagosComponent extends Component {
     static contextType = AuthContext;
@@ -18,7 +21,8 @@ export class PagosComponent extends Component {
         cargando: true,
         mostrarModalPago: false,
         pagoSeleccionado: null,
-        cantidadPago: ''
+        cantidadPago: '',
+        preciosActividades: {}
     };
 
     componentDidMount = async () => {
@@ -79,6 +83,45 @@ export class PagosComponent extends Component {
                 pago.estado && pago.estado.toLowerCase() !== 'pagado'
             );
         }
+    };
+
+    getPagosAgrupadosPagados = async () => {
+        const { pagos } = this.state;
+        const pagosPagados = pagos.filter(pago => 
+            pago.estado && pago.estado.toLowerCase() === 'pagado'
+        );
+
+        // Agrupar por idEventoActividad
+        const agrupados = {};
+        pagosPagados.forEach(pago => {
+            const key = pago.idEventoActividad;
+            if (!agrupados[key]) {
+                agrupados[key] = {
+                    ...pago,
+                    totalPagado: 0,
+                    numPagos: 0
+                };
+            }
+            agrupados[key].totalPagado += pago.cantidadPagada || 0;
+            agrupados[key].numPagos += 1;
+        });
+
+        // Obtener precios y validar
+        const resultado = [];
+        for (const key in agrupados) {
+            const grupo = agrupados[key];
+            try {
+                if (grupo.idPrecioActividad) {
+                    const precioData = await servicePrecioActividad.getPrecioActividad(grupo.idPrecioActividad);
+                    grupo.precioReal = precioData.precioTotal;
+                }
+            } catch (error) {
+                console.error('Error al obtener precio de actividad:', error);
+            }
+            resultado.push(grupo);
+        }
+
+        return resultado;
     };
 
     formatearFecha = (fecha) => {
@@ -216,7 +259,13 @@ export class PagosComponent extends Component {
                             </p>
                         </div>
                     ) : (
-                        <div className="pagos-table-container">
+                        pestanaActiva === 'pagados' ? (
+                            <TablaPagosAgrupadosComponent
+                                getPagosAgrupados={this.getPagosAgrupadosPagados}
+                                formatearFecha={this.formatearFecha}
+                            />
+                        ) : (
+                            <div className="pagos-table-container">
                             <table className="pagos-table">
                                 <thead>
                                     <tr>
@@ -260,8 +309,7 @@ export class PagosComponent extends Component {
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
-                    )}
+                        </div>                        )                    )}
                 </div>
 
                 {this.state.mostrarModalPago && (
