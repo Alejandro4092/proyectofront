@@ -4,20 +4,51 @@ import '../css/PerfilComponent.css'
 import Global from '../Global';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import CapitanService from '../services/CapitanService';
+
+const serviceCapitan = new CapitanService();
 
 export class PerfilComponent extends Component {
   static contextType = AuthContext;
   url = Global.apiDeportes
 
   state = {
-    actividades:[]
+    actividades:[],
+    actividadesCapitan: [],
+    esCapitan : false
   }
 
-  componentDidMount = () => {
-    this.loadActividadesUsuario();
+  componentDidMount = async () => {
+    await this.loadActividadesUsuario();
+    await this.checkCapitan();
   }
 
-  loadActividadesUsuario = () => {
+  checkCapitan = async () => {
+    let token = this.context.token;
+    try {
+      const capitanes = await serviceCapitan.getCapitanes(token);
+      console.log(capitanes)
+      const actividadesCapitan = [];
+      this.state.actividades.forEach(actividad => {
+        capitanes.forEach(capitan => {
+          if(actividad.idEventoActividad == capitan.idEventoActividad ){
+            actividadesCapitan.push(actividad.idEventoActividad)
+          }
+        })
+      })
+      this.setState({
+        actividadesCapitan: actividadesCapitan
+      })
+    } catch (error) {
+      console.error('Error al cargar capitanes:', error);
+    }
+  }
+
+  esCapitanActividad = (idEventoActividad) => {
+    return this.state.actividadesCapitan.includes(idEventoActividad);
+  }
+
+  loadActividadesUsuario = async () => {
     let token = this.context.token;
     console.log(token)
     let request = 'api/UsuariosDeportes/ActividadesUser'
@@ -132,12 +163,18 @@ export class PerfilComponent extends Component {
                         <span className="fecha-icon">🎯</span>
                         Fecha del Evento: {this.formatearFecha(actividad.fechaEvento)}
                       </p>
-                      {
-                        actividad.quiereSerCapitan ? 
-                        <span className="capitan-badge">⭐ Quieres ser capitán</span>
-                        :
-                        <span className="capitan-badge no-capitan">👤 No quieres ser capitán</span>
-                      }
+                      <div className="badges-container">
+                        {
+                          this.esCapitanActividad(actividad.idEventoActividad) && 
+                          <span className="capitan-badge es-capitan">👑 Eres capitán</span>
+                        }
+                        {
+                          actividad.quiereSerCapitan ? 
+                          <span className="capitan-badge">⭐ Quieres ser capitán</span>
+                          :
+                          <span className="capitan-badge no-capitan">👤 No quieres ser capitán</span>
+                        }
+                      </div>
                       {/* <span className="actividad-badge activo">Activo</span> */}
                     </div>
                   </div>

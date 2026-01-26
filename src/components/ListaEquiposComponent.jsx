@@ -7,8 +7,10 @@ import Swal from 'sweetalert2';
 import '../css/ListaEquiposComponent.css';
 import EquiposService from '../services/EquiposService.js';
 import AuthContext from '../context/AuthContext.js';
+import CapitanService from '../services/CapitanService.js';
 
 const serviceEquipos = new EquiposService();
+const serviceCapitan = new CapitanService();
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
     static contextType = AuthContext;
@@ -16,6 +18,8 @@ export class ListaEquiposComponent extends Component {
 
     state = {
         equipos: [],
+        capitan: {},
+        eresCapitan: false,
         equiposPrueba: [
             {
                 "idEquipo": 4444,
@@ -53,11 +57,47 @@ export class ListaEquiposComponent extends Component {
         ]
     }
 
-    componentDidMount = () => {
-        this.loadEquipos();
+    componentDidMount = async () => {
+        await this.loadEquipos();
+        await this.findCapitan();
     }
 
-    loadEquipos = () => {
+    getEventoActividad = async () => {
+        let request = "api/ActividadesEvento/FindIdEventoActividad/" + this.props.idEvento + "/" + this.props.idActividad;
+        try {
+            const res = await axios.get(this.url + request);
+            return res.data.idEventoActividad;
+        } catch (error) {
+            console.error("Error al obtener el id:", error);
+            throw error;
+        }
+    }
+
+    findCapitan = async () => {
+        
+        if (!this.context.token) return;
+        let idEventoActividad = await this.getEventoActividad();
+        
+        let token = this.context.token;
+        try {
+            const capitan = await serviceCapitan.getCapitanEventoActividad(idEventoActividad, token);
+            
+            let esCapi = false;
+            if(capitan.idUsuario == this.context.usuario.idUsuario){
+                esCapi = true;
+            }
+            this.setState({
+                capitan: capitan,
+                eresCapitan: esCapi
+            });
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+        }
+    
+
+    }
+
+    loadEquipos = async () => {
         let idActividad = this.props.idActividad;
         let idEvento = this.props.idEvento;
         serviceEquipos.getEquiposActividad(idActividad, idEvento).then(data =>{
@@ -126,12 +166,18 @@ render() {
         <div className='equipos-container'>
             <div className='equipos-header'>
                 <h1>Equipos</h1>
-                <NavLink
-                    to={`/crear-equipo/${this.props.idEvento}/${this.props.idActividad}`}
-                    className='btn-crear-equipo'
-                >
-                    + Crear Equipo
-                </NavLink>
+                <h1 className='capitan-info'>
+                    Capitán: <span className='capitan-nombre'>{this.state.capitan.usuario}</span>
+                </h1>
+                {
+                    this.state.eresCapitan && 
+                    <NavLink
+                        to={`/crear-equipo/${this.props.idEvento}/${this.props.idActividad}`}
+                        className='btn-crear-equipo'
+                    >
+                        + Crear Equipo
+                    </NavLink>
+                }
             </div>
             <div className='equipos-grid'>
                 {console.log(this.state.equipos)}
@@ -146,12 +192,16 @@ render() {
                                 <div className='cardEquipo'>
                                     <h1>{equipo.nombreEquipo}</h1>
                                     <h2>Mínimo de Jugadores: {equipo.minimoJugadores}</h2>
-                                    <button 
-                                        className='btn-eliminar-equipo'
-                                        onClick={(e) => this.eliminarEquipo(e, equipo.idEquipo, equipo.nombreEquipo)}
-                                    >
-                                        🗑️ Eliminar
-                                    </button>
+                                    {
+                                        this.state.eresCapitan != false &&
+                                        <button 
+                                            className='btn-eliminar-equipo'
+                                            onClick={(e) => this.eliminarEquipo(e, equipo.idEquipo, equipo.nombreEquipo)}
+                                        >
+                                            🗑️ Eliminar
+                                        </button>
+
+                                    }
                                 </div>
                             </NavLink>
                         )

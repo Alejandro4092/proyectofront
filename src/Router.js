@@ -15,8 +15,9 @@ import PartidosComponent from './components/PartidosComponent'
 import CrearEquipoComponent from './components/CrearEquipoComponent'
 import { AuthProvider } from './context/AuthContext'
 import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosComponent'
-import GestionarActividadesComponent from './components/GestionarActividadesComponent'
 import NotFoundComponent from './components/NotFoundComponent'
+import PagosComponent from './components/PagosComponent'
+import GestionarActividadesComponent from './components/GestionarActividadesComponent'
 
 export default class Router extends Component {
     render() {
@@ -61,12 +62,13 @@ export default class Router extends Component {
                         <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
                         <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
                         <Route path='/equipos' element={<ListaEquiposComponent/>}/>
-                        <Route path='/equipos/:idEvento/:idActividad/' element={<ListaEquiposElement/>}/>
+                        <Route path='/equipos/:idEvento/:idActividad' element={<ListaEquiposElement/>}/>
                         <Route path='/equipo/:idEquipo' element={<EquipoComponentElement/>}/>
                         <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
                         <Route path='/gestionar-actividades/:idEvento' element={<GestionarActividadesElement/>}/>
                         <Route path='/partidos' element={<PartidosComponent/>}/>
                         <Route path='/materialesSolicitados' element={<MaterialesSolicitadosComponent/>}/>
+                        <Route path='/pagos' element={<PagosComponent/>}/>
                         <Route path='*' element={<NotFoundComponent/>}/>
 
                     </Routes>

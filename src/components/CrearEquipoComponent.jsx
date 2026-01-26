@@ -5,9 +5,14 @@ import { Navigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../context/AuthContext';
 import EquiposService from '../services/EquiposService';
+import CapitanService from '../services/CapitanService.js';
+import ColorService from '../services/ColorService.js';
 import '../css/CrearEquipoComponent.css';
 
 const serviceEquipos = new EquiposService();
+const serviceCapitan = new CapitanService();
+const serviceColor = new ColorService();
+
 export class CrearEquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -41,16 +46,16 @@ export class CrearEquipoComponent extends Component {
     }
 
     loadColores = () => {
-        let request = "api/Colores";
-        axios.get(this.url + request)
-            .then(res => {
-                this.setState({ colores: res.data });
+         serviceColor.getColores()
+            .then(data => {
+                this.setState({ colores: data });
             })
             .catch(error => {
                 console.error("Error al cargar colores:", error);
             });
     }
 
+    
     getEventoActividad = async () => {
         let request = "api/ActividadesEvento/FindIdEventoActividad/" + this.props.idEvento + "/" + this.props.idActividad;
         try {
@@ -69,19 +74,39 @@ export class CrearEquipoComponent extends Component {
         });
     }
 
+    checkCapitan = async (idEventoActividad) => {
+        let token = this.context.token;
+        try {
+            const capitan = await serviceCapitan.getCapitanEventoActividad(idEventoActividad, token);
+            console.log(this.context.usuario)
+            console.log(capitan)
+            if (this.context.usuario.idUsuario == capitan.idUsuario) {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+            return false;
+        }
+        return false;
+    }
+
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        // if(this.context.role != "CAPITAN" || this.context.role != "ADMINISTRADOR"){
-        //     Swal.fire({
-        //         title: 'Error',
-        //         text: 'Debes ser capitán para crear un equipo',
-        //         icon: 'error',
-        //         confirmButtonText: 'Entendido'
-        //     });
-        //     return;
-        // }
-        
+        const idEventoActividadParam = await this.getEventoActividad();
+        let esCapitan = await this.checkCapitan(idEventoActividadParam);
+        console.log(esCapitan);
+        console.log(idEventoActividadParam);
+        if (esCapitan == false) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Debes ser capitán para crear un equipo',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
         const { nombreEquipo, minimoJugadores, idColor } = this.state;
 
         // Validaciones
@@ -108,7 +133,7 @@ export class CrearEquipoComponent extends Component {
         this.setState({ loading: true });
 
         try {
-            const idEventoActividadParam = await this.getEventoActividad();
+
 
             // Preparar datos para enviar
             const nuevoEquipo = {

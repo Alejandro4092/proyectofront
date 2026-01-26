@@ -129,6 +129,18 @@
     color: #0e7490;
 }
 
+.chip-capitan {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+}
+
+.chip-inscrito {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
 .btn-inscribirse {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: #ffffff;
@@ -146,6 +158,25 @@
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     color: #e0d4f7;
+}
+
+.btn-desinscribirse {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-desinscribirse:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(211, 47, 47, 0.3);
+    background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
 }
 
 .btn-inscribirse:active {

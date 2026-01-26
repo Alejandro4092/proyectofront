@@ -5,7 +5,9 @@ import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
 import '../css/EventosComponent.css'
+import EventosService from '../services/EventosService'
 
+const serviceEventos = new EventosService();
 export class EventosComponent extends Component {
   static contextType = AuthContext;
 
@@ -25,16 +27,15 @@ export class EventosComponent extends Component {
   // GET: Obtiene eventos del curso escolar
   loadEventosCursoEscolar = () => {
     let token = this.context.token;
-    let request = "api/Eventos/EventosCursoEscolar";
-    axios.get(this.url + request, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => {
-      this.setState({
-        eventosCursoEscolar: response.data
+    serviceEventos.getEventosCursoEscolar(token)
+      .then(data => {
+        this.setState({
+          eventosCursoEscolar: data
+        });
+      })
+      .catch(error => {
+        console.error('Error al cargar eventos:', error);
       });
-    });
   }
 
   // DELETE: Elimina un evento con confirmación
@@ -53,33 +54,30 @@ export class EventosComponent extends Component {
       return;
     }
     let token = this.context.token;
-    let request = "api/Eventos/" + id;
-    axios.delete(this.url + request, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => {
-      Swal.fire({
-        title: 'Eliminado',
-        text: 'Evento eliminado exitosamente',
-        icon: 'success',
-        timer: 1500,
-        showConfirmButton: false
+    serviceEventos.eliminarEvento(id, token)
+      .then(data => {
+        Swal.fire({
+          title: 'Eliminado',
+          text: 'Evento eliminado exitosamente',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+        this.setState({ eventoAEliminar: null });
+        this.loadEventosCursoEscolar();
+      })
+      .catch(error => {
+        console.error('Error al eliminar:', error);
+        this.setState({ eventoAEliminar: null });
+        Swal.fire({
+          title: 'Error',
+          text: error.response?.status === 403 
+            ? 'No tienes permisos para eliminar este evento. Verifica que tu usuario tenga rol de administrador.' 
+            : 'Error al eliminar el evento: ' + (error.response?.data || error.message),
+          icon: 'error',
+          confirmButtonText: 'Entendido'
+        });
       });
-      this.setState({ eventoAEliminar: null });
-      this.loadEventosCursoEscolar();
-    }).catch(error => {
-      console.error('Error al eliminar:', error);
-      this.setState({ eventoAEliminar: null });
-      Swal.fire({
-        title: 'Error',
-        text: error.response?.status === 403 
-          ? 'No tienes permisos para eliminar este evento. Verifica que tu usuario tenga rol de administrador.' 
-          : 'Error al eliminar el evento: ' + (error.response?.data || error.message),
-        icon: 'error',
-        confirmButtonText: 'Entendido'
-      });
-    });
   }
 
   cancelarEliminar = () => {
