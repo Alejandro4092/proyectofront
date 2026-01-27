@@ -17,6 +17,17 @@ export default class InscripcionesService {
         })
     }
 
+    obtenerInscripciones = async () => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Inscripciones"
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
     desinscribirse = async (idInscripcion, token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Inscripciones/" + idInscripcion

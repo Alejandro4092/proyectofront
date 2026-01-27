@@ -147,9 +147,11 @@ export class ActividadesComponent extends Component {
 
         if (result.isConfirmed) {
             try {
-                // Buscar el ID de la inscripción correspondiente al idEventoActividad
-                const inscripcion = this.state.datosInscritos.find(
-                    ins => ins.idEventoActividad === idEventoActividad
+                // Obtener todas las inscripciones y buscar la del usuario en esta actividad
+                const todasInscripciones = await serviceInscripciones.obtenerInscripciones();
+                const inscripcion = todasInscripciones.find(
+                    ins => ins.idEventoActividad === idEventoActividad && 
+                           ins.idUsuario === this.context.usuario.idUsuario
                 );
 
                 if (!inscripcion) {
@@ -162,7 +164,7 @@ export class ActividadesComponent extends Component {
                 }
 
                 let token = this.context.token;
-                await serviceInscripciones.desinscribirse(inscripcion.id, token);
+                await serviceInscripciones.desinscribirse(inscripcion.idInscripcion, token);
 
                 Swal.fire({
                     icon: 'success',
