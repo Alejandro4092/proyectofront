@@ -173,6 +173,35 @@
     margin: 0;
 }
 
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: #ffffff;
+}
+
+.loading-container p {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    color: #b8a4e8;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #2d1b69;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
     .eventos-container {
         padding: 20px;

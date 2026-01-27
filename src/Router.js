@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useParams, useLocation } from 'react-router-dom'
 import NavbarComponent from './components/NavbarComponent'
 import Home from './components/Home'
 import './css/Router.css'
@@ -18,6 +18,15 @@ import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosCo
 import NotFoundComponent from './components/NotFoundComponent'
 import PagosComponent from './components/PagosComponent'
 import GestionarActividadesComponent from './components/GestionarActividadesComponent'
+import PrivateRoute from './context/PrivateRoute'
+
+// Componente para mostrar navbar condicionalmente
+function ConditionalNavbar() {
+    const location = useLocation();
+    const hideNavbar = location.pathname === '/login';
+    
+    return !hideNavbar ? <NavbarComponent /> : null;
+}
 
 export default class Router extends Component {
     render() {
@@ -51,24 +60,24 @@ export default class Router extends Component {
         return (
         <AuthProvider>
             <BrowserRouter>
-                <NavbarComponent/>
+                <ConditionalNavbar/>
                 <div className="main-container">
                     <Routes>
-                        <Route path='/' element={<Home/>}/>
                         <Route path='/login' element={<LoginComponent/>}/>
-                        <Route path='/perfil' element={<PerfilComponent/>}/>
-                        <Route path='/crear-equipo/:idEvento/:idActividad' element={<CrearEquipoElement/>}/>
-                        <Route path='/eventos' element={<EventosComponent/>}/>
-                        <Route path='/crear-evento' element={<CrearEventoWrapper/>}/>
-                        <Route path='/editar-evento/:id' element={<EditarEvento/>}/>
-                        <Route path='/equipos' element={<ListaEquiposComponent/>}/>
-                        <Route path='/equipos/:idEvento/:idActividad' element={<ListaEquiposElement/>}/>
-                        <Route path='/equipo/:idEquipo' element={<EquipoComponentElement/>}/>
-                        <Route path='/actividades/:idEvento' element={<ActividadesElement/>}/>
-                        <Route path='/gestionar-actividades/:idEvento' element={<GestionarActividadesElement/>}/>
-                        <Route path='/partidos' element={<PartidosComponent/>}/>
-                        <Route path='/materialesSolicitados' element={<MaterialesSolicitadosComponent/>}/>
-                        <Route path='/pagos' element={<PagosComponent/>}/>
+                        <Route path='/' element={<PrivateRoute><Home/></PrivateRoute>}/>
+                        <Route path='/perfil' element={<PrivateRoute><PerfilComponent/></PrivateRoute>}/>
+                        <Route path='/crear-equipo/:idEvento/:idActividad' element={<PrivateRoute><CrearEquipoElement/></PrivateRoute>}/>
+                        <Route path='/eventos' element={<PrivateRoute><EventosComponent/></PrivateRoute>}/>
+                        <Route path='/crear-evento' element={<PrivateRoute><CrearEventoWrapper/></PrivateRoute>}/>
+                        <Route path='/editar-evento/:id' element={<PrivateRoute><EditarEvento/></PrivateRoute>}/>
+                        <Route path='/equipos' element={<PrivateRoute><ListaEquiposComponent/></PrivateRoute>}/>
+                        <Route path='/equipos/:idEvento/:idActividad' element={<PrivateRoute><ListaEquiposElement/></PrivateRoute>}/>
+                        <Route path='/equipo/:idEquipo' element={<PrivateRoute><EquipoComponentElement/></PrivateRoute>}/>
+                        <Route path='/actividades/:idEvento' element={<PrivateRoute><ActividadesElement/></PrivateRoute>}/>
+                        <Route path='/gestionar-actividades/:idEvento' element={<PrivateRoute><GestionarActividadesElement/></PrivateRoute>}/>
+                        <Route path='/partidos' element={<PrivateRoute><PartidosComponent/></PrivateRoute>}/>
+                        <Route path='/materialesSolicitados' element={<PrivateRoute><MaterialesSolicitadosComponent/></PrivateRoute>}/>
+                        <Route path='/pagos' element={<PrivateRoute><PagosComponent/></PrivateRoute>}/>
                         <Route path='*' element={<NotFoundComponent/>}/>
 
                     </Routes>

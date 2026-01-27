@@ -319,7 +319,7 @@ export class EquipoComponent extends Component {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                serviceEquipos.expulsarJugador(idMiembroEquipo).then(data => {
+                serviceEquipos.expulsarJugador(idMiembroEquipo, this.context.token).then(data => {
                     console.log("borrado", data)
                     Swal.fire(
                         '¡Expulsado!',

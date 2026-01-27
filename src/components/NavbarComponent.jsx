@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Navigate } from 'react-router-dom'
 import '../css/NavbarComponent.css'
 import tajamarLogo from '../assets/images/logo-tajamar-blanco-01.png'
 import { AuthContext } from '../context/AuthContext'
@@ -9,7 +9,8 @@ export class NavbarComponent extends Component {
     static contextType = AuthContext;
     
     state = {
-        dropdownOpen: false
+        dropdownOpen: false,
+        redirectToLogin: false
     }
 
     componentDidMount = () => {
@@ -35,12 +36,17 @@ export class NavbarComponent extends Component {
     cerrarSesion = () => {
         // Usar la función del contexto para cerrar sesión
         this.context.cerrarSesion();
-        this.setState({ dropdownOpen: false });
+        this.setState({ dropdownOpen: false, redirectToLogin: true });
     }
 
     render() {
         // Obtener datos del contexto
         const { usuario, rol, logeado } = this.context;
+
+        // Redirigir al login después de cerrar sesión
+        if (this.state.redirectToLogin) {
+            return <Navigate to="/login" replace />;
+        }
 
         return (
             <nav className="navbar navbar-expand-lg custom-navbar">
@@ -56,23 +62,41 @@ export class NavbarComponent extends Component {
                     <div className="collapse navbar-collapse" id="navbarScroll">
                         <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                             <li className="nav-item">
-                                <NavLink className="nav-link" aria-current="page" to="/">Home</NavLink>
+                                <NavLink className="nav-link" aria-current="page" to="/">
+                                    <span className="nav-icon">🏠</span>
+                                    <span>Home</span>
+                                </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/eventos">Eventos</NavLink>
+                                <NavLink className="nav-link" to="/eventos">
+                                    <span className="nav-icon">📅</span>
+                                    <span>Eventos</span>
+                                </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/pagos">Pagos</NavLink>
+                                <NavLink className="nav-link" to="/pagos">
+                                    <span className="nav-icon">💰</span>
+                                    <span>Pagos</span>
+                                </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/partidos">Partidos</NavLink>
+                                <NavLink className="nav-link" to="/partidos">
+                                    <span className="nav-icon">⚽</span>
+                                    <span>Partidos</span>
+                                </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/materialesSolicitados">Materiales solicitados</NavLink>
+                                <NavLink className="nav-link" to="/materialesSolicitados">
+                                    <span className="nav-icon">📦</span>
+                                    <span>Materiales</span>
+                                </NavLink>
                             </li>
                             {(rol === "Profesor" || rol === "Admin") && 
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to="/alumnos">Alumnos</NavLink>
+                                    <NavLink className="nav-link" to="/alumnos">
+                                        <span className="nav-icon">👥</span>
+                                        <span>Alumnos</span>
+                                    </NavLink>
                                 </li>
                             }
                         </ul>
@@ -93,12 +117,18 @@ export class NavbarComponent extends Component {
                                 
                                 {this.state.dropdownOpen && (
                                     <div className="user-dropdown">
-                                        <NavLink to="/perfil" className="dropdown-item" onClick={() => this.setState({ dropdownOpen: false })}>
-                                            <span>👤 Perfil</span>
+                                        <div className="dropdown-header">
+                                            <div className="user-icon-dropdown">
+                                                <img src={usuario?.imagen || "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"} alt="User" />
+                                            </div>
+                                            <span className="user-name-dropdown">{usuario?.nombre}</span>
+                                            <span className="dropdown-arrow-small">▼</span>
+                                        </div>
+                                        <NavLink to="/perfil" className="dropdown-item-button" onClick={() => this.setState({ dropdownOpen: false })}>
+                                            <span>👤 Mi Perfil</span>
                                         </NavLink>
-                                        <div className="dropdown-divider"></div>
-                                        <div className="dropdown-item" onClick={this.cerrarSesion}>
-                                            <span>🚪 Cerrar sesión</span>
+                                        <div className="dropdown-item-button" onClick={this.cerrarSesion}>
+                                            <span>🚪 Cerrar Sesión</span>
                                         </div>
                                     </div>
                                 )}

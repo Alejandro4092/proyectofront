@@ -16,7 +16,7 @@ export class EventosComponent extends Component {
     eventos: [],
     eventosCursoEscolar: [],
     eventoById: null,
-    loading: false
+    loading: true
   };
 
   componentDidMount() {
@@ -25,15 +25,18 @@ export class EventosComponent extends Component {
 
   // GET: Obtiene eventos del curso escolar
   loadEventosCursoEscolar = () => {
+    this.setState({ loading: true });
     let token = this.context.token;
     serviceEventos.getEventosCursoEscolar(token)
       .then(data => {
         this.setState({
-          eventosCursoEscolar: data
+          eventosCursoEscolar: data,
+          loading: false
         });
       })
       .catch(error => {
         console.error('Error al cargar eventos:', error);
+        this.setState({ loading: false });
       });
   }
 
@@ -96,7 +99,7 @@ export class EventosComponent extends Component {
   }
 
   render() {
-    const { eventosCursoEscolar } = this.state;
+    const { eventosCursoEscolar, loading } = this.state;
 
     return (
       <div className="eventos-container">
@@ -107,9 +110,15 @@ export class EventosComponent extends Component {
           </NavLink>
         </div>
 
-        <div className="eventos-grid">
-          {eventosCursoEscolar && eventosCursoEscolar.length > 0 ? (
-            eventosCursoEscolar.map((evento) => (
+        {loading ? (
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <p>Cargando eventos...</p>
+          </div>
+        ) : (
+          <div className="eventos-grid">
+            {eventosCursoEscolar && eventosCursoEscolar.length > 0 ? (
+              eventosCursoEscolar.map((evento) => (
               <NavLink 
                 to={`/actividades/${evento.idEvento}`} 
                 key={evento.idEvento} 
@@ -146,6 +155,7 @@ export class EventosComponent extends Component {
             </div>
           )}
         </div>
+        )}
       </div>
     )
   }

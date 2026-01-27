@@ -131,10 +131,14 @@ export default class EquiposService {
         })
     }
 
-    expulsarJugador = async (idMiembroEquipo) => {
+    expulsarJugador = async (idMiembroEquipo, token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/MiembroEquipos/" + idMiembroEquipo
-            axios.delete(request).then(res => {
+            axios.delete(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
