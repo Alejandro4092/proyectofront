@@ -120,9 +120,9 @@ export default class EquiposService {
         })
     }
 
-    salirseEquipo = async (idMiembroEquipo, token) => {
+    salirseEquipo = async (idEquipo, idUsuario, token) => {
         return new Promise(function(resolve, reject){
-            let request = Global.apiDeportes + "api/MiembroEquipos/" + idMiembroEquipo
+            let request = Global.apiDeportes + "api/MiembroEquipos/DeleteMiembroEquipoUsuario/" + idEquipo + "/" + idUsuario
             axios.delete(request, {
                 headers: {
                     'Authorization': `Bearer ${token}`

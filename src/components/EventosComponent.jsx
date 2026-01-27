@@ -105,9 +105,11 @@ export class EventosComponent extends Component {
       <div className="eventos-container">
         <div className="eventos-header">
           <h1>Eventos</h1>
-          <NavLink to="/crear-evento" className="btn-crear-evento">
-            + Crear Evento
-          </NavLink>
+          {this.context.esOrganizador && (
+            <NavLink to="/crear-evento" className="btn-crear-evento">
+              + Crear Evento
+            </NavLink>
+          )}
         </div>
 
         {loading ? (
@@ -134,19 +136,21 @@ export class EventosComponent extends Component {
                     <p className="evento-valor">{this.formatearFecha(evento.fechaEvento)}</p>
                   </div>              
                 </div>
-                <div className="evento-card-footer">
-                  <NavLink to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</NavLink>
-                  <button 
-                    className="btn-eliminar"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      this.deleteEvento(evento.idEvento);
-                    }}
-                  >
-                    Eliminar
-                  </button>
-                </div>
+                {this.context.esOrganizador && (
+                  <div className="evento-card-footer">
+                    <NavLink to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</NavLink>
+                    <button 
+                      className="btn-eliminar"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.deleteEvento(evento.idEvento);
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
               </NavLink>
             ))
           ) : (

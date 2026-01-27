@@ -55,6 +55,17 @@ class OrganizadoresService {
         }
     }
 
+    // GET: Obtiene los IDs de los organizadores del evento
+    getIdsOrganizadoresEvento = async () => {
+        try {
+            const response = await axios.get(this.url + 'api/Organizadores/IdsOrganizadoresEvento');
+            return response.data;
+        } catch (error) {
+            console.error('Error al obtener IDs de organizadores:', error);
+            throw error;
+        }
+    }
+
     // POST: Crea un nuevo Usuario organizador mediante su ID, tabla ORGANIZADOR EVENTO
     // TOKEN ADMINISTRADOR requerido
     createOrganizador = async (idUsuarioOrganizador, token) => {

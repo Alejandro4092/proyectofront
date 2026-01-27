@@ -1,6 +1,9 @@
 import React, { createContext, Component } from 'react';
 import axios from 'axios';
 import Global from '../Global';
+import OrganizadoresService from '../services/OrganizadoresService';
+
+const serviceOrganizadores = new OrganizadoresService();
 
 // Crear el contexto
 export const AuthContext = createContext();
@@ -16,7 +19,8 @@ export class AuthProvider extends Component {
             rol: "",
             logeado: false,
             loading: true,
-            token: null
+            token: null,
+            esOrganizador: false
         };
 
         this.url = Global.apiDeportes;
@@ -28,7 +32,7 @@ export class AuthProvider extends Component {
     }
 
     // Verificar si existe una sesión guardada en localStorage
-    verificarSesion = () => {
+    verificarSesion = async () => {
         const usuarioString = localStorage.getItem('usuario');
         const token = localStorage.getItem('token');
         
@@ -42,6 +46,8 @@ export class AuthProvider extends Component {
                     token: token,
                     loading: false
                 });
+                // Verificar si es organizador
+                await this.checkOrganizador(usuario.idUsuario);
             } catch (error) {
                 console.error('Error al parsear usuario:', error);
                 this.cerrarSesion();
@@ -91,6 +97,9 @@ export class AuthProvider extends Component {
                 token: token
             });
 
+            // Verificar si es organizador
+            await this.checkOrganizador(usuario.idUsuario);
+
             return { success: true, usuario };
 
         } catch (error) {
@@ -111,7 +120,8 @@ export class AuthProvider extends Component {
             usuario: null,
             rol: "",
             logeado: false,
-            token: null
+            token: null,
+            esOrganizador: false
         });
     }
 
@@ -125,6 +135,20 @@ export class AuthProvider extends Component {
         });
     }
 
+    // Verificar si el usuario es organizador
+    checkOrganizador = async (idUsuario) => {
+        if (!idUsuario) return;
+        
+        try {
+            const idsOrganizadores = await serviceOrganizadores.getIdsOrganizadoresEvento();
+            const esOrganizador = idsOrganizadores.some(id => id === idUsuario);
+            this.setState({ esOrganizador });
+        } catch (error) {
+            console.error('Error al verificar organizador:', error);
+            this.setState({ esOrganizador: false });
+        }
+    }
+
     render() {
         const { children } = this.props;
         
@@ -134,9 +158,11 @@ export class AuthProvider extends Component {
             logeado: this.state.logeado,
             loading: this.state.loading,
             token: this.state.token,
+            esOrganizador: this.state.esOrganizador,
             login: this.login,
             cerrarSesion: this.cerrarSesion,
-            actualizarUsuario: this.actualizarUsuario
+            actualizarUsuario: this.actualizarUsuario,
+            checkOrganizador: this.checkOrganizador
         };
 
         return (
