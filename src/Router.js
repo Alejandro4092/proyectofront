@@ -18,6 +18,7 @@ import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosCo
 import NotFoundComponent from './components/NotFoundComponent'
 import PagosComponent from './components/PagosComponent'
 import GestionarActividadesComponent from './components/GestionarActividadesComponent'
+import GestionarOrganizadoresComponent from './components/GestionarOrganizadoresComponent'
 
 export default class Router extends Component {
     render() {
@@ -69,6 +70,7 @@ export default class Router extends Component {
                         <Route path='/partidos' element={<PartidosComponent/>}/>
                         <Route path='/materialesSolicitados' element={<MaterialesSolicitadosComponent/>}/>
                         <Route path='/pagos' element={<PagosComponent/>}/>
+                        <Route path='/gestionarOrganizadores' element={<GestionarOrganizadoresComponent/>}/>
                         <Route path='*' element={<NotFoundComponent/>}/>
 
                     </Routes>

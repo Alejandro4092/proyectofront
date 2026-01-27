@@ -70,11 +70,6 @@ export class NavbarComponent extends Component {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/materialesSolicitados">Materiales solicitados</NavLink>
                             </li>
-                            {(rol === "Profesor" || rol === "Admin") && 
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" to="/alumnos">Alumnos</NavLink>
-                                </li>
-                            }
                         </ul>
                         {
                             !logeado ?
@@ -96,6 +91,11 @@ export class NavbarComponent extends Component {
                                         <NavLink to="/perfil" className="dropdown-item" onClick={() => this.setState({ dropdownOpen: false })}>
                                             <span>👤 Perfil</span>
                                         </NavLink>
+                                        {(rol === "ADMINISTRADOR") && 
+                                            <NavLink className="dropdown-item" to="/gestionarOrganizadores" onClick={() => this.setState({ dropdownOpen: false })}>
+                                                <span>🧑‍💼Gestionar Organizadores</span>
+                                            </NavLink>
+                                        }
                                         <div className="dropdown-divider"></div>
                                         <div className="dropdown-item" onClick={this.cerrarSesion}>
                                             <span>🚪 Cerrar sesión</span>
