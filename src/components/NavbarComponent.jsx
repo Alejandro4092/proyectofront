@@ -91,14 +91,6 @@ export class NavbarComponent extends Component {
                                     <span>Materiales</span>
                                 </NavLink>
                             </li>
-                            {(rol === "Profesor" || rol === "Admin") && 
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" to="/alumnos">
-                                        <span className="nav-icon">👥</span>
-                                        <span>Alumnos</span>
-                                    </NavLink>
-                                </li>
-                            }
                         </ul>
                         {
                             !logeado ?
@@ -127,8 +119,14 @@ export class NavbarComponent extends Component {
                                         <NavLink to="/perfil" className="dropdown-item-button" onClick={() => this.setState({ dropdownOpen: false })}>
                                             <span>👤 Mi Perfil</span>
                                         </NavLink>
-                                        <div className="dropdown-item-button" onClick={this.cerrarSesion}>
-                                            <span>🚪 Cerrar Sesión</span>
+                                        {(rol === "ADMINISTRADOR") && 
+                                            <NavLink className="dropdown-item" to="/gestionarOrganizadores" onClick={() => this.setState({ dropdownOpen: false })}>
+                                                <span>🧑‍💼Gestionar Organizadores</span>
+                                            </NavLink>
+                                        }
+                                        <div className="dropdown-divider"></div>
+                                        <div className="dropdown-item" onClick={this.cerrarSesion}>
+                                            <span>🚪 Cerrar sesión</span>
                                         </div>
                                     </div>
                                 )}
