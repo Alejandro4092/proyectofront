@@ -97,6 +97,7 @@ class GestionarOrganizadoresComponent extends Component {
 
             this.setState({ idUsuarioSeleccionado: '' });
             this.cargarOrganizadores(); // Recargar la lista
+            this.cargarTodosUsuarios(); // Recargar usuarios disponibles
         } catch (error) {
             console.error('Error al crear organizador:', error);
             Swal.fire({
@@ -107,6 +108,45 @@ class GestionarOrganizadoresComponent extends Component {
             });
         } finally {
             this.setState({ submitting: false });
+        }
+    }
+
+    handleEliminar = async (organizador) => {
+        const { token } = this.context;
+        
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Deseas eliminar a ${organizador.email} como organizador?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e74c3c',
+            cancelButtonColor: '#95a5a6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await serviceOrganizadores.deleteOrganizador(organizador.idUsuario, token);
+                
+                Swal.fire({
+                    title: 'Eliminado',
+                    text: 'El organizador ha sido eliminado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+
+                this.cargarOrganizadores(); // Recargar la lista
+                this.cargarTodosUsuarios(); // Recargar usuarios disponibles
+            } catch (error) {
+                console.error('Error al eliminar organizador:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: error.response?.data?.message || 'No se pudo eliminar el organizador',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
         }
     }
 
@@ -187,6 +227,7 @@ class GestionarOrganizadoresComponent extends Component {
                                         <tr>
                                             <th>ID</th>
                                             <th>Email</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -194,6 +235,15 @@ class GestionarOrganizadoresComponent extends Component {
                                             <tr key={org.idUsuario}>
                                                 <td>{org.idUsuario}</td>
                                                 <td>{org.email}</td>
+                                                <td>
+                                                    <button 
+                                                        className="btn-eliminar"
+                                                        onClick={() => this.handleEliminar(org)}
+                                                        title="Eliminar organizador"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

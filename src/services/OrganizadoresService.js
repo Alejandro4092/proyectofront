@@ -74,6 +74,25 @@ class OrganizadoresService {
             throw error;
         }
     }
+
+    // DELETE: Elimina un Organizador de la BBDD mediante el id del Usuario. Tabla ORGANIZADOREVENTOS
+    // TOKEN ADMINISTRADOR requerido
+    deleteOrganizador = async (idUsuario, token) => {
+        try {
+            const response = await axios.delete(
+                this.url + `api/Organizadores/QuitarOrganizadorEvento/${idUsuario}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error('Error al eliminar organizador:', error);
+            throw error;
+        }
+    }
 }
 
 export default OrganizadoresService;
