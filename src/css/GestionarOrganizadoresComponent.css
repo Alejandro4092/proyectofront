@@ -187,6 +187,7 @@
 
 .organizadores-table th:last-child {
     text-align: center;
+    width: 15%;
 }
 
 .organizadores-table tbody tr {
@@ -219,6 +220,29 @@
 
 .organizadores-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* Botón eliminar */
+.btn-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
 }
 
 /* Responsive */
