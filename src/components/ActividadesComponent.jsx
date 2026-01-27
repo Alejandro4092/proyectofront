@@ -289,7 +289,7 @@ export class ActividadesComponent extends Component {
                     <h1 className="actividades-title">Actividades</h1>
                     {this.state.esOrganizador && (
                         <div className="actividades-actions">
-                            <Link to={`/crear-actividad/${this.props.idEvento}`} className="btn-crear-evento">
+                            <Link to="/crear-actividad" className="btn-crear-evento">
                                 + Crear Actividad
                             </Link>
                             <Link to={`/gestionar-actividades/${this.props.idEvento}`} className="btn-gestionar-actividades">
