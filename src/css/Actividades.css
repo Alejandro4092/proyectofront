@@ -16,6 +16,13 @@
     flex-wrap: wrap;
 }
 
+.actividades-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 
 .actividades-title {
     margin: 10px 0 6px 0;
@@ -41,6 +48,27 @@
 }
 
 .btn-crear-evento:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    color: #e0d4f7;
+}
+
+.btn-gestionar-actividades {
+    background: linear-gradient(135deg, #6b46c1 0%, #4a2f8a 100%);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+}
+
+.btn-gestionar-actividades:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     color: #e0d4f7;

@@ -87,4 +87,19 @@ export default class EventosService {
             })
         })
     }
+    eliminarEventoCompleto = async (idEvento, token) => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "/api/ActividadesEvento/DeleteEventoActividadPanic/" + idEvento
+            axios.delete(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }
+ 
