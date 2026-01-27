@@ -26,6 +26,7 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
+        esOrganizador: false,
         precios: [],
     };
 
@@ -34,6 +35,7 @@ export class ActividadesComponent extends Component {
         await this.checkCapitan();
         await this.loadActividadesInscritas();
         await this.checkOrganizador();
+        await this.loadPrecios();
     };
 
     checkOrganizador = async () => {
@@ -181,12 +183,7 @@ export class ActividadesComponent extends Component {
         }
     };
 
-    componentDidMount = async () => {
-        await this.loadActividades();
-        await this.checkCapitan();
-        await this.loadActividadesInscritas();
-        await this.loadPrecios();
-    };
+
 
     abrirModal = (actividad) => {
         this.setState({
