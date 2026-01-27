@@ -28,7 +28,10 @@ export class EditarEventoComponent extends Component {
       }
     }).then(response => {
       const fechaEvento = new Date(response.data.fechaEvento);
-      const fechaFormateada = fechaEvento.toISOString().slice(0, 16);
+      // Ajustar la fecha a la zona horaria local para evitar desfase de días
+      const offset = fechaEvento.getTimezoneOffset();
+      const fechaLocal = new Date(fechaEvento.getTime() - (offset * 60 * 1000));
+      const fechaFormateada = fechaLocal.toISOString().slice(0, 16);
       this.setState({
         idEvento: idEvento,
         fecha: fechaFormateada,

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import Global from '../Global';
 import '../css/MaterialesSolicitadosComponent.css';
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import MaterialesService from '../services/MaterialesService';
 
 export class MaterialesSolicitadosComponent extends Component {
     static contextType = AuthContext;
@@ -19,11 +18,8 @@ export class MaterialesSolicitadosComponent extends Component {
             nombreMaterial: '',
             materialSeleccionado: null,
             idEventoActividadModal: '',
-            idEventoActividadList: [],
-            idEventoActividadAportar: '',
-            materialesAportables: []
+            idEventoActividadList: []
         };
-        this.url = Global.apiDeportes;
     }
 
     componentDidMount() {
@@ -32,8 +28,7 @@ export class MaterialesSolicitadosComponent extends Component {
     }
 
     obtenerMateriales = () => {
-        let request = "api/Materiales";
-        axios.get(this.url + request)
+        MaterialesService.obtenerMateriales()
             .then(response => {
                 this.setState({ 
                     materiales: response.data,
@@ -50,8 +45,7 @@ export class MaterialesSolicitadosComponent extends Component {
     }
 
     obtenerEventosActividades = () => {
-        let request = "api/ActividadesEvento";
-        axios.get(this.url + request)
+        MaterialesService.obtenerEventosActividades()
             .then(response => {
                 this.setState({
                     idEventoActividadList: response.data
@@ -88,21 +82,16 @@ export class MaterialesSolicitadosComponent extends Component {
     }
 
     abrirModalAportar = (material) => {
-        const materialesDelEvento = this.state.materiales.filter(m => m.idEventoActividad === material.idEventoActividad);
         this.setState({
             mostrarModalAportar: true,
-            materialSeleccionado: material,
-            idEventoActividadAportar: material.idEventoActividad,
-            materialesAportables: materialesDelEvento
+            materialSeleccionado: material
         });
     }
 
     cerrarModalAportar = () => {
         this.setState({
             mostrarModalAportar: false,
-            materialSeleccionado: null,
-            idEventoActividadAportar: '',
-            materialesAportables: []
+            materialSeleccionado: null
         });
     }
 
@@ -117,7 +106,6 @@ export class MaterialesSolicitadosComponent extends Component {
             return;
         }
 
-        let request = "api/Materiales/create";
         const datos = {
             idMaterial: 0,
             idEventoActividad: parseInt(this.state.idEventoActividadModal),
@@ -127,7 +115,7 @@ export class MaterialesSolicitadosComponent extends Component {
             fechaSolicitud: new Date().toISOString()
         };
 
-        axios.post(this.url + request, datos)
+        MaterialesService.crearMaterial(datos)
             .then(response => {
                 Swal.fire('¡Éxito!', 'Material solicitado correctamente', 'success');
                 this.cerrarModalSolicitar();
@@ -150,7 +138,6 @@ export class MaterialesSolicitadosComponent extends Component {
             return;
         }
 
-        let request = "api/Materiales/update";
         const datos = {
             idMaterial: this.state.materialSeleccionado.idMaterial,
             idEventoActividad: this.state.materialSeleccionado.idEventoActividad,
@@ -160,7 +147,7 @@ export class MaterialesSolicitadosComponent extends Component {
             fechaSolicitud: this.state.materialSeleccionado.fechaSolicitud
         };
 
-        axios.put(this.url + request, datos)
+        MaterialesService.actualizarMaterial(datos)
             .then(response => {
                 Swal.fire('¡Éxito!', 'Material aportado correctamente', 'success');
                 this.cerrarModalAportar();
@@ -253,15 +240,15 @@ export class MaterialesSolicitadosComponent extends Component {
 
                 {/* Modal Solicitar Material */}
                 {mostrarModalSolicitar && (
-                    <div className="modal-overlay" onClick={this.cerrarModalSolicitar}>
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <div className="modal-header">
+                    <div className="mat-modal-overlay" onClick={this.cerrarModalSolicitar}>
+                        <div className="mat-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <div className="mat-modal-header">
                                 <h2>Solicitar Material</h2>
-                                <button className="close-btn" onClick={this.cerrarModalSolicitar}>✕</button>
+                                <button className="mat-close-btn" onClick={this.cerrarModalSolicitar}>✕</button>
                             </div>
 
-                            <div className="modal-body">
-                                <div className="form-group">
+                            <div className="mat-modal-body">
+                                <div className="mat-form-group">
                                     <label>Nombre del Material *</label>
                                     <input 
                                         type="text"
@@ -271,7 +258,7 @@ export class MaterialesSolicitadosComponent extends Component {
                                     />
                                 </div>
 
-                                <div className="form-group">
+                                <div className="mat-form-group">
                                     <label>Actividad/Evento *</label>
                                     <select 
                                         value={this.state.idEventoActividadModal}
@@ -287,11 +274,11 @@ export class MaterialesSolicitadosComponent extends Component {
                                 </div>
                             </div>
 
-                            <div className="modal-footer">
-                                <button className="btn-cancelar" onClick={this.cerrarModalSolicitar}>
+                            <div className="mat-modal-footer">
+                                <button className="mat-btn-cancelar" onClick={this.cerrarModalSolicitar}>
                                     Cancelar
                                 </button>
-                                <button className="btn-confirmar" onClick={this.solicitarMaterial}>
+                                <button className="mat-btn-confirmar" onClick={this.solicitarMaterial}>
                                     Solicitar
                                 </button>
                             </div>
@@ -301,47 +288,32 @@ export class MaterialesSolicitadosComponent extends Component {
 
                 {/* Modal Aportar Material */}
                 {mostrarModalAportar && materialSeleccionado && (
-                    <div className="modal-overlay" onClick={this.cerrarModalAportar}>
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <div className="modal-header">
+                    <div className="mat-modal-overlay" onClick={this.cerrarModalAportar}>
+                        <div className="mat-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <div className="mat-modal-header">
                                 <h2>Aportar Material</h2>
-                                <button className="close-btn" onClick={this.cerrarModalAportar}>✕</button>
+                                <button className="mat-close-btn" onClick={this.cerrarModalAportar}>✕</button>
                             </div>
 
-                            <div className="modal-body">
-                                <div className="form-group">
-                                    <label>Selecciona el material a aportar:</label>
-                                    <select 
-                                        value={this.state.materialSeleccionado?.idMaterial || ''}
-                                        onChange={(e) => {
-                                            const material = this.state.materialesAportables.find(m => m.idMaterial === parseInt(e.target.value));
-                                            this.setState({ materialSeleccionado: material });
-                                        }}
-                                    >
-                                        <option value="">Selecciona un material</option>
-                                        {this.state.materialesAportables.map(m => (
-                                            <option key={m.idMaterial} value={m.idMaterial}>
-                                                {m.nombreMaterial}
-                                            </option>
-                                        ))}
-                                    </select>
+                            <div className="mat-modal-body">
+                                <div className="mat-form-group">
+                                    <label>Material a aportar:</label>
+                                    <p className="material-info-modal"><strong>{materialSeleccionado.nombreMaterial}</strong></p>
                                 </div>
 
-                                <div className="form-group">
+
+                                <div className="mat-form-group">
                                     <label>Fecha solicitado:</label>
                                     <p className="material-info-modal">{this.formatearFecha(materialSeleccionado.fechaSolicitud)}</p>
                                 </div>
 
-                                <div className="confirmation-message">
-                                    <p>¿Deseas aportar este material?</p>
-                                </div>
                             </div>
 
-                            <div className="modal-footer">
-                                <button className="btn-cancelar" onClick={this.cerrarModalAportar}>
+                            <div className="mat-modal-footer">
+                                <button className="mat-btn-cancelar" onClick={this.cerrarModalAportar}>
                                     Cancelar
                                 </button>
-                                <button className="btn-confirmar" onClick={this.aportarMaterial}>
+                                <button className="mat-btn-confirmar" onClick={this.aportarMaterial}>
                                     Confirmar Aportación
                                 </button>
                             </div>
