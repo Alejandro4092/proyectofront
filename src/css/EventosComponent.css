@@ -202,3 +202,39 @@
         gap: 10px;
     }
 }
+
+/* SweetAlert z-index y fondo */
+.swal2-container {
+    z-index: 3000 !important;
+}
+
+.swal2-popup {
+    background: white !important;
+    color: #333 !important;
+}
+
+.swal2-title {
+    color: #333 !important;
+}
+
+.swal2-html-container {
+    color: #666 !important;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+    background-color: white !important;
+    color: #333 !important;
+    border: 2px solid #ddd !important;
+}
+
+.swal2-confirm {
+    background-color: #e74c3c !important;
+    color: white !important;
+    border-color: #e74c3c !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #c0392b !important;
+    border-color: #c0392b !important;
+}

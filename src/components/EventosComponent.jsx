@@ -16,8 +16,7 @@ export class EventosComponent extends Component {
     eventos: [],
     eventosCursoEscolar: [],
     eventoById: null,
-    loading: false,
-    eventoAEliminar: null
+    loading: false
   };
 
   componentDidMount() {
@@ -40,7 +39,21 @@ export class EventosComponent extends Component {
 
   // DELETE: Elimina un evento con confirmación
   deleteEvento = (id) => {
-    this.setState({ eventoAEliminar: id });
+    Swal.fire({
+      title: '¿Eliminar evento?',
+      text: '¿Estás seguro de que deseas eliminar este evento?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.confirmarEliminar(id);
+      }
+    });
   }
 
   confirmarEliminar = (id) => {
@@ -63,12 +76,9 @@ export class EventosComponent extends Component {
           timer: 1500,
           showConfirmButton: false
         });
-        this.setState({ eventoAEliminar: null });
         this.loadEventosCursoEscolar();
       })
       .catch(error => {
-        console.error('Error al eliminar:', error);
-        this.setState({ eventoAEliminar: null });
         Swal.fire({
           title: 'Error',
           text: error.response?.status === 403 
@@ -80,17 +90,13 @@ export class EventosComponent extends Component {
       });
   }
 
-  cancelarEliminar = () => {
-    this.setState({ eventoAEliminar: null });
-  }
-
   formatearFecha = (fecha) => {
     const opciones = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(fecha).toLocaleDateString('es-ES', opciones);
   }
 
   render() {
-    const { eventosCursoEscolar, eventoAEliminar } = this.state;
+    const { eventosCursoEscolar } = this.state;
 
     return (
       <div className="eventos-container">
@@ -140,29 +146,6 @@ export class EventosComponent extends Component {
             </div>
           )}
         </div>
-
-        {eventoAEliminar && (
-          <div className="modal-overlay">
-            <div className="modal-contenido">
-              <h2>¿Eliminar evento?</h2>
-              <p>¿Estás seguro de que deseas eliminar este evento?</p>
-              <div className="modal-acciones">
-                <button 
-                  className="btn-confirmar-eliminar"
-                  onClick={() => this.confirmarEliminar(eventoAEliminar)}
-                >
-                  Eliminar
-                </button>
-                <button 
-                  className="btn-cancelar-modal"
-                  onClick={this.cancelarEliminar}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     )
   }
