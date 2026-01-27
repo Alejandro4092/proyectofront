@@ -40,10 +40,17 @@ export class MaterialesSolicitadosComponent extends Component {
         this.obtenerEventosFiltro();
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        // Recargar materiales si el filtro cambió
+        if (this.state.filtroEvento !== prevState.filtroEvento && !this.state.filtroEvento) {
+            this.obtenerMateriales();
+        }
+    }
+
     obtenerMateriales = () => {
         MaterialesService.obtenerMateriales()
             .then(response => {
-                console.log(response)
+                console.log('Materiales recibidos:', response.data);
                 this.setState({ 
                     materiales: response.data,
                     cargando: false 
@@ -122,6 +129,7 @@ export class MaterialesSolicitadosComponent extends Component {
             this.setState({ cargando: true });
             MaterialesService.getMaterialesPorActividad(idEventoActividad)
                 .then(response => {
+                    console.log('Materiales filtrados recibidos:', response.data);
                     this.setState({ 
                         materiales: response.data,
                         cargando: false 
@@ -166,10 +174,6 @@ export class MaterialesSolicitadosComponent extends Component {
             month: '2-digit',
             year: 'numeric'
         });
-    }
-
-    getNombreUsuario = (idUsuario) => {
-        
     }
 
     abrirModalSolicitar = () => {
@@ -266,10 +270,11 @@ export class MaterialesSolicitadosComponent extends Component {
         const datos = {
             idMaterial: this.state.materialSeleccionado.idMaterial,
             idEventoActividad: this.state.materialSeleccionado.idEventoActividad,
-            idUsuario: this.context.usuario.idUsuario,
+            idUsuario: this.state.materialSeleccionado.idUsuario,
             nombreMaterial: this.state.materialSeleccionado.nombreMaterial,
             pendiente: false,
-            fechaSolicitud: this.state.materialSeleccionado.fechaSolicitud
+            fechaSolicitud: this.state.materialSeleccionado.fechaSolicitud,
+            idUsuarioAportacion: this.context.usuario.idUsuario
         };
 
         MaterialesService.actualizarMaterial(datos)
@@ -367,44 +372,54 @@ export class MaterialesSolicitadosComponent extends Component {
                     </div>
                 ) : (
                     <div className="materiales-grid">
-                        {materiales.map((material) => (
-                            <div 
-                                key={material.idMaterial} 
-                                className={`material-card ${material.pendiente ? 'pendiente' : 'aportado'}`}
-                            >
-                                <div className="material-header">
-                                    <h3>{material.nombreMaterial}</h3>
-                                    <span className={`estado ${material.pendiente ? 'pendiente' : 'aportado'}`}>
-                                        {material.pendiente ? '⏳ Pendiente' : '✓ Aportado'}
-                                    </span>
-                                </div>
-
-                                <div className="material-body">
-                                    
-                                    <div className="material-info">
-                                        <span className="label">Solicitado por:</span>
-                                        <span className="valor">Usuario {material.idUsuario}</span>
-                                        <span className="valor">{this.getNombreUsuario(material.idUsuario)}</span>
+                        {materiales.map((item) => {
+                            const { material, usuarioMaterial, usuarioAportacionMaterial } = item;
+                            return (
+                                <div 
+                                    key={material.idMaterial} 
+                                    className={`material-card ${material.pendiente ? 'pendiente' : 'aportado'}`}
+                                >
+                                    <div className="material-header">
+                                        <h3>{material.nombreMaterial}</h3>
+                                        <span className={`estado ${material.pendiente ? 'pendiente' : 'aportado'}`}>
+                                            {material.pendiente ? '⏳ Pendiente' : '✓ Aportado'}
+                                        </span>
                                     </div>
 
-                                    <div className="material-info">
-                                        <span className="label">Fecha:</span>
-                                        <span className="valor">{this.formatearFecha(material.fechaSolicitud)}</span>
+                                    <div className="material-body">
+                                        <div className="material-info">
+                                            <span className="label">Solicitado por:</span>
+                                            <span className="valor">
+                                                {usuarioMaterial ? usuarioMaterial.usuario : `Usuario ${material.idUsuario}`}
+                                            </span>
+                                        </div>
+
+                                        <div className="material-info">
+                                            <span className="label">Fecha solicitud:</span>
+                                            <span className="valor">{this.formatearFecha(material.fechaSolicitud)}</span>
+                                        </div>
+
+                                        {!material.pendiente && usuarioAportacionMaterial && (
+                                            <div className="material-info">
+                                                <span className="label">Aportado por:</span>
+                                                <span className="valor">{usuarioAportacionMaterial.usuario}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="material-footer">
+                                        {material.pendiente && (
+                                            <button 
+                                                className="btn-aportar"
+                                                onClick={() => this.abrirModalAportar(material)}
+                                            >
+                                                Aportar Material
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
-
-                                <div className="material-footer">
-                                    {material.pendiente && (
-                                        <button 
-                                            className="btn-aportar"
-                                            onClick={() => this.abrirModalAportar(material)}
-                                        >
-                                            Aportar Material
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
 
