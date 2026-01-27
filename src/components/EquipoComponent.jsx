@@ -7,9 +7,11 @@ import { AuthContext } from '../context/AuthContext';
 import { NavLink } from 'react-router-dom';
 import EquiposService from '../services/EquiposService';
 import ColorService from '../services/ColorService';
+import CapitanService from '../services/CapitanService';
 
 const serviceEquipos = new EquiposService();
 const serviceColor = new ColorService();
+const serviceCapitan = new CapitanService();
 export class EquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -17,7 +19,7 @@ export class EquipoComponent extends Component {
     state = {
         equipoCompleto: false,
         eresMiembro: false,
-        eresCapitan: true,
+        eresCapitan: false,
         usuarioMiembroEquipo: {},
         equipo: {},
         equipoPrueba: {
@@ -54,12 +56,13 @@ export class EquipoComponent extends Component {
     }
 
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         //console.log(this.getColorName(1))
         console.log(this.context.usuario)
-        this.loadEquipo();
-        this.loadColores();
-        this.loadPartidos();
+        await this.loadEquipo();
+        await this.loadColores();
+        await this.loadPartidos();
+        await this.findCapitan();
     }
 
     componentDidUpdate = (prevProps) => {
@@ -90,6 +93,29 @@ export class EquipoComponent extends Component {
         }
     }
 
+    findCapitan = async () => {
+        
+        if (!this.context.token) return;
+        let idEventoActividad = this.state.equipo.idEventoActividad;
+        
+        let token = this.context.token;
+        try {
+            const capitan = await serviceCapitan.getCapitanEventoActividad(idEventoActividad, token);
+            console.log(capitan)
+            let esCapi = false;
+            if(capitan.idUsuario == this.context.usuario.idUsuario){
+                esCapi = true;
+            }
+            this.setState({
+                eresCapitan: esCapi
+            });
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+        }
+    
+
+    }
+
     getColorName = async (idColor) => {
         try {
             const colorName = await serviceColor.getColorName(idColor);
@@ -112,8 +138,8 @@ export class EquipoComponent extends Component {
         }
     }
 
-    loadColores = () => {
-        serviceColor.getColores()
+    loadColores = async () => {
+        await serviceColor.getColores()
             .then(data => {
                 this.setState({ colores: data });
             })
@@ -140,7 +166,7 @@ export class EquipoComponent extends Component {
             if (result.isConfirmed) {
                 let idEquipo = this.props.idEquipo;
                 
-                serviceEquipos.actualizarColorEquipo(idEquipo, idColor)
+                serviceEquipos.actualizarColorEquipo(idEquipo, idColor, this.context.token)
                     .then(data => {
                         console.log("Color actualizado:", data);
                         Swal.fire(

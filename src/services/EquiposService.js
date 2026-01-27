@@ -79,10 +79,14 @@ export default class EquiposService {
         })
     }
 
-    actualizarColorEquipo = async (idEquipo, idColor) => {
+    actualizarColorEquipo = async (idEquipo, idColor, token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Equipos/UpdateEquipacionEquipo/" + idEquipo + "/" + idColor
-            axios.put(request).then(res => {
+            axios.put(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)

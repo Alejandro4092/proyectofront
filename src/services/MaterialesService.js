@@ -8,7 +8,7 @@ class MaterialesService {
      * Obtiene todos los materiales
      */
     obtenerMateriales() {
-        let request = "api/Materiales";
+        let request = "api/Materiales/MaterialUsuarios";
         return axios.get(this.url + request);
     }
 

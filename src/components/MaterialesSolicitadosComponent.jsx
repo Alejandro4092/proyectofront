@@ -35,7 +35,7 @@ export class MaterialesSolicitadosComponent extends Component {
     }
 
     componentDidMount() {
-        this.setState({ cargando: false });
+        this.obtenerMateriales();
         this.obtenerEventos();
         this.obtenerEventosFiltro();
     }
@@ -43,6 +43,7 @@ export class MaterialesSolicitadosComponent extends Component {
     obtenerMateriales = () => {
         MaterialesService.obtenerMateriales()
             .then(response => {
+                console.log(response)
                 this.setState({ 
                     materiales: response.data,
                     cargando: false 
@@ -85,10 +86,10 @@ export class MaterialesSolicitadosComponent extends Component {
         if (!idEvento) {
             this.setState({ 
                 actividadesFiltroLista: [], 
-                filtroActividad: '',
-                materiales: [],
-                cargando: false
+                filtroActividad: ''
             });
+            // Recargar todos los materiales cuando se limpia el filtro
+            this.obtenerMateriales();
             return;
         }
 
@@ -107,10 +108,8 @@ export class MaterialesSolicitadosComponent extends Component {
 
     aplicarFiltroActividad = async (idEvento, idActividad) => {
         if (!idEvento || !idActividad) {
-            this.setState({ 
-                materiales: [],
-                cargando: false
-            });
+            // Si no hay actividad seleccionada, recargar todos los materiales
+            this.obtenerMateriales();
             return;
         }
 
@@ -364,9 +363,7 @@ export class MaterialesSolicitadosComponent extends Component {
 
                 {materiales.length === 0 ? (
                     <div className="sin-materiales">
-                        {!this.state.filtroEvento || !this.state.filtroActividad 
-                            ? 'Selecciona un evento y actividad para ver los materiales' 
-                            : 'No hay materiales para esta actividad'}
+                        No hay materiales registrados
                     </div>
                 ) : (
                     <div className="materiales-grid">
