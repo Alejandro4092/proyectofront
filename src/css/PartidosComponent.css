@@ -12,6 +12,67 @@
     font-weight: 700;
 }
 
+/* Filtros */
+.partidos-filtros {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.partidos-filtros .form-group {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.partidos-filtros .form-group label {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.partidos-filtros .form-group select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.partidos-filtros .form-group select:hover {
+    border-color: #667eea;
+    background-color: white;
+}
+
+.partidos-filtros .form-group select:focus {
+    outline: none;
+    background-color: white;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.sin-partidos {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 1.2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+}
+
 .partidos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -6,10 +6,13 @@ import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import EquiposService from '../services/EquiposService';
 import PartidosService from '../services/PartidosService';
+import EventosService from '../services/EventosService';
+import ActividadesService from '../services/ActividadesService';
 
 const serviceEquipos = new EquiposService();
 const servicePartidos = new PartidosService();
-
+const serviceEventos = new EventosService();
+const serviceActividades = new ActividadesService();
 export class PartidosComponent extends Component {
     static contextType = AuthContext;
     
@@ -19,13 +22,88 @@ export class PartidosComponent extends Component {
             partidos: [],
             equipos: {},
             cargando: true,
-            error: null
+            error: null,
+            // Filtros
+            filtroEvento: '',
+            filtroActividad: '',
+            eventosFiltroLista: [],
+            actividadesFiltroLista: []
         };
         this.url = Global.apiDeportes;
     }
 
     componentDidMount() {
         this.obtenerPartidos();
+        this.obtenerEventosFiltro();
+    }
+
+    obtenerEventosFiltro = () => {
+        serviceEventos.getEventosCursoEscolar(this.context.token)
+            .then(data => {
+                this.setState({
+                    eventosFiltroLista: data
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener eventos para filtro:', error);
+            });
+    }   
+
+    obtenerActividadesPorEventoFiltro = (idEvento) => {
+        if (!idEvento) {
+            this.setState({ 
+                actividadesFiltroLista: [], 
+                filtroActividad: ''
+            });
+            // Recargar todos los partidos cuando se limpia el filtro
+            this.obtenerPartidos();
+            return;
+        }
+
+        serviceActividades.getActividadesEvento(idEvento)
+            .then(data => {
+                this.setState({
+                    actividadesFiltroLista: data,
+                    filtroActividad: ''
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener actividades para filtro:', error);
+                this.setState({ actividadesFiltroLista: [] });
+            });
+    }
+
+    aplicarFiltroActividad = async (idEvento, idActividad) => {
+        if (!idEvento || !idActividad) {
+            // Si no hay actividad seleccionada, recargar todos los partidos
+            this.obtenerPartidos();
+            return;
+        }
+
+        try {
+            const idEventoActividad = await serviceActividades.getEventoActividad(
+                parseInt(idEvento),
+                parseInt(idActividad)
+            );
+
+            this.setState({ cargando: true });
+            servicePartidos.getPartidosPorActividad(idEventoActividad)
+                .then(data => {
+                    this.setState({ partidos: data });
+                    this.obtenerEquipos(data);
+                    this.setState({ cargando: false });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.setState({
+                        error: 'Error al cargar los partidos',
+                        cargando: false
+                    });
+                });
+        } catch (error) {
+            console.error('Error al obtener idEventoActividad:', error);
+            this.setState({ cargando: false });
+        }
     }
 
     obtenerPartidos = () => {
@@ -109,7 +187,54 @@ export class PartidosComponent extends Component {
         if (partidos.length === 0) {
             return (
                 <div className="partidos-container">
-                    <div className="sin-partidos">No hay partidos registrados</div>
+                    <h1>Resultados de Partidos</h1>
+                    
+                    {/* Filtros */}
+                    <div className="partidos-filtros">
+                        <div className="form-group">
+                            <label>Filtrar por Evento:</label>
+                            <select 
+                                value={this.state.filtroEvento}
+                                onChange={(e) => {
+                                    const idEvento = e.target.value;
+                                    this.setState({ filtroEvento: idEvento });
+                                    this.obtenerActividadesPorEventoFiltro(idEvento);
+                                }}
+                            >
+                                <option value="">Todos los eventos</option>
+                                {this.state.eventosFiltroLista.map((evento) => (
+                                    <option key={evento.idEvento} value={evento.idEvento}>
+                                        Evento {evento.idEvento} - {new Date(evento.fechaEvento).toLocaleDateString('es-ES')}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {this.state.filtroEvento && (
+                            <div className="form-group">
+                                <label>Filtrar por Actividad:</label>
+                                <select 
+                                    value={this.state.filtroActividad}
+                                    onChange={(e) => {
+                                        const idActividad = e.target.value;
+                                        this.setState({ filtroActividad: idActividad });
+                                        this.aplicarFiltroActividad(this.state.filtroEvento, idActividad);
+                                    }}
+                                >
+                                    <option value="">Todas las actividades</option>
+                                    {this.state.actividadesFiltroLista.map((actividad) => (
+                                        <option key={actividad.idActividad} value={actividad.idActividad}>
+                                            {actividad.nombreActividad}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="sin-partidos">
+                        No hay partidos registrados
+                    </div>
                 </div>
             );
         }
@@ -117,6 +242,50 @@ export class PartidosComponent extends Component {
         return (
             <div className="partidos-container">
                 <h1>Resultados de Partidos</h1>
+                
+                {/* Filtros */}
+                <div className="partidos-filtros">
+                    <div className="form-group">
+                        <label>Filtrar por Evento:</label>
+                        <select 
+                            value={this.state.filtroEvento}
+                            onChange={(e) => {
+                                const idEvento = e.target.value;
+                                this.setState({ filtroEvento: idEvento });
+                                this.obtenerActividadesPorEventoFiltro(idEvento);
+                            }}
+                        >
+                            <option value="">Todos los eventos</option>
+                            {this.state.eventosFiltroLista.map((evento) => (
+                                <option key={evento.idEvento} value={evento.idEvento}>
+                                    Evento {evento.idEvento} - {new Date(evento.fechaEvento).toLocaleDateString('es-ES')}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {this.state.filtroEvento && (
+                        <div className="form-group">
+                            <label>Filtrar por Actividad:</label>
+                            <select 
+                                value={this.state.filtroActividad}
+                                onChange={(e) => {
+                                    const idActividad = e.target.value;
+                                    this.setState({ filtroActividad: idActividad });
+                                    this.aplicarFiltroActividad(this.state.filtroEvento, idActividad);
+                                }}
+                            >
+                                <option value="">Todas las actividades</option>
+                                {this.state.actividadesFiltroLista.map((actividad) => (
+                                    <option key={actividad.idActividad} value={actividad.idActividad}>
+                                        {actividad.nombreActividad}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                </div>
+
                 <div className="partidos-grid">
                     {partidos.map((partido) => {
                         const equipoLocal = equipos[partido.idEquipoLocal] || {};
