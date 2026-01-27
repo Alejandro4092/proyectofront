@@ -13,6 +13,7 @@ import ActividadesComponent from './components/ActividadesComponent'
 import LoginComponent from './components/LoginComponent'
 import PartidosComponent from './components/PartidosComponent'
 import CrearEquipoComponent from './components/CrearEquipoComponent'
+import CrearActividadComponent from './components/CrearActividadComponent'
 import { AuthProvider } from './context/AuthContext'
 import MaterialesSolicitadosComponent from './components/MaterialesSolicitadosComponent'
 import NotFoundComponent from './components/NotFoundComponent'
@@ -74,6 +75,7 @@ export default class Router extends Component {
                         <Route path='/equipos/:idEvento/:idActividad' element={<PrivateRoute><ListaEquiposElement/></PrivateRoute>}/>
                         <Route path='/equipo/:idEquipo' element={<PrivateRoute><EquipoComponentElement/></PrivateRoute>}/>
                         <Route path='/actividades/:idEvento' element={<PrivateRoute><ActividadesElement/></PrivateRoute>}/>
+                        <Route path='/crear-actividad' element={<PrivateRoute><CrearActividadComponent/></PrivateRoute>}/>
                         <Route path='/gestionar-actividades/:idEvento' element={<PrivateRoute><GestionarActividadesElement/></PrivateRoute>}/>
                         <Route path='/partidos' element={<PrivateRoute><PartidosComponent/></PrivateRoute>}/>
                         <Route path='/materialesSolicitados' element={<PrivateRoute><MaterialesSolicitadosComponent/></PrivateRoute>}/>

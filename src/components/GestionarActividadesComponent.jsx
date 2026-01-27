@@ -17,8 +17,6 @@ export class GestionarActividadesComponent extends Component {
         actividadesDisponibles: [],
         actividadesAsociadas: [],
         actividadSeleccionada: '',
-        minimoJugadores: '',
-        posicion: '',
         loading: false
     };
 
@@ -61,29 +59,23 @@ export class GestionarActividadesComponent extends Component {
     asociarActividad = async (e) => {
         e.preventDefault();
 
-        if (!this.state.actividadSeleccionada || !this.state.minimoJugadores || !this.state.posicion) {
+        if (!this.state.actividadSeleccionada) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Campos incompletos',
-                text: 'Por favor, completa todos los campos'
+                title: 'Selección requerida',
+                text: 'Por favor, selecciona una actividad'
             });
             return;
         }
 
         let token = this.context.token;
-        
-        const datos = {
-            idEventoActividad: 0,
-            idEvento: parseInt(this.props.idEvento),
-            idActividad: parseInt(this.state.actividadSeleccionada),
-            minimoJugadores: parseInt(this.state.minimoJugadores),
-            posicion: parseInt(this.state.posicion)
-        };
+        const idEvento = parseInt(this.props.idEvento);
+        const idActividad = parseInt(this.state.actividadSeleccionada);
 
         this.setState({ loading: true });
 
         try {
-            await serviceActividades.asociarEventoActividad(datos, token);
+            await serviceActividades.asociarEventoActividad(idEvento, idActividad, token);
 
             Swal.fire({
                 icon: 'success',
@@ -95,8 +87,6 @@ export class GestionarActividadesComponent extends Component {
 
             this.setState({
                 actividadSeleccionada: '',
-                minimoJugadores: '',
-                posicion: '',
                 loading: false
             });
 
@@ -172,6 +162,7 @@ export class GestionarActividadesComponent extends Component {
                                         value={this.state.actividadSeleccionada}
                                         onChange={this.handleChange}
                                         className="form-control"
+                                        required
                                     >
                                         <option value="">Selecciona una actividad</option>
                                         {this.state.actividadesDisponibles.map((actividad) => (
@@ -180,34 +171,6 @@ export class GestionarActividadesComponent extends Component {
                                             </option>
                                         ))}
                                     </select>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="minimoJugadores">Mínimo de Jugadores</label>
-                                    <input
-                                        type="number"
-                                        id="minimoJugadores"
-                                        name="minimoJugadores"
-                                        value={this.state.minimoJugadores}
-                                        onChange={this.handleChange}
-                                        className="form-control"
-                                        min="1"
-                                        placeholder="Ej: 5"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="posicion">Posición</label>
-                                    <input
-                                        type="number"
-                                        id="posicion"
-                                        name="posicion"
-                                        value={this.state.posicion}
-                                        onChange={this.handleChange}
-                                        className="form-control"
-                                        min="1"
-                                        placeholder="Ej: 1"
-                                    />
                                 </div>
 
                                 <button 
@@ -231,14 +194,6 @@ export class GestionarActividadesComponent extends Component {
                                         <div key={actividad.idEventoActividad} className="actividad-item">
                                             <div className="actividad-info">
                                                 <h3>{actividad.nombreActividad}</h3>
-                                                <div className="actividad-detalles">
-                                                    <span className="detalle-badge">
-                                                        Mín. jugadores: {actividad.minimoJugadores}
-                                                    </span>
-                                                    <span className="detalle-badge">
-                                                        Posición: {actividad.posicion}
-                                                    </span>
-                                                </div>
                                             </div>
                                             <button
                                                 className="ga-btn-eliminar"

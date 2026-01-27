@@ -54,10 +54,10 @@ export default class ActividadesService {
         })
     }
 
-    asociarEventoActividad = async (datos, token) => {
+    asociarEventoActividad = async (idEvento, idActividad, token) => {
         return new Promise(function(resolve, reject){
-            let request = Global.apiDeportes + "api/EventoActividad"
-            axios.post(request, datos, {
+            let request = Global.apiDeportes + "api/ActividadesEvento/create/" + idEvento + "/" + idActividad
+            axios.post(request, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -88,6 +88,22 @@ export default class ActividadesService {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/ActividadesEvento"
             axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    crearActividad = async (datos, token) => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Actividades/create"
+            axios.post(request, datos, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
