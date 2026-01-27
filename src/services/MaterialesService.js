@@ -13,10 +13,11 @@ class MaterialesService {
     }
 
     /**
-     * Obtiene eventos y actividades
+     * Obtiene materiales por idEventoActividad
+     * @param {number} idEventoActividad - ID del evento actividad
      */
-    obtenerEventosActividades() {
-        let request = "api/ActividadesEvento";
+    getMaterialesPorActividad(idEventoActividad) {
+        let request = `api/Materiales/MaterialesActividad/${idEventoActividad}`;
         return axios.get(this.url + request);
     }
 

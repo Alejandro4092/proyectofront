@@ -2,6 +2,17 @@ import axios from "axios"
 import Global from "../Global"
 
 export default class EventosService {
+    getTodosEventos = async () => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Eventos"
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
     getEventosCursoEscolar = async (token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Eventos/EventosCursoEscolar"

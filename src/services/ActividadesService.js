@@ -83,4 +83,15 @@ export default class ActividadesService {
             })
         })
     }
+
+    obtenerEventosActividades = async () => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/ActividadesEvento"
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }

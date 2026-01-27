@@ -13,7 +13,7 @@
 }
 
 .materiales-header h1 {
-    color: #333;
+    color: white;
     font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
@@ -35,6 +35,47 @@
 .btn-solicitar:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.materiales-filtros {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.materiales-filtros .mat-form-group {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 0;
+}
+
+.materiales-filtros .mat-form-group label {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.materiales-filtros .mat-form-group select {
+    background-color: #f8f9fa;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.materiales-filtros .mat-form-group select:hover {
+    border-color: #667eea;
+    background-color: white;
+}
+
+.materiales-filtros .mat-form-group select:focus {
+    background-color: white;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
 .materiales-grid {
@@ -371,6 +412,15 @@
 
     .btn-solicitar {
         width: 100%;
+    }
+
+    .materiales-filtros {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .materiales-filtros .mat-form-group {
+        min-width: 100%;
     }
 
     .materiales-grid {

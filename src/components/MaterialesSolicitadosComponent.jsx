@@ -3,6 +3,11 @@ import '../css/MaterialesSolicitadosComponent.css';
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import MaterialesService from '../services/MaterialesService';
+import ActividadesService from '../services/ActividadesService';
+import EventosService from '../services/EventosService';
+
+const serviceActividades = new ActividadesService();
+const serviceEventos = new EventosService();
 
 export class MaterialesSolicitadosComponent extends Component {
     static contextType = AuthContext;
@@ -17,14 +22,22 @@ export class MaterialesSolicitadosComponent extends Component {
             mostrarModalAportar: false,
             nombreMaterial: '',
             materialSeleccionado: null,
-            idEventoActividadModal: '',
-            idEventoActividadList: []
+            idEventoModal: '',
+            idActividadModal: '',
+            eventosLista: [],
+            actividadesLista: [],
+            // Filtros
+            filtroEvento: '',
+            filtroActividad: '',
+            eventosFiltroLista: [],
+            actividadesFiltroLista: []
         };
     }
 
     componentDidMount() {
-        this.obtenerMateriales();
-        this.obtenerEventosActividades();
+        this.setState({ cargando: false });
+        this.obtenerEventos();
+        this.obtenerEventosFiltro();
     }
 
     obtenerMateriales = () => {
@@ -44,15 +57,106 @@ export class MaterialesSolicitadosComponent extends Component {
             });
     }
 
-    obtenerEventosActividades = () => {
-        MaterialesService.obtenerEventosActividades()
-            .then(response => {
+    obtenerEventos = () => {
+        serviceEventos.getEventosCursoEscolar(this.context.token)
+            .then(data => {
                 this.setState({
-                    idEventoActividadList: response.data
+                    eventosLista: data
                 });
             })
             .catch(error => {
-                console.error('Error al obtener eventos actividades:', error);
+                console.error('Error al obtener eventos:', error);
+            });
+    }
+
+    obtenerEventosFiltro = () => {
+        serviceEventos.getEventosCursoEscolar(this.context.token)
+            .then(data => {
+                this.setState({
+                    eventosFiltroLista: data
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener eventos para filtro:', error);
+            });
+    }
+
+    obtenerActividadesPorEventoFiltro = (idEvento) => {
+        if (!idEvento) {
+            this.setState({ 
+                actividadesFiltroLista: [], 
+                filtroActividad: '',
+                materiales: [],
+                cargando: false
+            });
+            return;
+        }
+
+        serviceActividades.getActividadesEvento(idEvento)
+            .then(data => {
+                this.setState({
+                    actividadesFiltroLista: data,
+                    filtroActividad: ''
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener actividades para filtro:', error);
+                this.setState({ actividadesFiltroLista: [] });
+            });
+    }
+
+    aplicarFiltroActividad = async (idEvento, idActividad) => {
+        if (!idEvento || !idActividad) {
+            this.setState({ 
+                materiales: [],
+                cargando: false
+            });
+            return;
+        }
+
+        try {
+            const idEventoActividad = await serviceActividades.getEventoActividad(
+                parseInt(idEvento),
+                parseInt(idActividad)
+            );
+
+            this.setState({ cargando: true });
+            MaterialesService.getMaterialesPorActividad(idEventoActividad)
+                .then(response => {
+                    this.setState({ 
+                        materiales: response.data,
+                        cargando: false 
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.setState({ 
+                        error: 'Error al cargar los materiales',
+                        cargando: false 
+                    });
+                });
+        } catch (error) {
+            console.error('Error al obtener idEventoActividad:', error);
+            this.setState({ cargando: false });
+        }
+    }
+
+    obtenerActividadesPorEvento = (idEvento) => {
+        if (!idEvento) {
+            this.setState({ actividadesLista: [], idActividadModal: '' });
+            return;
+        }
+
+        serviceActividades.getActividadesEvento(idEvento)
+            .then(data => {
+                this.setState({
+                    actividadesLista: data,
+                    idActividadModal: ''
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener actividades:', error);
+                this.setState({ actividadesLista: [] });
             });
     }
 
@@ -69,7 +173,9 @@ export class MaterialesSolicitadosComponent extends Component {
         this.setState({
             mostrarModalSolicitar: true,
             nombreMaterial: '',
-            idEventoActividadModal: ''
+            idEventoModal: '',
+            idActividadModal: '',
+            actividadesLista: []
         });
     }
 
@@ -77,7 +183,9 @@ export class MaterialesSolicitadosComponent extends Component {
         this.setState({
             mostrarModalSolicitar: false,
             nombreMaterial: '',
-            idEventoActividadModal: ''
+            idEventoModal: '',
+            idActividadModal: '',
+            actividadesLista: []
         });
     }
 
@@ -95,8 +203,8 @@ export class MaterialesSolicitadosComponent extends Component {
         });
     }
 
-    solicitarMaterial = () => {
-        if (!this.state.nombreMaterial || !this.state.idEventoActividadModal) {
+    solicitarMaterial = async () => {
+        if (!this.state.nombreMaterial || !this.state.idEventoModal || !this.state.idActividadModal) {
             Swal.fire('Error', 'Por favor completa todos los campos', 'error');
             return;
         }
@@ -106,25 +214,39 @@ export class MaterialesSolicitadosComponent extends Component {
             return;
         }
 
-        const datos = {
-            idMaterial: 0,
-            idEventoActividad: parseInt(this.state.idEventoActividadModal),
-            idUsuario: this.context.usuario.idUsuario,
-            nombreMaterial: this.state.nombreMaterial,
-            pendiente: true,
-            fechaSolicitud: new Date().toISOString()
-        };
+        try {
+            // Obtener el idEventoActividad
+            const idEventoActividad = await serviceActividades.getEventoActividad(
+                parseInt(this.state.idEventoModal),
+                parseInt(this.state.idActividadModal)
+            );
 
-        MaterialesService.crearMaterial(datos)
-            .then(response => {
-                Swal.fire('¡Éxito!', 'Material solicitado correctamente', 'success');
-                this.cerrarModalSolicitar();
-                this.obtenerMateriales();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire('Error', 'Error al solicitar el material', 'error');
-            });
+            const datos = {
+                idMaterial: 0,
+                idEventoActividad: idEventoActividad,
+                idUsuario: this.context.usuario.idUsuario,
+                nombreMaterial: this.state.nombreMaterial,
+                pendiente: true,
+                fechaSolicitud: new Date().toISOString()
+            };
+
+            MaterialesService.crearMaterial(datos)
+                .then(response => {
+                    Swal.fire('¡Éxito!', 'Material solicitado correctamente', 'success');
+                    this.cerrarModalSolicitar();
+                    // Recargar materiales con filtro si está activo
+                    if (this.state.filtroEvento && this.state.filtroActividad) {
+                        this.aplicarFiltroActividad(this.state.filtroEvento, this.state.filtroActividad);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'Error al solicitar el material', 'error');
+                });
+        } catch (error) {
+            console.error('Error al obtener idEventoActividad:', error);
+            Swal.fire('Error', 'Error al procesar la solicitud', 'error');
+        }
     }
 
     aportarMaterial = () => {
@@ -151,7 +273,10 @@ export class MaterialesSolicitadosComponent extends Component {
             .then(response => {
                 Swal.fire('¡Éxito!', 'Material aportado correctamente', 'success');
                 this.cerrarModalAportar();
-                this.obtenerMateriales();
+                // Recargar materiales con filtro si está activo
+                if (this.state.filtroEvento && this.state.filtroActividad) {
+                    this.aplicarFiltroActividad(this.state.filtroEvento, this.state.filtroActividad);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -190,8 +315,55 @@ export class MaterialesSolicitadosComponent extends Component {
                     </button>
                 </div>
 
+                {/* Filtros */}
+                <div className="materiales-filtros">
+                    <div className="mat-form-group">
+                        <label>Filtrar por Evento:</label>
+                        <select 
+                            value={this.state.filtroEvento}
+                            onChange={(e) => {
+                                const idEvento = e.target.value;
+                                this.setState({ filtroEvento: idEvento });
+                                this.obtenerActividadesPorEventoFiltro(idEvento);
+                            }}
+                        >
+                            <option value="">Todos los eventos</option>
+                            {this.state.eventosFiltroLista.map((evento) => (
+                                <option key={evento.idEvento} value={evento.idEvento}>
+                                    Evento {evento.idEvento} - {new Date(evento.fechaEvento).toLocaleDateString('es-ES')}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {this.state.filtroEvento && (
+                        <div className="mat-form-group">
+                            <label>Filtrar por Actividad:</label>
+                            <select 
+                                value={this.state.filtroActividad}
+                                onChange={(e) => {
+                                    const idActividad = e.target.value;
+                                    this.setState({ filtroActividad: idActividad });
+                                    this.aplicarFiltroActividad(this.state.filtroEvento, idActividad);
+                                }}
+                            >
+                                <option value="">Todas las actividades</option>
+                                {this.state.actividadesFiltroLista.map((actividad) => (
+                                    <option key={actividad.idActividad} value={actividad.idActividad}>
+                                        {actividad.nombreActividad}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                </div>
+
                 {materiales.length === 0 ? (
-                    <div className="sin-materiales">No hay materiales solicitados</div>
+                    <div className="sin-materiales">
+                        {!this.state.filtroEvento || !this.state.filtroActividad 
+                            ? 'Selecciona un evento y actividad para ver los materiales' 
+                            : 'No hay materiales para esta actividad'}
+                    </div>
                 ) : (
                     <div className="materiales-grid">
                         {materiales.map((material) => (
@@ -259,19 +431,40 @@ export class MaterialesSolicitadosComponent extends Component {
                                 </div>
 
                                 <div className="mat-form-group">
-                                    <label>Actividad/Evento *</label>
+                                    <label>Evento *</label>
                                     <select 
-                                        value={this.state.idEventoActividadModal}
-                                        onChange={(e) => this.setState({ idEventoActividadModal: e.target.value })}
+                                        value={this.state.idEventoModal}
+                                        onChange={(e) => {
+                                            const idEvento = e.target.value;
+                                            this.setState({ idEventoModal: idEvento });
+                                            this.obtenerActividadesPorEvento(idEvento);
+                                        }}
                                     >
-                                        <option value="">Selecciona una actividad</option>
-                                        {this.state.idEventoActividadList.map((actividad) => (
-                                            <option key={actividad.idEventoActividad} value={actividad.idEventoActividad}>
-                                                Actividad {actividad.idEventoActividad}
+                                        <option value="">Selecciona un evento</option>
+                                        {this.state.eventosLista.map((evento) => (
+                                            <option key={evento.idEvento} value={evento.idEvento}>
+                                                Evento {evento.idEvento} - {new Date(evento.fechaEvento).toLocaleDateString('es-ES')}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
+
+                                {this.state.idEventoModal && (
+                                    <div className="mat-form-group">
+                                        <label>Actividad *</label>
+                                        <select 
+                                            value={this.state.idActividadModal}
+                                            onChange={(e) => this.setState({ idActividadModal: e.target.value })}
+                                        >
+                                            <option value="">Selecciona una actividad</option>
+                                            {this.state.actividadesLista.map((actividad) => (
+                                                <option key={actividad.idActividad} value={actividad.idActividad}>
+                                                    {actividad.nombreActividad}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="mat-modal-footer">
