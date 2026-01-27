@@ -8,10 +8,12 @@ import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
 import InscripcionesService from '../services/InscripcionesService';
 import axios from 'axios';
+import PrecioActividadService from '../services/PrecioActividadService';
 
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
+const servicePrecioActividad = new PrecioActividadService();
 
 export class ActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -25,7 +27,8 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
-        esOrganizador: false
+        esOrganizador: false,
+        precios: [],
     };
 
     componentDidMount = async () => {
@@ -33,6 +36,7 @@ export class ActividadesComponent extends Component {
         await this.checkCapitan();
         await this.loadActividadesInscritas();
         await this.checkOrganizador();
+        await this.loadPrecios();
     };
 
     checkOrganizador = async () => {
@@ -112,6 +116,22 @@ export class ActividadesComponent extends Component {
 
     estaInscritoEnEvento = () => {
         return this.state.actividadesInscritas.length > 0;
+    };
+
+    loadPrecios = async () => {
+        try {
+            const precios = await servicePrecioActividad.getPreciosActividades();
+            this.setState({ precios });
+        } catch (error) {
+            console.error('Error al cargar precios:', error);
+        }
+    };
+
+    getPrecioActividad = (idEventoActividad) => {
+        const precio = this.state.precios.find(
+            p => p.idEventoActividad === idEventoActividad
+        );
+        return precio?.precioTotal;
     };
 
     desinscribirse = async (idEventoActividad) => {
@@ -281,6 +301,11 @@ export class ActividadesComponent extends Component {
                             style={{ textDecoration: 'none', color: 'inherit' }}
                         >
                             <article className="actividad-card">
+                                {this.getPrecioActividad(actividad.idEventoActividad) && (
+                                    <div className="actividad-precio-badge">
+                                        <span className="chip chip-precio">Precio: {this.getPrecioActividad(actividad.idEventoActividad)}€</span>
+                                    </div>
+                                )}
                                 <div className="actividad-title">{actividad.nombreActividad}</div>
                                 <div className="actividad-fecha">{actividad.fechaEvento}</div>
                                 <p className="actividad-desc">
