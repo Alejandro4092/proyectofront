@@ -7,9 +7,8 @@ import Swal from 'sweetalert2';
 import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
 import InscripcionesService from '../services/InscripcionesService';
-import axios from 'axios';
 import PrecioActividadService from '../services/PrecioActividadService';
-
+import axios from 'axios';
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
@@ -27,7 +26,6 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
-        esOrganizador: false,
         precios: [],
     };
 
@@ -36,7 +34,6 @@ export class ActividadesComponent extends Component {
         await this.checkCapitan();
         await this.loadActividadesInscritas();
         await this.checkOrganizador();
-        await this.loadPrecios();
     };
 
     checkOrganizador = async () => {
@@ -182,6 +179,13 @@ export class ActividadesComponent extends Component {
                 });
             }
         }
+    };
+
+    componentDidMount = async () => {
+        await this.loadActividades();
+        await this.checkCapitan();
+        await this.loadActividadesInscritas();
+        await this.loadPrecios();
     };
 
     abrirModal = (actividad) => {
