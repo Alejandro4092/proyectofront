@@ -169,6 +169,10 @@ export class MaterialesSolicitadosComponent extends Component {
         });
     }
 
+    getNombreUsuario = (idUsuario) => {
+        
+    }
+
     abrirModalSolicitar = () => {
         this.setState({
             mostrarModalSolicitar: true,
@@ -379,10 +383,11 @@ export class MaterialesSolicitadosComponent extends Component {
                                 </div>
 
                                 <div className="material-body">
-
+                                    
                                     <div className="material-info">
                                         <span className="label">Solicitado por:</span>
                                         <span className="valor">Usuario {material.idUsuario}</span>
+                                        <span className="valor">{this.getNombreUsuario(material.idUsuario)}</span>
                                     </div>
 
                                     <div className="material-info">

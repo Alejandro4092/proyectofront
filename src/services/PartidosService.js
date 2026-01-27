@@ -12,4 +12,15 @@ export default class PartidosService {
             })
         })
     }
+
+    getPartidosPorActividad = async (idEventoActividad) => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/PartidoResultado/PartidosResultadosActividad/" + idEventoActividad
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }
