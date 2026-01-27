@@ -5,6 +5,9 @@ import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
 import '../css/CrearEventoComponent.css'
+import EventosService from '../services/EventosService'
+
+const serviceEventos = new EventosService();
 
 export class EditarEventoComponent extends Component {
   static contextType = AuthContext;
@@ -21,23 +24,23 @@ export class EditarEventoComponent extends Component {
   loadEvento = () => {
     let token = this.context.token;
     var idEvento = this.props.idEvento;
-    var request = "api/Eventos/" + idEvento;
-    axios.get(this.url + request, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => {
-      const fechaEvento = new Date(response.data.fechaEvento);
-      // Ajustar la fecha a la zona horaria local para evitar desfase de días
-      const offset = fechaEvento.getTimezoneOffset();
-      const fechaLocal = new Date(fechaEvento.getTime() - (offset * 60 * 1000));
-      const fechaFormateada = fechaLocal.toISOString().slice(0, 16);
-      this.setState({
-        idEvento: idEvento,
-        fecha: fechaFormateada,
-        cargando: false
+    serviceEventos.getEvento(idEvento, token)
+      .then(evento => {
+        const fechaEvento = new Date(evento.fechaEvento);
+        const fechaFormateada = fechaEvento.toISOString().slice(0, 16);
+        this.setState({
+          idEvento: idEvento,
+          fecha: fechaFormateada,
+          cargando: false
+        });
+      })
+      .catch(error => {
+        console.error('Error al cargar evento:', error);
+        this.setState({
+          error: 'Error al cargar el evento',
+          cargando: false
+        });
       });
-    });
   }
 
   componentDidMount = () => {
@@ -65,19 +68,24 @@ export class EditarEventoComponent extends Component {
       idProfesor: 0
     };
 
-    let request = "api/Eventos/update";
-    axios.put(this.url + request, eventoActualizado, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(response => {
-      this.setState({
-        mensaje: 'Evento actualizado exitosamente'
+    serviceEventos.actualizarEvento(eventoActualizado, token)
+      .then(data => {
+        this.setState({
+          mensaje: 'Evento actualizado exitosamente'
+        });
+        setTimeout(() => {
+          this.props.navigate('/eventos');
+        }, 1500);
+      })
+      .catch(error => {
+        console.error('Error al actualizar evento:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo actualizar el evento',
+          icon: 'error',
+          confirmButtonText: 'Entendido'
+        });
       });
-      setTimeout(() => {
-        this.props.navigate('/eventos');
-      }, 1500);
-    });
   }
 
   handleChange = (e) => {

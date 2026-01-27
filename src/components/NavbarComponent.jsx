@@ -46,7 +46,9 @@ export class NavbarComponent extends Component {
             <nav className="navbar navbar-expand-lg custom-navbar">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">
-                        <img src={tajamarLogo} alt="Tajamar" className="navbar-logo" />
+                        <NavLink to="/">
+                            <img src={tajamarLogo} alt="Tajamar" className="navbar-logo" />
+                        </NavLink>
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

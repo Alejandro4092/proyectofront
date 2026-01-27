@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import Global from '../Global';
 import { NavLink, Link } from 'react-router-dom'
-import axios from 'axios'
 import '../css/Actividades.css'
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import CapitanService from '../services/CapitanService';
+import ActividadesService from '../services/ActividadesService';
+import InscripcionesService from '../services/InscripcionesService';
+import axios from 'axios';
 
 const serviceCapitan = new CapitanService();
+const serviceActividades = new ActividadesService();
+const serviceInscripciones = new InscripcionesService();
 
 export class ActividadesComponent extends Component {
     static contextType = AuthContext;
@@ -21,28 +25,50 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
+        esOrganizador: false
     };
+
+    componentDidMount = async () => {
+        await this.loadActividades();
+        await this.checkCapitan();
+        await this.loadActividadesInscritas();
+        await this.checkOrganizador();
+    };
+
+    checkOrganizador = async () => {
+        let request = "api/Organizadores/IdsOrganizadoresEvento"
+        let res = await axios.get(this.url+request);
+        res.data.forEach(id => {
+            if(id == this.context.usuario.idUsuario){
+                this.setState({esOrganizador: true})
+            }
+        })
+    }
+
     loadActividades = () => {
-        let request = "api/Actividades/ActividadesEvento/" + this.props.idEvento;
-        axios.get(this.url + request).then((response) => {
-            console.log(response.data)
-            this.setState({
-                actividades: response.data,
+        serviceActividades.getActividadesEvento(this.props.idEvento)
+            .then(data => {
+                console.log(data)
+                this.setState({
+                    actividades: data,
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar actividades:', error);
             });
-        });
     };
 
     checkCapitan = async () => {
         if (!this.context.token) return;
-        
+
         let token = this.context.token;
         try {
             const capitanes = await serviceCapitan.getCapitanes(token);
             const actividadesCapitan = [];
             this.state.actividades.forEach(actividad => {
                 capitanes.forEach(capitan => {
-                    if(actividad.idEventoActividad == capitan.idEventoActividad){
-                        if(capitan.idUsuario == this.context.usuario.idUsuario){
+                    if (actividad.idEventoActividad == capitan.idEventoActividad) {
+                        if (capitan.idUsuario == this.context.usuario.idUsuario) {
                             actividadesCapitan.push(actividad.idEventoActividad)
                         }
                     }
@@ -58,17 +84,12 @@ export class ActividadesComponent extends Component {
 
     loadActividadesInscritas = async () => {
         if (!this.context.token) return;
-        
+
         let token = this.context.token;
-        let request = "api/UsuariosDeportes/ActividadesUser";
         try {
-            const response = await axios.get(this.url + request, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const actividades = await serviceActividades.getActividadesUsuario(token);
             // Filtrar solo las actividades del evento actual
-            const actividadesDelEvento = response.data.filter(
+            const actividadesDelEvento = actividades.filter(
                 act => act.idEvento === parseInt(this.props.idEvento)
             );
             const idsInscritas = actividadesDelEvento.map(act => act.idEventoActividad);
@@ -122,12 +143,7 @@ export class ActividadesComponent extends Component {
                 }
 
                 let token = this.context.token;
-                let request = "api/Inscripciones/" + inscripcion.id;
-                await axios.delete(this.url + request, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                await serviceInscripciones.desinscribirse(inscripcion.id, token);
 
                 Swal.fire({
                     icon: 'success',
@@ -148,12 +164,6 @@ export class ActividadesComponent extends Component {
         }
     };
 
-    componentDidMount = async () => {
-        await this.loadActividades();
-        await this.checkCapitan();
-        await this.loadActividadesInscritas();
-    };
-
     abrirModal = (actividad) => {
         this.setState({
             mostrarModal: true,
@@ -170,10 +180,10 @@ export class ActividadesComponent extends Component {
     };
 
     inscribirse = async () => {
-        let request = "api/UsuariosDeportes/InscribirmeEvento/"+this.state.actividadSeleccionada.idEventoActividad+"/"+this.state.esCapitan;
+        let request = "api/UsuariosDeportes/InscribirmeEvento/" + this.state.actividadSeleccionada.idEventoActividad + "/" + this.state.esCapitan;
         //let request = "api/Inscripciones/create";
-        
-        
+
+
         if (!this.context.usuario || !this.context.usuario.idUsuario) {
             Swal.fire({
                 icon: 'error',
@@ -182,7 +192,7 @@ export class ActividadesComponent extends Component {
             });
             return;
         }
-        
+
         if (!this.state.actividadSeleccionada || !this.state.actividadSeleccionada.idEventoActividad) {
             Swal.fire({
                 icon: 'error',
@@ -191,7 +201,7 @@ export class ActividadesComponent extends Component {
             });
             return;
         }
-        
+
         const datos = {
             idInscripcion: 0,
             idUsuario: this.context.usuario.idUsuario,
@@ -199,15 +209,11 @@ export class ActividadesComponent extends Component {
             quiereSerCapitan: this.state.esCapitan,
             fechaInscripcion: new Date().toISOString()
         };
-        
+
         try {
             let token = this.context.token;
             console.log(token)
-            const response = await axios.post(this.url + request, datos, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            await serviceInscripciones.inscribirse(datos, token);
             Swal.fire({
                 icon: 'success',
                 title: '¡Inscripción exitosa!',
@@ -219,7 +225,7 @@ export class ActividadesComponent extends Component {
         } catch (error) {
             if (error.response?.status === 400) {
                 const mensajeError = error.response?.data?.message || error.response?.data || "";
-                
+
                 if (mensajeError.includes("mismo Evento")) {
                     Swal.fire({
                         icon: 'warning',
@@ -255,13 +261,12 @@ export class ActividadesComponent extends Component {
         this.cerrarModal();
     };
     render() {
-        const esOrganizador = (this.context.rol || '').toLowerCase() === 'organizador';
         console.log(this.context)
         return (
             <div className="actividades-wrapper">
                 <div className="actividades-head">
                     <h1 className="actividades-title">Actividades</h1>
-                    {esOrganizador && (
+                    {this.state.esOrganizador && (
                         <Link to={`/gestionar-actividades/${this.props.idEvento}`} className="btn-crear-evento">
                             Gestionar Actividades
                         </Link>

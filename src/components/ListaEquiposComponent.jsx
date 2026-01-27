@@ -8,9 +8,11 @@ import '../css/ListaEquiposComponent.css';
 import EquiposService from '../services/EquiposService.js';
 import AuthContext from '../context/AuthContext.js';
 import CapitanService from '../services/CapitanService.js';
+import ActividadesService from '../services/ActividadesService.js';
 
 const serviceEquipos = new EquiposService();
 const serviceCapitan = new CapitanService();
+const serviceActividades = new ActividadesService();
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
     static contextType = AuthContext;
@@ -63,10 +65,8 @@ export class ListaEquiposComponent extends Component {
     }
 
     getEventoActividad = async () => {
-        let request = "api/ActividadesEvento/FindIdEventoActividad/" + this.props.idEvento + "/" + this.props.idActividad;
         try {
-            const res = await axios.get(this.url + request);
-            return res.data.idEventoActividad;
+            return await serviceActividades.getEventoActividad(this.props.idEvento, this.props.idActividad);
         } catch (error) {
             console.error("Error al obtener el id:", error);
             throw error;

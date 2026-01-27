@@ -1,9 +1,11 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import Global from '../Global'
 import '../css/Home.css'
 import AuthContext from '../context/AuthContext'
+import EventosService from '../services/EventosService'
+
+const serviceEventos = new EventosService();
 
 export class Home extends Component {
   static contextType = AuthContext;
@@ -25,10 +27,10 @@ export class Home extends Component {
   }
 
   loadEventos = () => {
-    let request = "api/Eventos/EventosCursoEscolar";
-    axios.get(this.url + request).then(response => {
+    let token = this.context.token;
+    serviceEventos.getEventosCursoEscolar(token).then(data => {
       this.setState({
-        eventos: response.data
+        eventos: data
       });
     });
   }
