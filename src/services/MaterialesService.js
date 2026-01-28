@@ -8,16 +8,17 @@ class MaterialesService {
      * Obtiene todos los materiales
      */
     obtenerMateriales() {
-        let request = "api/Materiales";
+        let request = "api/Materiales/MaterialUsuarios";
         return axios.get(this.url + request);
     }
 
     /**
      * Obtiene materiales por idEventoActividad
      * @param {number} idEventoActividad - ID del evento actividad
+     * @returns Array de objetos con material, usuarioMaterial y usuarioAportacionMaterial
      */
     getMaterialesPorActividad(idEventoActividad) {
-        let request = `api/Materiales/MaterialesActividad/${idEventoActividad}`;
+        let request = `api/Materiales/MaterialesUsuarioActividad/${idEventoActividad}`;
         return axios.get(this.url + request);
     }
 

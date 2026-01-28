@@ -8,7 +8,6 @@ import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
 import InscripcionesService from '../services/InscripcionesService';
 import PrecioActividadService from '../services/PrecioActividadService';
-import axios from 'axios';
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
@@ -26,7 +25,6 @@ export class ActividadesComponent extends Component {
         mostrarModal: false,
         actividadSeleccionada: null,
         esCapitan: false,
-        esOrganizador: false,
         precios: [],
     };
 
@@ -34,19 +32,8 @@ export class ActividadesComponent extends Component {
         await this.loadActividades();
         await this.checkCapitan();
         await this.loadActividadesInscritas();
-        await this.checkOrganizador();
         await this.loadPrecios();
     };
-
-    checkOrganizador = async () => {
-        let request = "api/Organizadores/IdsOrganizadoresEvento"
-        let res = await axios.get(this.url+request);
-        res.data.forEach(id => {
-            if(id == this.context.usuario.idUsuario){
-                this.setState({esOrganizador: true})
-            }
-        })
-    }
 
     loadActividades = () => {
         serviceActividades.getActividadesEvento(this.props.idEvento)
@@ -147,9 +134,11 @@ export class ActividadesComponent extends Component {
 
         if (result.isConfirmed) {
             try {
-                // Buscar el ID de la inscripción correspondiente al idEventoActividad
-                const inscripcion = this.state.datosInscritos.find(
-                    ins => ins.idEventoActividad === idEventoActividad
+                // Obtener todas las inscripciones y buscar la del usuario en esta actividad
+                const todasInscripciones = await serviceInscripciones.obtenerInscripciones();
+                const inscripcion = todasInscripciones.find(
+                    ins => ins.idEventoActividad === idEventoActividad && 
+                           ins.idUsuario === this.context.usuario.idUsuario
                 );
 
                 if (!inscripcion) {
@@ -162,7 +151,7 @@ export class ActividadesComponent extends Component {
                 }
 
                 let token = this.context.token;
-                await serviceInscripciones.desinscribirse(inscripcion.id, token);
+                await serviceInscripciones.desinscribirse(inscripcion.idInscripcion, token);
 
                 Swal.fire({
                     icon: 'success',
@@ -201,10 +190,6 @@ export class ActividadesComponent extends Component {
     };
 
     inscribirse = async () => {
-        let request = "api/UsuariosDeportes/InscribirmeEvento/" + this.state.actividadSeleccionada.idEventoActividad + "/" + this.state.esCapitan;
-        //let request = "api/Inscripciones/create";
-
-
         if (!this.context.usuario || !this.context.usuario.idUsuario) {
             Swal.fire({
                 icon: 'error',
@@ -223,18 +208,13 @@ export class ActividadesComponent extends Component {
             return;
         }
 
-        const datos = {
-            idInscripcion: 0,
-            idUsuario: this.context.usuario.idUsuario,
-            idEventoActividad: this.state.actividadSeleccionada.idEventoActividad,
-            quiereSerCapitan: this.state.esCapitan,
-            fechaInscripcion: new Date().toISOString()
-        };
-
         try {
             let token = this.context.token;
-            console.log(token)
-            await serviceInscripciones.inscribirse(datos, token);
+            await serviceInscripciones.inscribirse(
+                this.state.actividadSeleccionada.idEventoActividad, 
+                this.state.esCapitan, 
+                token
+            );
             Swal.fire({
                 icon: 'success',
                 title: '¡Inscripción exitosa!',
@@ -287,9 +267,9 @@ export class ActividadesComponent extends Component {
             <div className="actividades-wrapper">
                 <div className="actividades-head">
                     <h1 className="actividades-title">Actividades</h1>
-                    {this.state.esOrganizador && (
+                    {this.context.esOrganizador && (
                         <div className="actividades-actions">
-                            <Link to={`/crear-actividad/${this.props.idEvento}`} className="btn-crear-evento">
+                            <Link to="/crear-actividad" className="btn-crear-evento">
                                 + Crear Actividad
                             </Link>
                             <Link to={`/gestionar-actividades/${this.props.idEvento}`} className="btn-gestionar-actividades">

@@ -16,37 +16,11 @@ export class EventosComponent extends Component {
     eventos: [],
     eventosCursoEscolar: [],
     eventoById: null,
-    loading: true,
-    esOrganizador: false
+    loading: true
   };
 
   componentDidMount() {
     this.loadEventosCursoEscolar();
-    this.checkOrganizador();
-  }
-
-  checkOrganizador = async () => {
-    try {
-      console.log('Rol actual:', this.context.rol);
-      
-      // Si es Admin o Profesor, puede ver los botones
-      if (this.context.rol === 'ADMINISTRADOR' || this.context.rol === 'PROFESOR') {
-        console.log('Es Admin o Profesor, mostrando botones');
-        this.setState({ esOrganizador: true });
-        return;
-      }
-
-      // Validar si es organizador
-      let request = "api/Organizadores/IdsOrganizadoresEvento"
-      let res = await axios.get(this.url + request);
-      res.data.forEach(id => {
-        if (id == this.context.usuario.idUsuario) {
-          this.setState({ esOrganizador: true })
-        }
-      })
-    } catch (error) {
-      console.error('Error al verificar si es organizador:', error);
-    }
   }
 
   // GET: Obtiene eventos del curso escolar
@@ -125,15 +99,17 @@ export class EventosComponent extends Component {
   }
 
   render() {
-    const { eventosCursoEscolar, loading, esOrganizador } = this.state;
+    const { eventosCursoEscolar, loading } = this.state;
 
     return (
       <div className="eventos-container">
         <div className="eventos-header">
           <h1>Eventos</h1>
-          <NavLink to="/crear-evento" className="btn-crear-evento">
-            + Crear Evento
-          </NavLink>
+          {this.context.esOrganizador && (
+            <NavLink to="/crear-evento" className="btn-crear-evento">
+              + Crear Evento
+            </NavLink>
+          )}
         </div>
 
         {loading ? (
@@ -160,23 +136,21 @@ export class EventosComponent extends Component {
                     <p className="evento-valor">{this.formatearFecha(evento.fechaEvento)}</p>
                   </div>              
                 </div>
-                <div className="evento-card-footer">
-                  {esOrganizador && (
-                    <>
-                      <NavLink to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</NavLink>
-                      <button 
-                        className="btn-eliminar"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          this.deleteEvento(evento.idEvento);
-                        }}
-                      >
-                        Eliminar
-                      </button>
-                    </>
-                  )}
-                </div>
+                {this.context.esOrganizador && (
+                  <div className="evento-card-footer">
+                    <NavLink to={`/editar-evento/${evento.idEvento}`} className="btn-editar" onClick={(e) => e.stopPropagation()}>Editar</NavLink>
+                    <button 
+                      className="btn-eliminar"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.deleteEvento(evento.idEvento);
+                      }}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
               </NavLink>
             ))
           ) : (

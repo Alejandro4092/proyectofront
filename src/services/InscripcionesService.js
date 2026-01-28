@@ -2,14 +2,25 @@ import axios from "axios"
 import Global from "../Global"
 
 export default class InscripcionesService {
-    inscribirse = async (datos, token) => {
+    inscribirse = async (idEventoActividad, quiereSerCapitan, token) => {
         return new Promise(function(resolve, reject){
-            let request = Global.apiDeportes + "api/Inscripciones"
-            axios.post(request, datos, {
+            let request = Global.apiDeportes + "api/UsuariosDeportes/InscribirmeEvento/" + idEventoActividad + "/" + quiereSerCapitan
+            axios.post(request, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    obtenerInscripciones = async () => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Inscripciones"
+            axios.get(request).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
@@ -25,6 +36,17 @@ export default class InscripcionesService {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    getInscripcionesUsuario = async (idUsuario) => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Inscripciones/FindInscripcionesUser/" + idUsuario
+            axios.get(request).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)

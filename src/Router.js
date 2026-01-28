@@ -20,6 +20,7 @@ import NotFoundComponent from './components/NotFoundComponent'
 import PagosComponent from './components/PagosComponent'
 import GestionarActividadesComponent from './components/GestionarActividadesComponent'
 import PrivateRoute from './context/PrivateRoute'
+import GestionarOrganizadoresComponent from './components/GestionarOrganizadoresComponent'
 
 // Componente para mostrar navbar condicionalmente
 function ConditionalNavbar() {
@@ -80,6 +81,7 @@ export default class Router extends Component {
                         <Route path='/partidos' element={<PrivateRoute><PartidosComponent/></PrivateRoute>}/>
                         <Route path='/materialesSolicitados' element={<PrivateRoute><MaterialesSolicitadosComponent/></PrivateRoute>}/>
                         <Route path='/pagos' element={<PrivateRoute><PagosComponent/></PrivateRoute>}/>
+                        <Route path='/gestionarOrganizadores' element={<GestionarOrganizadoresComponent/>}/>
                         <Route path='*' element={<NotFoundComponent/>}/>
 
                     </Routes>

@@ -7,9 +7,13 @@ import { AuthContext } from '../context/AuthContext';
 import { NavLink } from 'react-router-dom';
 import EquiposService from '../services/EquiposService';
 import ColorService from '../services/ColorService';
+import CapitanService from '../services/CapitanService';
+import InscripcionesService from '../services/InscripcionesService';
 
 const serviceEquipos = new EquiposService();
 const serviceColor = new ColorService();
+const serviceCapitan = new CapitanService();
+const serviceInscripciones = new InscripcionesService();
 export class EquipoComponent extends Component {
     static contextType = AuthContext;
 
@@ -17,7 +21,7 @@ export class EquipoComponent extends Component {
     state = {
         equipoCompleto: false,
         eresMiembro: false,
-        eresCapitan: true,
+        eresCapitan: false,
         usuarioMiembroEquipo: {},
         equipo: {},
         equipoPrueba: {
@@ -54,12 +58,13 @@ export class EquipoComponent extends Component {
     }
 
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         //console.log(this.getColorName(1))
         console.log(this.context.usuario)
-        this.loadEquipo();
-        this.loadColores();
-        this.loadPartidos();
+        await this.loadEquipo();
+        await this.loadColores();
+        await this.loadPartidos();
+        await this.findCapitan();
     }
 
     componentDidUpdate = (prevProps) => {
@@ -90,6 +95,29 @@ export class EquipoComponent extends Component {
         }
     }
 
+    findCapitan = async () => {
+        
+        if (!this.context.token) return;
+        let idEventoActividad = this.state.equipo.idEventoActividad;
+        
+        let token = this.context.token;
+        try {
+            const capitan = await serviceCapitan.getCapitanEventoActividad(idEventoActividad, token);
+            console.log(capitan)
+            let esCapi = false;
+            if(capitan.idUsuario == this.context.usuario.idUsuario){
+                esCapi = true;
+            }
+            this.setState({
+                eresCapitan: esCapi
+            });
+        } catch (error) {
+            console.error('Error al verificar capitán:', error);
+        }
+    
+
+    }
+
     getColorName = async (idColor) => {
         try {
             const colorName = await serviceColor.getColorName(idColor);
@@ -112,8 +140,8 @@ export class EquipoComponent extends Component {
         }
     }
 
-    loadColores = () => {
-        serviceColor.getColores()
+    loadColores = async () => {
+        await serviceColor.getColores()
             .then(data => {
                 this.setState({ colores: data });
             })
@@ -140,7 +168,7 @@ export class EquipoComponent extends Component {
             if (result.isConfirmed) {
                 let idEquipo = this.props.idEquipo;
                 
-                serviceEquipos.actualizarColorEquipo(idEquipo, idColor)
+                serviceEquipos.actualizarColorEquipo(idEquipo, idColor, this.context.token)
                     .then(data => {
                         console.log("Color actualizado:", data);
                         Swal.fire(
@@ -222,10 +250,11 @@ export class EquipoComponent extends Component {
         }).then((result) => {
             if (result.isConfirmed) {
               
-                let idUsuarioMiembro = this.state.usuarioMiembroEquipo.idMiembroEquipo
-                console.log("usuario miembro",idUsuarioMiembro)
+                let idEquipo = this.props.idEquipo;
+                let idUsuario = this.context.usuario.idUsuario;
+                console.log("Equipo:", idEquipo, "Usuario:", idUsuario);
             
-                serviceEquipos.salirseEquipo(idUsuarioMiembro, this.context.token).then(data => {
+                serviceEquipos.salirseEquipo(idEquipo, idUsuario, this.context.token).then(data => {
                     console.log("abandonado: "+data)
                     Swal.fire(
                         '¡Abandonaste!',
@@ -247,7 +276,7 @@ export class EquipoComponent extends Component {
         });
     }
 
-    entrarAlEquipo = () => {
+    entrarAlEquipo = async () => {
         // Verificar si el usuario está logueado
         if (!this.context.logeado) {
             Swal.fire({
@@ -259,41 +288,82 @@ export class EquipoComponent extends Component {
             return;
         }
 
-        // Lógica para entrar al equipo
-        Swal.fire({
-            title: '¿Unirte al equipo?',
-            text: `¿Deseas unirte a ${this.state.equipo.nombreEquipo}?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, unirme',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let idEquipo = this.props.idEquipo;
-                let token = this.context.token;
-                console.log(token)
-                
-                serviceEquipos.apuntarseEquipo(idEquipo, token).then(data => {
-                    console.log("insertado: "+data)
-                    Swal.fire(
-                        '¡Inscrito!',
-                        'Has entrado en el equipo.',
-                        'success'
-                    );
-                    this.loadEquipo();
-                    console.log("Uniéndose al equipo...");
-                }).catch(error => {
-                    console.error("Error al entrar al equipo:", error);
-                    Swal.fire(
-                        'Error',
-                        'No se pudo entrar al equipo.',
-                        'error'
-                    );
+        try {
+            // Verificar si el usuario está inscrito en la actividad
+            const idUsuario = this.context.usuario.idUsuario;
+            const inscripcionesData = await serviceInscripciones.getInscripcionesUsuario(idUsuario);
+            const inscripciones = inscripcionesData.inscripciones;
+            
+            const idEventoActividadEquipo = this.state.equipo.idEventoActividad;
+            
+            // Debug logs
+            console.log("ID Usuario:", idUsuario);
+            console.log("Inscripciones del usuario:", inscripciones);
+            console.log("ID EventoActividad del equipo:", idEventoActividadEquipo);
+            
+            const estaInscrito = inscripciones.some(
+                inscripcion => {
+                    console.log("Comparando:", inscripcion.idEventoActividad, "con", idEventoActividadEquipo);
+                    return inscripcion.idEventoActividad == idEventoActividadEquipo;
+                }
+            );
+            
+            console.log("¿Está inscrito?", estaInscrito);
+
+            if (!estaInscrito) {
+                Swal.fire({
+                    title: 'No estás inscrito',
+                    text: 'Debes estar inscrito en esta actividad para unirte al equipo',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
                 });
+                return;
             }
-        });
+
+            // Lógica para entrar al equipo
+            Swal.fire({
+                title: '¿Unirte al equipo?',
+                text: `¿Deseas unirte a ${this.state.equipo.nombreEquipo}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, unirme',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let idEquipo = this.props.idEquipo;
+                    let token = this.context.token;
+                    console.log(token)
+                    
+                    serviceEquipos.apuntarseEquipo(idEquipo, token).then(data => {
+                        console.log("insertado: "+data)
+                        Swal.fire(
+                            '¡Inscrito!',
+                            'Has entrado en el equipo.',
+                            'success'
+                        );
+                        this.loadEquipo();
+                        console.log("Uniéndose al equipo...");
+                    }).catch(error => {
+                        console.error("Error al entrar al equipo:", error);
+                        Swal.fire(
+                            'Error',
+                            'No se pudo entrar al equipo.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        } catch (error) {
+            console.error("Error al verificar inscripción:", error);
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo verificar tu inscripción. Por favor, intenta de nuevo.',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+        }
     }
 
     expulsarJugador = (idMiembroEquipo) => {

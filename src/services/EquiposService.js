@@ -79,10 +79,14 @@ export default class EquiposService {
         })
     }
 
-    actualizarColorEquipo = async (idEquipo, idColor) => {
+    actualizarColorEquipo = async (idEquipo, idColor, token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Equipos/UpdateEquipacionEquipo/" + idEquipo + "/" + idColor
-            axios.put(request).then(res => {
+            axios.put(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
                 resolve(res.data)
             }).catch(error => {
                 reject(error)
@@ -116,9 +120,9 @@ export default class EquiposService {
         })
     }
 
-    salirseEquipo = async (idMiembroEquipo, token) => {
+    salirseEquipo = async (idEquipo, idUsuario, token) => {
         return new Promise(function(resolve, reject){
-            let request = Global.apiDeportes + "api/MiembroEquipos/" + idMiembroEquipo
+            let request = Global.apiDeportes + "api/MiembroEquipos/DeleteMiembroEquipoUsuario/" + idEquipo + "/" + idUsuario
             axios.delete(request, {
                 headers: {
                     'Authorization': `Bearer ${token}`
