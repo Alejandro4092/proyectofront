@@ -223,6 +223,24 @@
     box-shadow: 0 4px 8px rgba(45, 27, 105, 0.3);
 }
 
+.btn-editar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-editar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
 /* Modal de pago */
 .modal-overlay {
     position: fixed;
@@ -366,19 +384,19 @@
     .pagos-wrapper {
         padding: 20px 16px;
     }
-    
+
     .tabs-container {
         overflow-x: auto;
     }
-    
+
     .pagos-table-container {
         padding: 12px;
     }
-    
+
     .pagos-table {
         font-size: 0.85rem;
     }
-    
+
     .pagos-table th,
     .pagos-table td {
         padding: 10px 8px;
