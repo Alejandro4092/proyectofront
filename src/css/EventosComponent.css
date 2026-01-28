@@ -20,6 +20,13 @@
     margin: 0;
 }
 
+.eventos-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .btn-crear-evento {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
