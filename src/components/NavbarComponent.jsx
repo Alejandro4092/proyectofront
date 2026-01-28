@@ -120,12 +120,12 @@ export class NavbarComponent extends Component {
                                             <span>👤 Mi Perfil</span>
                                         </NavLink>
                                         {(rol === "ADMINISTRADOR") && 
-                                            <NavLink className="dropdown-item" to="/gestionarOrganizadores" onClick={() => this.setState({ dropdownOpen: false })}>
+                                            <NavLink className="dropdown-item-button" to="/gestionarOrganizadores" onClick={() => this.setState({ dropdownOpen: false })}>
                                                 <span>🧑‍💼Gestionar Organizadores</span>
                                             </NavLink>
                                         }
                                         <div className="dropdown-divider"></div>
-                                        <div className="dropdown-item" onClick={this.cerrarSesion}>
+                                        <div className="dropdown-item-button" onClick={this.cerrarSesion}>
                                             <span>🚪 Cerrar sesión</span>
                                         </div>
                                     </div>
