@@ -14,7 +14,15 @@ export class CrearActividadComponent extends Component {
         nombre: '',
         minimoJugadores: '',
         redirect: false,
+        redirectToHome: false,
         loading: false
+    };
+
+    componentDidMount = () => {
+        // Verificar que el usuario sea organizador
+        if (!this.context.esOrganizador) {
+            this.setState({ redirectToHome: true });
+        }
     };
 
     handleChange = (e) => {
@@ -86,6 +94,10 @@ export class CrearActividadComponent extends Component {
     };
 
     render() {
+        if (this.state.redirectToHome) {
+            return <Navigate to="/" />;
+        }
+
         if (this.state.redirect) {
             return <Navigate to="/eventos" />;
         }

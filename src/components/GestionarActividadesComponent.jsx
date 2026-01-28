@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Global from '../Global';
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import axios from 'axios'
 import '../css/GestionarActividadesComponent.css'
 import AuthContext from '../context/AuthContext';
@@ -17,10 +17,16 @@ export class GestionarActividadesComponent extends Component {
         actividadesDisponibles: [],
         actividadesAsociadas: [],
         actividadSeleccionada: '',
-        loading: false
+        loading: false,
+        redirectToHome: false
     };
 
     componentDidMount = () => {
+        // Verificar que el usuario sea organizador
+        if (!this.context.esOrganizador) {
+            this.setState({ redirectToHome: true });
+            return;
+        }
         this.loadActividadesDisponibles();
         this.loadActividadesAsociadas();
     };
@@ -139,6 +145,10 @@ export class GestionarActividadesComponent extends Component {
     };
 
     render() {
+        if (this.state.redirectToHome) {
+            return <Navigate to="/" replace />;
+        }
+
         return (
             <div className="gestionar-actividades-container">
                 <div className="gestionar-actividades-wrapper">

@@ -4,6 +4,7 @@ import PagosService from '../services/PagosService';
 import GestionEventoService from '../services/GestionEventoService';
 import PrecioActividadService from '../services/PrecioActividadService';
 import TablaPagosAgrupadosComponent from './TablaPagosAgrupadosComponent';
+import Swal from 'sweetalert2';
 import '../css/PagosComponent.css';
 
 const servicePagos = new PagosService();

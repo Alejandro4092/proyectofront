@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
@@ -18,7 +18,8 @@ export class EditarEventoComponent extends Component {
     fecha: '',
     mensaje: null,
     cargando: true,
-    error: null
+    error: null,
+    redirectToHome: false
   };
 
   loadEvento = () => {
@@ -44,6 +45,11 @@ export class EditarEventoComponent extends Component {
   }
 
   componentDidMount = () => {
+    // Verificar que el usuario sea organizador
+    if (!this.context.esOrganizador) {
+      this.setState({ redirectToHome: true });
+      return;
+    }
     this.loadEvento();
   }
 
@@ -102,7 +108,11 @@ export class EditarEventoComponent extends Component {
   }
 
   render() {
-    const { fecha, mensaje, cargando, error } = this.state;
+    const { fecha, mensaje, cargando, error, redirectToHome } = this.state;
+
+    if (redirectToHome) {
+      return <Navigate to="/" replace />;
+    }
 
     if (cargando) {
       return (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Navigate, useNavigate } from 'react-router-dom'
 import Global from '../Global'
 import { AuthContext } from '../context/AuthContext'
 import Swal from 'sweetalert2'
@@ -14,7 +14,15 @@ export class CrearEventoComponent extends Component {
   url = Global.apiDeportes;
   state = {
     fecha: '',
-    mensaje: null
+    mensaje: null,
+    redirectToHome: false
+  };
+
+  componentDidMount = () => {
+    // Verificar que el usuario sea organizador
+    if (!this.context.esOrganizador) {
+      this.setState({ redirectToHome: true });
+    }
   };
 
   // POST: Crea un nuevo evento
@@ -67,7 +75,11 @@ export class CrearEventoComponent extends Component {
   }
 
   render() {
-    const { fecha, mensaje } = this.state;
+    const { fecha, mensaje, redirectToHome } = this.state;
+
+    if (redirectToHome) {
+      return <Navigate to="/" replace />;
+    }
 
     return (
       <div className="crear-evento-container">
