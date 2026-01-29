@@ -33,16 +33,15 @@ export class EventosComponent extends Component {
 		serviceEventos
 			.getEventosCursoEscolar(token)
 			.then((data) => {
-				const hoy = new Date();
-				hoy.setHours(0, 0, 0, 0); // Resetear horas para comparar solo fecha
+				const ahora = new Date(); // Fecha y hora actual
 
 				// Filtrar según el estado verEventosPasados
 				const eventosFiltrados = data.filter((evento) => {
 					const fechaEvento = new Date(evento.fechaEvento);
 					if (this.state.verEventosPasados) {
-						return fechaEvento < hoy; // Eventos pasados
+						return fechaEvento < ahora; // Eventos pasados (incluye hora)
 					} else {
-						return fechaEvento >= hoy; // Eventos futuros
+						return fechaEvento >= ahora; // Eventos futuros (incluye hora)
 					}
 				});
 

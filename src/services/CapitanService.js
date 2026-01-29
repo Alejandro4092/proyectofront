@@ -3,7 +3,7 @@ import Global from "../Global"
 
 export default class CapitanService {
     getCapitanes = async (token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/CapitanActividades"
             axios.get(request, {
                 headers: {
@@ -18,9 +18,29 @@ export default class CapitanService {
     }
 
     getCapitanEventoActividad = async (idEventoActividad, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/CapitanActividades/FindCapitanEventoActividad/" + idEventoActividad
             axios.get(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    crearCapitan = async (idEventoActividad, idUsuario, token) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/CapitanActividades/create"
+            const data = {
+                idCapitanActividad: 0,
+                idEventoActividad: idEventoActividad,
+                idUsuario: idUsuario
+            }
+            axios.post(request, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
