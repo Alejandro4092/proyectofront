@@ -100,8 +100,8 @@
     margin-top: 35px;
 }
 
-.btn-crear,
-.btn-cancelar {
+.crear-equipo-btn-crear,
+.crear-equipo-btn-cancelar {
     flex: 1;
     padding: 12px 25px;
     border: none;
@@ -116,28 +116,28 @@
     justify-content: center;
 }
 
-.btn-crear {
+.crear-equipo-btn-crear {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
 }
 
-.btn-crear:hover:not(:disabled) {
+.crear-equipo-btn-crear:hover:not(:disabled) {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(45, 27, 105, 0.4);
 }
 
-.btn-crear:disabled {
+.crear-equipo-btn-crear:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-.btn-cancelar {
+.crear-equipo-btn-cancelar {
     background-color: #e9ecef;
     color: #495057;
     text-decoration: none;
 }
 
-.btn-cancelar:hover {
+.crear-equipo-btn-cancelar:hover {
     background-color: #dee2e6;
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);

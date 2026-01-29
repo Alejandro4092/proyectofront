@@ -1,7 +1,7 @@
 .eventos-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #1a1a1a;
+    background: #000000;
 }
 
 .eventos-header {
@@ -25,6 +25,25 @@
     gap: 12px;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.btn-toggle-eventos {
+    background: #6c757d;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-toggle-eventos:hover {
+    background: #5a6268;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-crear-evento {
@@ -128,10 +147,8 @@
     border-top: 1px solid #e9ecef;
 }
 
-.btn-editar,
-.btn-eliminar,
-.btn-apuntarse,
-.btn-apuntado {
+.eventos-btn-editar,
+.eventos-btn-eliminar {
     flex: 1;
     padding: 10px 15px;
     border: none;
@@ -147,52 +164,27 @@
     text-align: center;
 }
 
-.btn-editar {
+.eventos-btn-editar {
     background-color: #1a4d7a;
     color: white;
 }
 
-.btn-editar:hover {
+.eventos-btn-editar:hover {
     background-color: #0d2d4a;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(26, 77, 122, 0.3);
     color: white;
 }
 
-.btn-eliminar {
+.eventos-btn-eliminar {
     background-color: #e74c3c;
     color: white;
 }
 
-.btn-eliminar:hover {
+.eventos-btn-eliminar:hover {
     background-color: #c0392b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-}
-
-.btn-apuntarse {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
-    color: white;
-    width: 100%;
-}
-
-.btn-apuntarse:hover {
-    background: linear-gradient(135deg, #1a0d4a 0%, #0d2d4a 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(45, 27, 105, 0.4);
-}
-
-.btn-apuntado {
-    background: #27ae60;
-    color: white;
-    width: 100%;
-    cursor: default;
-    opacity: 0.8;
-}
-
-.btn-apuntado:hover {
-    transform: none;
-    box-shadow: none;
 }
 
 .no-eventos {

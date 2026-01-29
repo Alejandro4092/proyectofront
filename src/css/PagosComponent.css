@@ -1,7 +1,7 @@
 .pagos-wrapper {
     min-height: 100vh;
     padding: 32px 40px 48px;
-    background: #1a1a1a;
+    background: #000000;
 }
 
 .pagos-header {
@@ -223,7 +223,7 @@
     box-shadow: 0 4px 8px rgba(45, 27, 105, 0.3);
 }
 
-.btn-editar {
+.pagos-btn-editar {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #ffffff;
     border: none;
@@ -236,7 +236,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-editar:hover {
+.pagos-btn-editar:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }

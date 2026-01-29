@@ -9,11 +9,15 @@ import EquiposService from "../services/EquiposService";
 import ColorService from "../services/ColorService";
 import CapitanService from "../services/CapitanService";
 import InscripcionesService from "../services/InscripcionesService";
+import ActividadesService from "../services/ActividadesService";
+import EventosService from "../services/EventosService";
 
 const serviceEquipos = new EquiposService();
 const serviceColor = new ColorService();
 const serviceCapitan = new CapitanService();
 const serviceInscripciones = new InscripcionesService();
+const serviceActividades = new ActividadesService();
+const serviceEventos = new EventosService();
 export class EquipoComponent extends Component {
 	static contextType = AuthContext;
 
@@ -24,6 +28,7 @@ export class EquipoComponent extends Component {
 		eresCapitan: false,
 		usuarioMiembroEquipo: {},
 		equipo: {},
+		fechaEvento: null,
 		equipoPrueba: {
 			idEquipo: 1,
 			idEventoActividad: 2,
@@ -62,6 +67,7 @@ export class EquipoComponent extends Component {
 		await this.loadColores();
 		await this.loadPartidos();
 		await this.findCapitan();
+		await this.loadFechaEvento();
 	};
 
 	componentDidUpdate = (prevProps) => {
@@ -79,7 +85,6 @@ export class EquipoComponent extends Component {
 			const equipo = await serviceEquipos.getEquipo(idEquipo);
 			const color = await this.getColorName(equipo.idColor);
 			const jugadoresEquipo = await this.findJugadoresEquipo(equipo.idEquipo);
-
 			this.setState(
 				{
 					equipo: equipo,
@@ -115,6 +120,38 @@ export class EquipoComponent extends Component {
 		} catch (error) {
 			console.error("Error al verificar capitán:", error);
 		}
+	};
+
+	loadFechaEvento = async () => {
+		try {
+			const idEventoActividad = this.state.equipo.idEventoActividad;
+			if (!idEventoActividad) return;
+
+			// Obtener el EventoActividad que contiene el idEvento
+			const eventoActividad =
+				await serviceActividades.obtenerEventoActividad(idEventoActividad);
+
+			if (!eventoActividad || !eventoActividad.idEvento) return;
+
+			// Obtener el Evento usando el idEvento
+			const evento = await serviceEventos.getEvento(
+				eventoActividad.idEvento,
+				this.context.token,
+			);
+
+			if (evento && evento.fechaEvento) {
+				this.setState({ fechaEvento: evento.fechaEvento });
+			}
+		} catch (error) {
+			console.error("Error al cargar fecha del evento:", error);
+		}
+	};
+
+	esEventoPasado = () => {
+		if (!this.state.fechaEvento) return false;
+		const fechaActual = new Date();
+		const fecha = new Date(this.state.fechaEvento);
+		return fecha > fechaActual;
 	};
 
 	getColorName = async (idColor) => {
@@ -169,7 +206,6 @@ export class EquipoComponent extends Component {
 				serviceEquipos
 					.actualizarColorEquipo(idEquipo, idColor, this.context.token)
 					.then((data) => {
-
 						Swal.fire(
 							"¡Actualizado!",
 							`El color del equipo se cambió a ${nombreColor}.`,
@@ -415,7 +451,6 @@ export class EquipoComponent extends Component {
 			);
 
 			this.setState({ partidos: partidosConEquipos });
-			console.log("Partidos cargados:", partidosConEquipos);
 		} catch (error) {
 			console.error("Error al cargar partidos:", error);
 			this.setState({ partidos: [] });
@@ -439,32 +474,36 @@ export class EquipoComponent extends Component {
 				</div>
 
 				<div className="equipo-actions">
-					{this.state.eresMiembro ? (
-						<button className="btn-salir" onClick={this.salirDelEquipo}>
-							Salir del equipo
-						</button>
-					) : this.state.equipoCompleto == false ? (
-						<button className="btn-entrar" onClick={this.entrarAlEquipo}>
-							Entrar al equipo
-						</button>
-					) : (
-						<h2 className="equipo-completo">Equipo completo</h2>
+					{!this.esEventoPasado() && (
+						<>
+							{this.state.eresMiembro ? (
+								<button className="btn-salir" onClick={this.salirDelEquipo}>
+									Salir del equipo
+								</button>
+							) : this.state.equipoCompleto == false ? (
+								<button className="btn-entrar" onClick={this.entrarAlEquipo}>
+									Entrar al equipo
+								</button>
+							) : (
+								<h2 className="equipo-completo">Equipo completo</h2>
+							)}
+						</>
 					)}
 				</div>
 
 				<div className="equipo-info">
 					<div className="equipo-stats">
 						<div className="stat-item">
-							<h2>
-								Color:
-								<span
-									className="color-badge clickable"
-									onClick={this.toggleColores}
-									title="Clic para cambiar color"
-								>
-									{this.state.colorName}
-								</span>
-							</h2>
+							<h2>Color del Equipo:</h2>
+							<div
+								className={`color-badge ${this.state.eresCapitan ? "clickable" : ""}`}
+								onClick={this.state.eresCapitan ? this.toggleColores : null}
+								style={{
+									cursor: this.state.eresCapitan ? "pointer" : "default",
+								}}
+							>
+								{this.state.colorName}
+							</div>
 							{this.state.mostrarColores && (
 								<div className="colores-dropdown">
 									<h3>Selecciona un color:</h3>
@@ -490,7 +529,6 @@ export class EquipoComponent extends Component {
 						</div>
 					</div>
 				</div>
-
 				<div className="jugadores-section">
 					<h1>Jugadores</h1>
 					<div className="jugadores-grid">

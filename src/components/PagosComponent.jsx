@@ -339,7 +339,7 @@ export class PagosComponent extends Component {
 																	Pagar
 																</button>
 																<button
-																	className="btn-editar"
+																	className="pagos-btn-editar"
 																	onClick={() =>
 																		this.abrirModalPago(pago, true)
 																	}

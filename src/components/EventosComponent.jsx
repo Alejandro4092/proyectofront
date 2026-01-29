@@ -6,11 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import "../css/EventosComponent.css";
 import EventosService from "../services/EventosService";
-import ProfesEventosService from "../services/ProfesEventosService";
 
 const serviceEventos = new EventosService();
-const serviceProfesEventos = new ProfesEventosService();
-
 export class EventosComponent extends Component {
 	static contextType = AuthContext;
 
@@ -20,7 +17,7 @@ export class EventosComponent extends Component {
 		eventosCursoEscolar: [],
 		eventoById: null,
 		loading: true,
-		eventosApuntado: [],
+		verEventosPasados: false,
 	};
 
 	componentDidMount() {
@@ -34,28 +31,39 @@ export class EventosComponent extends Component {
 		serviceEventos
 			.getEventosCursoEscolar(token)
 			.then((data) => {
+				const hoy = new Date();
+				hoy.setHours(0, 0, 0, 0); // Resetear horas para comparar solo fecha
+
+				// Filtrar según el estado verEventosPasados
+				const eventosFiltrados = data.filter((evento) => {
+					const fechaEvento = new Date(evento.fechaEvento);
+					if (this.state.verEventosPasados) {
+						return fechaEvento < hoy; // Eventos pasados
+					} else {
+						return fechaEvento >= hoy; // Eventos futuros
+					}
+				});
+
+				// Ordenar eventos por fecha
+				eventosFiltrados.sort((a, b) => {
+					if (this.state.verEventosPasados) {
+						// Pasados: más recientes primero (orden descendente)
+						return new Date(b.fechaEvento) - new Date(a.fechaEvento);
+					} else {
+						// Futuros: más próximos primero (orden ascendente)
+						return new Date(a.fechaEvento) - new Date(b.fechaEvento);
+					}
+				});
+
 				this.setState({
-					eventosCursoEscolar: data,
+					eventosCursoEscolar: eventosFiltrados,
 					loading: false,
 				});
-				// Verificar en qué eventos está apuntado el profesor
-				if (this.context.esProfesor && this.context.usuario) {
-					this.verificarEventosApuntado(data);
-				}
 			})
 			.catch((error) => {
 				console.error("Error al cargar eventos:", error);
 				this.setState({ loading: false });
 			});
-	};
-
-	// Verifica en qué eventos el profesor está apuntado
-	verificarEventosApuntado = (eventos) => {
-		const idProfesor = this.context.usuario.idUsuario;
-		const eventosApuntado = eventos
-			.filter(evento => evento.idProfesor === idProfesor)
-			.map(evento => evento.idEvento);
-		this.setState({ eventosApuntado });
 	};
 
 	// DELETE: Elimina un evento con confirmación
@@ -114,67 +122,10 @@ export class EventosComponent extends Component {
 			});
 	};
 
-	// POST: Asocia al profesor actual al evento
-	apuntarseEvento = (idEvento) => {
-		Swal.fire({
-			title: "¿Apuntarte al evento?",
-			text: "¿Deseas apuntarte como profesor de este evento?",
-			icon: "question",
-			showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			cancelButtonColor: "#6c757d",
-			confirmButtonText: "Apuntarme",
-			cancelButtonText: "Cancelar",
-			reverseButtons: true,
-		}).then((result) => {
-			if (result.isConfirmed) {
-				this.confirmarApuntarse(idEvento);
-			}
+	alternarEventosPasados = () => {
+		this.setState({ verEventosPasados: !this.state.verEventosPasados }, () => {
+			this.loadEventosCursoEscolar();
 		});
-	};
-
-	confirmarApuntarse = (idEvento) => {
-		if (!this.context.logeado) {
-			Swal.fire({
-				title: "No has iniciado sesión",
-				text: "Debes iniciar sesión para apuntarte a un evento",
-				icon: "warning",
-				confirmButtonText: "Entendido",
-			});
-			return;
-		}
-
-		const token = this.context.token;
-		const idProfesor = this.context.user.idUsuario;
-
-		serviceProfesEventos
-			.asociarProfesorEvento(idEvento, idProfesor, token)
-			.then((data) => {
-				// Actualizar el estado para marcar este evento como apuntado
-				this.setState({
-					eventosApuntado: [...this.state.eventosApuntado, idEvento]
-				});
-				Swal.fire({
-					title: "¡Apuntado!",
-					text: "Te has apuntado exitosamente al evento",
-					icon: "success",
-					timer: 1500,
-					showConfirmButton: false,
-				});
-				this.loadEventosCursoEscolar();
-			})
-			.catch((error) => {
-				Swal.fire({
-					title: "Error",
-					text:
-						error.response?.status === 403
-							? "No tienes permisos para apuntarte a este evento."
-							: "Error al apuntarte al evento: " +
-								(error.response?.data || error.message),
-					icon: "error",
-					confirmButtonText: "Entendido",
-				});
-			});
 	};
 
 	formatearFecha = (fecha) => {
@@ -194,17 +145,29 @@ export class EventosComponent extends Component {
 		return (
 			<div className="eventos-container">
 				<div className="eventos-header">
-					<h1>Eventos</h1>
-					{this.context.esOrganizador && (
-						<div className="eventos-actions">
-							<NavLink to="/crear-evento" className="btn-crear-evento">
-								+ Crear Evento
-							</NavLink>
-							<NavLink to="/crear-actividad" className="btn-crear-evento">
-								+ Crear Actividad
-							</NavLink>
-						</div>
-					)}
+					<h1>
+						{this.state.verEventosPasados ? "Eventos Pasados" : "Eventos"}
+					</h1>
+					<div className="eventos-actions">
+						<button
+							className="btn-toggle-eventos"
+							onClick={this.alternarEventosPasados}
+						>
+							{this.state.verEventosPasados
+								? "Ver Eventos Futuros"
+								: "Ver Eventos Pasados"}
+						</button>
+						{this.context.esOrganizador && (
+							<>
+								<NavLink to="/crear-evento" className="btn-crear-evento">
+									+ Crear Evento
+								</NavLink>
+								<NavLink to="/crear-actividad" className="btn-crear-evento">
+									+ Crear Actividad
+								</NavLink>
+							</>
+						)}
+					</div>
 				</div>
 
 				{loading ? (
@@ -233,53 +196,27 @@ export class EventosComponent extends Component {
 											</p>
 										</div>
 									</div>
-									<div className="evento-card-footer">
-										{this.context.esOrganizador ? (
-											<>
-												<NavLink
-													to={`/editar-evento/${evento.idEvento}`}
-													className="btn-editar"
-													onClick={(e) => e.stopPropagation()}
-												>
-													Editar
-												</NavLink>
-												<button
-													className="btn-eliminar"
-													onClick={(e) => {
-														e.preventDefault();
-														e.stopPropagation();
-														this.deleteEvento(evento.idEvento);
-													}}
-												>
-													Eliminar
-												</button>
-											</>
-										) : this.context.esProfesor ? (
-											this.state.eventosApuntado.includes(evento.idEvento) ? (
-												<button
-													className="btn-apuntado"
-													disabled
-													onClick={(e) => {
-														e.preventDefault();
-														e.stopPropagation();
-													}}
-												>
-													✓ Apuntado
-												</button>
-											) : (
-												<button
-													className="btn-apuntarse"
-													onClick={(e) => {
-														e.preventDefault();
-														e.stopPropagation();
-														this.apuntarseEvento(evento.idEvento);
-													}}
-												>
-													📋 Apuntarme
-												</button>
-											)
-										) : null}
-									</div>
+									{this.context.esOrganizador && (
+										<div className="evento-card-footer">
+											<NavLink
+												to={`/editar-evento/${evento.idEvento}`}
+												className="eventos-btn-editar"
+												onClick={(e) => e.stopPropagation()}
+											>
+												Editar
+											</NavLink>
+											<button
+												className="eventos-btn-eliminar"
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													this.deleteEvento(evento.idEvento);
+												}}
+											>
+												Eliminar
+											</button>
+										</div>
+									)}
 								</NavLink>
 							))
 						) : (

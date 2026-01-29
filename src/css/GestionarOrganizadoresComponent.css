@@ -108,7 +108,7 @@
     margin: 0;
 }
 
-.btn-submit {
+.organizadores-btn-submit {
     width: 100%;
     padding: 12px 20px;
     background-color: #27ae60;
@@ -121,12 +121,12 @@
     transition: background-color 0.3s, transform 0.1s;
 }
 
-.btn-submit:hover:not(:disabled) {
+.organizadores-btn-submit:hover:not(:disabled) {
     background-color: #229954;
     transform: translateY(-2px);
 }
 
-.btn-submit:disabled {
+.organizadores-btn-submit:disabled {
     background-color: #95a5a6;
     cursor: not-allowed;
     transform: none;
@@ -223,7 +223,7 @@
 }
 
 /* Botón eliminar */
-.btn-eliminar {
+.organizadores-btn-eliminar {
     background-color: #e74c3c;
     color: white;
     border: none;
@@ -239,7 +239,7 @@
     height: 36px;
 }
 
-.btn-eliminar:hover {
+.organizadores-btn-eliminar:hover {
     background-color: #c0392b;
     transform: scale(1.1);
     box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);

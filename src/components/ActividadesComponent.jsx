@@ -8,15 +8,10 @@ import CapitanService from "../services/CapitanService";
 import ActividadesService from "../services/ActividadesService";
 import InscripcionesService from "../services/InscripcionesService";
 import PrecioActividadService from "../services/PrecioActividadService";
-import EventosService from "../services/EventosService";
-import ProfesEventosService from "../services/ProfesEventosService";
-
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
 const servicePrecioActividad = new PrecioActividadService();
-const serviceEventos = new EventosService();
-const serviceProfesEventos = new ProfesEventosService();
 
 export class ActividadesComponent extends Component {
 	static contextType = AuthContext;
@@ -31,36 +26,16 @@ export class ActividadesComponent extends Component {
 		actividadSeleccionada: null,
 		esCapitan: false,
 		precios: [],
-		evento: null,
-		nombreProfesor: null,
+		mostrarModalPrecio: false,
+		precioActual: 0,
+		actividadPrecio: null,
 	};
 
 	componentDidMount = async () => {
-		await this.loadEvento();
 		await this.loadActividades();
 		await this.checkCapitan();
 		await this.loadActividadesInscritas();
 		await this.loadPrecios();
-	};
-
-	loadEvento = async () => {
-		if (!this.context.token) {
-			return;
-		}
-
-		const token = this.context.token;
-		try {
-			const evento = await serviceEventos.getEvento(this.props.idEvento, token);
-			this.setState({ evento });
-
-			// Cargar el profesor si existe
-			if (evento.idProfesor) {
-				const profesor = await serviceProfesEventos.getProfesorById(evento.idProfesor, token);
-				this.setState({ nombreProfesor: profesor.usuario });
-			}
-		} catch (error) {
-			console.error("Error al cargar evento:", error);
-		}
 	};
 
 	loadActividades = () => {
@@ -134,6 +109,12 @@ export class ActividadesComponent extends Component {
 		return this.state.actividadesInscritas.length > 0;
 	};
 
+	esEventoPasado = (fechaEvento) => {
+		const fechaActual = new Date();
+		const fecha = new Date(fechaEvento);
+		return fecha > fechaActual;
+	};
+
 	loadPrecios = async () => {
 		try {
 			const precios = await servicePrecioActividad.getPreciosActividades();
@@ -148,6 +129,94 @@ export class ActividadesComponent extends Component {
 			(p) => p.idEventoActividad === idEventoActividad,
 		);
 		return precio?.precioTotal;
+	};
+
+	getPrecioObjetoCompleto = (idEventoActividad) => {
+		return this.state.precios.find(
+			(p) => p.idEventoActividad === idEventoActividad,
+		);
+	};
+
+	abrirModalPrecio = (actividad, e) => {
+		if (e) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+		const precioExistente = this.getPrecioObjetoCompleto(
+			actividad.idEventoActividad,
+		);
+		this.setState({
+			mostrarModalPrecio: true,
+			actividadPrecio: actividad,
+			precioActual: precioExistente?.precioTotal || 0,
+		});
+	};
+
+	cerrarModalPrecio = () => {
+		this.setState({
+			mostrarModalPrecio: false,
+			actividadPrecio: null,
+			precioActual: 0,
+		});
+	};
+
+	guardarPrecio = async (e) => {
+		e.preventDefault();
+
+		if (!this.state.precioActual || this.state.precioActual <= 0) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "El precio debe ser mayor a 0",
+			});
+			return;
+		}
+
+		try {
+			const precioExistente = this.getPrecioObjetoCompleto(
+				this.state.actividadPrecio.idEventoActividad,
+			);
+
+			const datos = {
+				idPrecioActividad: precioExistente?.idPrecioActividad || 0,
+				idEventoActividad: this.state.actividadPrecio.idEventoActividad,
+				precioTotal: parseFloat(this.state.precioActual),
+			};
+
+			const token = this.context.token;
+
+			if (precioExistente) {
+				// Actualizar precio existente
+				await servicePrecioActividad.actualizarPrecioActividad(datos, token);
+				Swal.fire({
+					icon: "success",
+					title: "¡Precio actualizado!",
+					text: "El precio se ha actualizado correctamente",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			} else {
+				// Crear nuevo precio
+				await servicePrecioActividad.crearPrecioActividad(datos, token);
+				Swal.fire({
+					icon: "success",
+					title: "¡Precio creado!",
+					text: "El precio se ha asignado correctamente",
+					timer: 2000,
+					showConfirmButton: false,
+				});
+			}
+
+			await this.loadPrecios();
+			this.cerrarModalPrecio();
+		} catch (error) {
+			console.error("Error al guardar precio:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: error.response?.data || "Error al guardar el precio",
+			});
+		}
 	};
 
 	desinscribirse = async (idEventoActividad) => {
@@ -305,11 +374,6 @@ export class ActividadesComponent extends Component {
 			<div className="actividades-wrapper">
 				<div className="actividades-head">
 					<h1 className="actividades-title">Actividades</h1>
-					{this.state.nombreProfesor && (
-						<h1 className="profesor-info">
-							Profesor: <span className="profesor-nombre">{this.state.nombreProfesor}</span>
-						</h1>
-					)}
 					{this.context.esOrganizador && (
 						<Link
 							to={`/gestionar-actividades/${this.props.idEvento}`}
@@ -335,6 +399,19 @@ export class ActividadesComponent extends Component {
 										</span>
 									</div>
 								)}
+								{this.context.esOrganizador &&
+									!this.esEventoPasado(actividad.fechaEvento) && (
+										<div className="actividad-precio-admin">
+											<button
+												className="btn-precio"
+												onClick={(e) => this.abrirModalPrecio(actividad, e)}
+											>
+												{this.getPrecioActividad(actividad.idEventoActividad)
+													? "💰 Modificar Precio"
+													: "💰 Asignar Precio"}
+											</button>
+										</div>
+									)}
 								<div className="actividad-title">
 									{actividad.nombreActividad}
 								</div>
@@ -363,7 +440,8 @@ export class ActividadesComponent extends Component {
 											Desinscribirse
 										</button>
 									) : (
-										!this.estaInscritoEnEvento() && (
+										!this.estaInscritoEnEvento() &&
+										!this.esEventoPasado(actividad.fechaEvento) && (
 											<button
 												className="btn-inscribirse"
 												onClick={(e) => {
@@ -381,9 +459,15 @@ export class ActividadesComponent extends Component {
 					))}
 				</div>
 				{this.state.mostrarModal && (
-					<div className="modal-overlay" onClick={this.cerrarModal}>
-						<div className="modal-content" onClick={(e) => e.stopPropagation()}>
-							<button className="modal-close" onClick={this.cerrarModal}>
+					<div className="actividades-modal-overlay" onClick={this.cerrarModal}>
+						<div
+							className="actividades-modal-content"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<button
+								className="actividades-modal-close"
+								onClick={this.cerrarModal}
+							>
 								&times;
 							</button>
 							<h2>
@@ -392,7 +476,7 @@ export class ActividadesComponent extends Component {
 							</h2>
 
 							<form onSubmit={this.postInscripcion}>
-								<div className="form-group">
+								<div className="actividades-form-group">
 									<label className="custom-switch">
 										<input
 											type="checkbox"
@@ -406,15 +490,15 @@ export class ActividadesComponent extends Component {
 									</label>
 								</div>
 
-								<div className="modal-actions">
+								<div className="actividades-modal-actions">
 									<button
 										type="button"
-										className="btn-cancel"
+										className="actividades-btn-cancel"
 										onClick={this.cerrarModal}
 									>
 										Cancelar
 									</button>
-									<button type="submit" className="btn-submit">
+									<button type="submit" className="actividades-btn-submit">
 										Confirmar inscripción
 									</button>
 								</div>
@@ -422,6 +506,65 @@ export class ActividadesComponent extends Component {
 						</div>
 					</div>
 				)}{" "}
+				{this.state.mostrarModalPrecio && (
+					<div
+						className="actividades-modal-overlay"
+						onClick={this.cerrarModalPrecio}
+					>
+						<div
+							className="actividades-modal-content"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<button
+								className="actividades-modal-close"
+								onClick={this.cerrarModalPrecio}
+							>
+								&times;
+							</button>
+							<h2>
+								{this.getPrecioObjetoCompleto(
+									this.state.actividadPrecio?.idEventoActividad,
+								)
+									? "Modificar Precio"
+									: "Asignar Precio"}
+							</h2>
+							<p className="actividades-modal-subtitle">
+								{this.state.actividadPrecio?.nombreActividad}
+							</p>
+
+							<form onSubmit={this.guardarPrecio}>
+								<div className="actividades-form-group">
+									<label htmlFor="precio">Precio (€)</label>
+									<input
+										type="number"
+										id="precio"
+										step="0.01"
+										min="0"
+										value={this.state.precioActual}
+										onChange={(e) =>
+											this.setState({ precioActual: e.target.value })
+										}
+										required
+										className="input-precio"
+									/>
+								</div>
+
+								<div className="actividades-modal-actions">
+									<button
+										type="button"
+										className="actividades-btn-cancel"
+										onClick={this.cerrarModalPrecio}
+									>
+										Cancelar
+									</button>
+									<button type="submit" className="actividades-btn-submit">
+										Guardar
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				)}
 			</div>
 		);
 	}
