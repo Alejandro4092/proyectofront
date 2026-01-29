@@ -129,7 +129,9 @@
 }
 
 .btn-editar,
-.btn-eliminar {
+.btn-eliminar,
+.btn-apuntarse,
+.btn-apuntado {
     flex: 1;
     padding: 10px 15px;
     border: none;
@@ -166,6 +168,31 @@
     background-color: #c0392b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-apuntarse {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    width: 100%;
+}
+
+.btn-apuntarse:hover {
+    background: linear-gradient(135deg, #1a0d4a 0%, #0d2d4a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 27, 105, 0.4);
+}
+
+.btn-apuntado {
+    background: #27ae60;
+    color: white;
+    width: 100%;
+    cursor: default;
+    opacity: 0.8;
+}
+
+.btn-apuntado:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .no-eventos {

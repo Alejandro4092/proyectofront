@@ -110,4 +110,49 @@ export default class ActividadesService {
             })
         })
     }
+
+    // Obtener un EventoActividad por su ID
+    getEventoActividadById = async (id) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/ActividadesEvento/" + id
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    // Actualizar un EventoActividad
+    actualizarEventoActividad = async (datos, token) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/ActividadesEvento/update"
+            axios.put(request, datos, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
+    // Eliminar EventoActividad en modo panic (elimina todo relacionado)
+    eliminarEventoActividadPanic = async (idEventoActividad, token) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/ActividadesEvento/DeleteEventoActividadPanic/" + idEventoActividad
+            axios.delete(request, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }

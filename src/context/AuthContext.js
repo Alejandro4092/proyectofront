@@ -20,7 +20,8 @@ export class AuthProvider extends Component {
             logeado: false,
             loading: true,
             token: null,
-            esOrganizador: false
+            esOrganizador: false,
+            esProfesor: false
         };
 
         this.url = Global.apiDeportes;
@@ -44,7 +45,8 @@ export class AuthProvider extends Component {
                     rol: usuario.role,
                     logeado: true,
                     token: token,
-                    loading: false
+                    loading: false,
+                    esProfesor: usuario.role === 'PROFESOR'
                 });
                 // Verificar si es organizador
                 await this.checkOrganizador(usuario.idUsuario);
@@ -94,7 +96,8 @@ export class AuthProvider extends Component {
                 usuario: usuario,
                 rol: usuario.role,
                 logeado: true,
-                token: token
+                token: token,
+                esProfesor: usuario.role === 'PROFESOR'
             });
 
             // Verificar si es organizador
@@ -121,7 +124,8 @@ export class AuthProvider extends Component {
             rol: "",
             logeado: false,
             token: null,
-            esOrganizador: false
+            esOrganizador: false,
+            esProfesor: false
         });
     }
 
@@ -154,11 +158,13 @@ export class AuthProvider extends Component {
         
         const contextValue = {
             usuario: this.state.usuario,
+            user: this.state.usuario,
             rol: this.state.rol,
             logeado: this.state.logeado,
             loading: this.state.loading,
             token: this.state.token,
             esOrganizador: this.state.esOrganizador,
+            esProfesor: this.state.esProfesor,
             login: this.login,
             cerrarSesion: this.cerrarSesion,
             actualizarUsuario: this.actualizarUsuario,
