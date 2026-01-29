@@ -22,7 +22,7 @@ import GestionarActividadesComponent from './components/GestionarActividadesComp
 import PrivateRoute from './context/PrivateRoute'
 import GestionarOrganizadoresComponent from './components/GestionarOrganizadoresComponent'
 import InscripcionesCapitanComponent from './components/InscripcionesCapitanComponent'
-
+import AlumnosComponent from './components/AlumnosComponent';
 // Componente para mostrar navbar condicionalmente
 function ConditionalNavbar() {
     const location = useLocation();
@@ -84,6 +84,7 @@ export default class Router extends Component {
                             <Route path='/pagos' element={<PrivateRoute><PagosComponent /></PrivateRoute>} />
                             <Route path='/gestionarOrganizadores' element={<GestionarOrganizadoresComponent />} />
                             <Route path='/inscripcionesCapitan' element={<PrivateRoute><InscripcionesCapitanComponent /></PrivateRoute>} />
+                            <Route path='/alumnos' element={<PrivateRoute><AlumnosComponent /></PrivateRoute>} />
                             <Route path='*' element={<NotFoundComponent />} />
 
                         </Routes>

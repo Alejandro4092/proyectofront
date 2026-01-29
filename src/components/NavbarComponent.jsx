@@ -168,6 +168,15 @@ export class NavbarComponent extends Component {
 												<span>👨‍✈️ Solicitudes de Capitanía</span>
 											</NavLink>
 										)}
+										{rol === "ADMINISTRADOR" && (
+											<NavLink
+												className="dropdown-item-button"
+												to="/alumnos"
+												onClick={() => this.setState({ dropdownOpen: false })}
+											>
+												<span>🎓Alumnos</span>
+											</NavLink>
+										)}
 										<div className="dropdown-divider"></div>
 										<div
 											className="dropdown-item-button"
