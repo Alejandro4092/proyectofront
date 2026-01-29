@@ -369,7 +369,7 @@ export class EventosComponent extends Component {
 														this.desapuntarseEvento(evento.idEvento);
 													}}
 												>
-													❌ Desapuntarme
+													Desapuntarme
 												</button>
 											) : (
 												<button
@@ -380,7 +380,7 @@ export class EventosComponent extends Component {
 														this.apuntarseEvento(evento.idEvento);
 													}}
 												>
-													📋 Apuntarme
+													Apuntarme
 												</button>
 											)
 										) : null}

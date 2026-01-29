@@ -157,7 +157,7 @@ export class PerfilComponent extends Component {
                         Inscrito desde: {this.formatearFecha(actividad.fechaInscripcion)}
                       </p>
                       <p className="actividad-fecha evento">
-                        <span className="fecha-icon">🎯</span>
+                        <span className="fecha-icon"></span>
                         Fecha del Evento: {this.formatearFecha(actividad.fechaEvento)}
                       </p>
                       <div className="badges-container">
@@ -167,7 +167,7 @@ export class PerfilComponent extends Component {
                         }
                         {
                           actividad.quiereSerCapitan ? 
-                          <span className="capitan-badge">⭐ Quieres ser capitán</span>
+                          <span className="capitan-badge">Quieres ser capitán</span>
                           :
                           <span className="capitan-badge no-capitan">👤 No quieres ser capitán</span>
                         }

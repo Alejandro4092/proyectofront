@@ -153,30 +153,37 @@ export class Home extends Component {
       <div className="home-container">
         <h1>Calendario de Eventos Deportivos</h1>
         
-        {this.renderCalendar()}
+        <div className="home-content-wrapper">
+          {this.renderCalendar()}
 
-        {selectedDate && (
-          <div className="eventos-del-dia">
-            <h3>Eventos del {selectedDate} de {monthNames[currentMonth]} de {currentYear}</h3>
-            {eventosDelDia.length > 0 ? (
-              <div className="eventos-lista">
-                {eventosDelDia.map(evento => (
-                  <div key={evento.idEvento} className="evento-item">
-                    <div className="evento-item-header">
-                      <span className="evento-id">Evento Deportivo</span>
-                      <span className="evento-fecha">{this.formatearFecha(evento.fechaEvento)}</span>
+          {selectedDate ? (
+            <div className="eventos-del-dia">
+              <h3>Eventos del {selectedDate} de {monthNames[currentMonth]} de {currentYear}</h3>
+              {eventosDelDia.length > 0 ? (
+                <div className="eventos-lista">
+                  {eventosDelDia.map(evento => (
+                    <div key={evento.idEvento} className="evento-item">
+                      <div className="evento-item-header">
+                        <span className="evento-id">Evento Deportivo</span>
+                        <span className="evento-fecha">{this.formatearFecha(evento.fechaEvento)}</span>
+                      </div>
+                      <NavLink to={`/actividades/${evento.idEvento}`} className="btn-ver-detalle">
+                        Ver detalles
+                      </NavLink>
                     </div>
-                    <NavLink to={`/actividades/${evento.idEvento}`} className="btn-ver-detalle">
-                      Ver detalles
-                    </NavLink>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="no-eventos">No hay eventos programados para este día</p>
-            )}
-          </div>
-        )}
+                  ))}
+                </div>
+              ) : (
+                <p className="no-eventos">No hay eventos programados para este día</p>
+              )}
+            </div>
+          ) : (
+            <div className="eventos-del-dia">
+              <h3>Selecciona un día</h3>
+              <p className="no-eventos">Haz clic en un día del calendario para ver los eventos</p>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

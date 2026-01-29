@@ -63,31 +63,26 @@ export class NavbarComponent extends Component {
                         <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                             <li className="nav-item">
                                 <NavLink className="nav-link" aria-current="page" to="/">
-                                    <span className="nav-icon">🏠</span>
                                     <span>Home</span>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/eventos">
-                                    <span className="nav-icon">📅</span>
                                     <span>Eventos</span>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/pagos">
-                                    <span className="nav-icon">💰</span>
                                     <span>Pagos</span>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/partidos">
-                                    <span className="nav-icon">⚽</span>
                                     <span>Partidos</span>
                                 </NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/materialesSolicitados">
-                                    <span className="nav-icon">📦</span>
                                     <span>Materiales</span>
                                 </NavLink>
                             </li>
@@ -117,21 +112,21 @@ export class NavbarComponent extends Component {
                                             <span className="dropdown-arrow-small">▼</span>
                                         </div>
                                         <NavLink to="/perfil" className="dropdown-item-button" onClick={() => this.setState({ dropdownOpen: false })}>
-                                            <span>👤 Mi Perfil</span>
+                                            <span>Mi Perfil</span>
                                         </NavLink>
                                         {(rol === "ADMINISTRADOR") && 
                                             <NavLink className="dropdown-item-button" to="/gestionarOrganizadores" onClick={() => this.setState({ dropdownOpen: false })}>
-                                                <span>🧑‍💼Gestionar Organizadores</span>
+                                                <span>Gestionar Organizadores</span>
                                             </NavLink>
                                         }
                                         {(rol === "ADMINISTRADOR") && 
                                             <NavLink className="dropdown-item-button" to="/alumnos" onClick={() => this.setState({ dropdownOpen: false })}>
-                                                <span>🎓Alumnos</span>
+                                                <span>Alumnos</span>
                                             </NavLink>
                                         }
                                         <div className="dropdown-divider"></div>
                                         <div className="dropdown-item-button" onClick={this.cerrarSesion}>
-                                            <span>🚪 Cerrar sesión</span>
+                                            <span>Cerrar sesión</span>
                                         </div>
                                     </div>
                                 )}
