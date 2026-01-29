@@ -403,6 +403,13 @@ export class ActividadesComponent extends Component {
 	render() {
 		return (
 			<div className="actividades-wrapper">
+				<button
+					className="actividades-btn-volver"
+					onClick={() => window.history.back()}
+					title="Volver atrás"
+				>
+					← Volver
+				</button>
 				<div className="actividades-head">
 					<h1 className="actividades-title">Actividades</h1>
 					{this.state.nombreProfesor && (
@@ -426,82 +433,88 @@ export class ActividadesComponent extends Component {
 							)}
 					</div>
 				</div>
-				<div className="actividades-grid">
-					{this.state.actividades.map((actividad) => (
-						<NavLink
-							to={`/equipos/${actividad.idEvento}/${actividad.idActividad}`}
-							key={actividad.idEventoActividad}
-							style={{ textDecoration: "none", color: "inherit" }}
-						>
-							<article className="actividad-card">
-								{this.getPrecioActividad(actividad.idEventoActividad) && (
-									<div className="actividad-precio-badge">
-										<span className="chip chip-precio">
-											Precio Total:{" "}
-											{this.getPrecioActividad(actividad.idEventoActividad)}€
-										</span>
-									</div>
-								)}
-								{this.context.esOrganizador &&
-									this.esEventoPasado(actividad.fechaEvento) && (
-										<div className="actividad-precio-admin">
-											<button
-												className="btn-precio"
-												onClick={(e) => this.abrirModalPrecio(actividad, e)}
-											>
-												{this.getPrecioActividad(actividad.idEventoActividad)
-													? "💰 Modificar Precio"
-													: "💰 Asignar Precio"}
-											</button>
+				{this.state.actividades.length === 0 ? (
+					<div className="no-actividades">
+						<p>📋 No hay actividades disponibles para este evento</p>
+					</div>
+				) : (
+					<div className="actividades-grid">
+						{this.state.actividades.map((actividad) => (
+							<NavLink
+								to={`/equipos/${actividad.idEvento}/${actividad.idActividad}`}
+								key={actividad.idEventoActividad}
+								style={{ textDecoration: "none", color: "inherit" }}
+							>
+								<article className="actividad-card">
+									{this.getPrecioActividad(actividad.idEventoActividad) && (
+										<div className="actividad-precio-badge">
+											<span className="chip chip-precio">
+												Precio Total:{" "}
+												{this.getPrecioActividad(actividad.idEventoActividad)}€
+											</span>
 										</div>
 									)}
-								<div className="actividad-title">
-									{actividad.nombreActividad}
-								</div>
-								<div className="actividad-fecha">{actividad.fechaEvento}</div>
-								<p className="actividad-desc">
-									Mínimo de jugadores: {actividad.minimoJugadores}
-								</p>
-								<div className="actividad-tags">
-									<span className="chip chip-primary">
-										Posición: {actividad.posicion}
-									</span>
-									{this.esCapitanActividad(actividad.idEventoActividad) && (
-										<span className="chip chip-capitan">👑 Capitán</span>
-									)}
-									{this.estaInscrito(actividad.idEventoActividad) && (
-										<span className="chip chip-inscrito">✓ Inscrito</span>
-									)}
-									{this.estaInscrito(actividad.idEventoActividad) &&
-									this.esEventoPasado(actividad.fechaEvento) ? (
-										<button
-											className="btn-desinscribirse"
-											onClick={(e) => {
-												e.preventDefault();
-												this.desinscribirse(actividad.idEventoActividad);
-											}}
-										>
-											Desinscribirse
-										</button>
-									) : (
-										!this.estaInscritoEnEvento() &&
+									{this.context.esOrganizador &&
 										this.esEventoPasado(actividad.fechaEvento) && (
+											<div className="actividad-precio-admin">
+												<button
+													className="btn-precio"
+													onClick={(e) => this.abrirModalPrecio(actividad, e)}
+												>
+													{this.getPrecioActividad(actividad.idEventoActividad)
+														? "💰 Modificar Precio"
+														: "💰 Asignar Precio"}
+												</button>
+											</div>
+										)}
+									<div className="actividad-title">
+										{actividad.nombreActividad}
+									</div>
+									<div className="actividad-fecha">{actividad.fechaEvento}</div>
+									<p className="actividad-desc">
+										Mínimo de jugadores: {actividad.minimoJugadores}
+									</p>
+									<div className="actividad-tags">
+										<span className="chip chip-primary">
+											Posición: {actividad.posicion}
+										</span>
+										{this.esCapitanActividad(actividad.idEventoActividad) && (
+											<span className="chip chip-capitan">👑 Capitán</span>
+										)}
+										{this.estaInscrito(actividad.idEventoActividad) && (
+											<span className="chip chip-inscrito">✓ Inscrito</span>
+										)}
+										{this.estaInscrito(actividad.idEventoActividad) &&
+										this.esEventoPasado(actividad.fechaEvento) ? (
 											<button
-												className="btn-inscribirse"
+												className="btn-desinscribirse"
 												onClick={(e) => {
 													e.preventDefault();
-													this.abrirModal(actividad);
+													this.desinscribirse(actividad.idEventoActividad);
 												}}
 											>
-												Inscribirse
+												Desinscribirse
 											</button>
-										)
-									)}
-								</div>
-							</article>
-						</NavLink>
-					))}
-				</div>
+										) : (
+											!this.estaInscritoEnEvento() &&
+											this.esEventoPasado(actividad.fechaEvento) && (
+												<button
+													className="btn-inscribirse"
+													onClick={(e) => {
+														e.preventDefault();
+														this.abrirModal(actividad);
+													}}
+												>
+													Inscribirse
+												</button>
+											)
+										)}
+									</div>
+								</article>
+							</NavLink>
+						))}
+					</div>
+				)}
 				{this.state.mostrarModal && (
 					<div className="actividades-modal-overlay" onClick={this.cerrarModal}>
 						<div

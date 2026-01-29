@@ -347,21 +347,56 @@ export class EquipoComponent extends Component {
 				cancelButtonColor: "#d33",
 				confirmButtonText: "Sí, unirme",
 				cancelButtonText: "Cancelar",
-			}).then((result) => {
+			}).then(async (result) => {
 				if (result.isConfirmed) {
-					let idEquipo = this.props.idEquipo;
-					let token = this.context.token;
+					try {
+						// Verificar si el usuario ya está en otro equipo de la misma ActividadEvento
+						const equiposConJugadores =
+							await serviceEquipos.getEquiposConJugadores();
 
-					serviceEquipos
-						.apuntarseEquipo(idEquipo, token)
-						.then((data) => {
-							Swal.fire("¡Inscrito!", "Has entrado en el equipo.", "success");
-							this.loadEquipo();
-						})
-						.catch((error) => {
-							console.error("Error al entrar al equipo:", error);
-							Swal.fire("Error", "No se pudo entrar al equipo.", "error");
+						// Filtrar equipos de la misma ActividadEvento
+						const equiposMismaActividad = equiposConJugadores.filter(
+							(eq) => eq.equipo.idEventoActividad === idEventoActividadEquipo,
+						);
+
+						// Verificar si el usuario ya está en algún equipo de esta actividad
+						const equipoUsuario = equiposMismaActividad.find((eq) =>
+							eq.jugadores.some((jugador) => jugador.idUsuario === idUsuario),
+						);
+
+						if (equipoUsuario) {
+							Swal.fire({
+								title: "Ya estás en un equipo",
+								text: `Ya formas parte del equipo "${equipoUsuario.equipo.nombreEquipo}" en esta actividad. No puedes estar en múltiples equipos de la misma actividad.`,
+								icon: "warning",
+								confirmButtonText: "Entendido",
+							});
+							return;
+						}
+
+						// Si no está en otro equipo, proceder a unirse
+						let idEquipo = this.props.idEquipo;
+						let token = this.context.token;
+
+						serviceEquipos
+							.apuntarseEquipo(idEquipo, token)
+							.then((data) => {
+								Swal.fire("¡Inscrito!", "Has entrado en el equipo.", "success");
+								this.loadEquipo();
+							})
+							.catch((error) => {
+								console.error("Error al entrar al equipo:", error);
+								Swal.fire("Error", "No se pudo entrar al equipo.", "error");
+							});
+					} catch (error) {
+						console.error("Error al verificar equipos:", error);
+						Swal.fire({
+							title: "Error",
+							text: "No se pudo verificar los equipos. Por favor, intenta de nuevo.",
+							icon: "error",
+							confirmButtonText: "Entendido",
 						});
+					}
 				}
 			});
 		} catch (error) {
@@ -469,12 +504,19 @@ export class EquipoComponent extends Component {
 	render() {
 		return (
 			<div className="equipo-detail-container">
+				<button
+					className="equipo-btn-volver"
+					onClick={() => window.history.back()}
+					title="Volver atrás"
+				>
+					← Volver
+				</button>
 				<div className="equipo-header">
 					<h1>{this.state.equipo.nombreEquipo}</h1>
 				</div>
 
 				<div className="equipo-actions">
-					{!this.esEventoPasado() && (
+					{this.esEventoPasado() && (
 						<>
 							{this.state.eresMiembro ? (
 								<button className="btn-salir" onClick={this.salirDelEquipo}>
