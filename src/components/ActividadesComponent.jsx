@@ -8,10 +8,14 @@ import CapitanService from "../services/CapitanService";
 import ActividadesService from "../services/ActividadesService";
 import InscripcionesService from "../services/InscripcionesService";
 import PrecioActividadService from "../services/PrecioActividadService";
+import EventosService from "../services/EventosService";
+import ProfesEventosService from "../services/ProfesEventosService";
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
 const servicePrecioActividad = new PrecioActividadService();
+const serviceEventos = new EventosService();
+const serviceProfesEventos = new ProfesEventosService();
 
 export class ActividadesComponent extends Component {
 	static contextType = AuthContext;
@@ -28,14 +32,40 @@ export class ActividadesComponent extends Component {
 		precios: [],
 		mostrarModalPrecio: false,
 		precioActual: 0,
-		actividadPrecio: null
+		actividadPrecio: null,
+		evento: null,
+		nombreProfesor: null,
 	};
 
 	componentDidMount = async () => {
+		await this.loadEvento();
 		await this.loadActividades();
 		await this.checkCapitan();
 		await this.loadActividadesInscritas();
 		await this.loadPrecios();
+	};
+
+	loadEvento = async () => {
+		if (!this.context.token) {
+			return;
+		}
+
+		const token = this.context.token;
+		try {
+			const evento = await serviceEventos.getEvento(this.props.idEvento, token);
+			this.setState({ evento });
+
+			// Cargar el profesor si existe
+			if (evento.idProfesor) {
+				const profesor = await serviceProfesEventos.getProfesorById(
+					evento.idProfesor,
+					token,
+				);
+				this.setState({ nombreProfesor: profesor.usuario });
+			}
+		} catch (error) {
+			console.error("Error al cargar evento:", error);
+		}
 	};
 
 	loadActividades = () => {
@@ -375,6 +405,14 @@ export class ActividadesComponent extends Component {
 			<div className="actividades-wrapper">
 				<div className="actividades-head">
 					<h1 className="actividades-title">Actividades</h1>
+					{this.state.nombreProfesor && (
+						<h1 className="profesor-info">
+							Profesor:{" "}
+							<span className="profesor-nombre">
+								{this.state.nombreProfesor}
+							</span>
+						</h1>
+					)}
 					<div className="actividades-actions">
 						{this.context.esOrganizador && (
 							<Link

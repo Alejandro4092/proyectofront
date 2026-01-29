@@ -46,7 +46,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.btn-crear-evento {
+.eventos-btn-crear {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
     padding: 12px 30px;
@@ -61,7 +61,7 @@
     display: inline-block;
 }
 
-.btn-crear-evento:hover {
+.eventos-btn-crear:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     color: #e0d4f7;
@@ -148,7 +148,10 @@
 }
 
 .eventos-btn-editar,
-.eventos-btn-eliminar {
+.eventos-btn-eliminar,
+.btn-apuntarse,
+.btn-apuntado,
+.btn-desapuntarse {
     flex: 1;
     padding: 10px 15px;
     border: none;
@@ -185,6 +188,43 @@
     background-color: #c0392b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-apuntarse {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    color: white;
+    width: 100%;
+}
+
+.btn-apuntarse:hover {
+    background: linear-gradient(135deg, #1a0d4a 0%, #0d2d4a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 27, 105, 0.4);
+}
+
+.btn-apuntado {
+    background: #27ae60;
+    color: white;
+    width: 100%;
+    cursor: default;
+    opacity: 0.8;
+}
+
+.btn-apuntado:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-desapuntarse {
+    background: #e67e22;
+    color: white;
+    width: 100%;
+}
+
+.btn-desapuntarse:hover {
+    background: #d35400;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
 }
 
 .no-eventos {
@@ -248,7 +288,7 @@
         font-size: 2rem;
     }
 
-    .btn-crear-evento {
+    .eventos-btn-crear {
         width: 100%;
         text-align: center;
     }
@@ -279,22 +319,4 @@
 
 .swal2-html-container {
     color: #666 !important;
-}
-
-.swal2-confirm,
-.swal2-cancel {
-    background-color: white !important;
-    color: #333 !important;
-    border: 2px solid #ddd !important;
-}
-
-.swal2-confirm {
-    background-color: #e74c3c !important;
-    color: white !important;
-    border-color: #e74c3c !important;
-}
-
-.swal2-confirm:hover {
-    background-color: #c0392b !important;
-    border-color: #c0392b !important;
 }
