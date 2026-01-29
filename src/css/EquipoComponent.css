@@ -1,7 +1,7 @@
 .equipo-detail-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #000000;
+    background: #1a1a1a;
 }
 
 .equipo-header {

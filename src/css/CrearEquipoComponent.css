@@ -1,7 +1,7 @@
 .crear-equipo-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #000000;
+    background: #1a1a1a;
     display: flex;
     align-items: center;
     justify-content: center;
