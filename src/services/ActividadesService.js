@@ -95,6 +95,17 @@ export default class ActividadesService {
         })
     }
 
+    obtenerEventoActividad = async (idEventoActividad) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/ActividadesEvento/" + idEventoActividad
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
     crearActividad = async (datos, token) => {
         return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Actividades/create"

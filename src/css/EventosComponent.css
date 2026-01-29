@@ -20,6 +20,32 @@
     margin: 0;
 }
 
+.eventos-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-toggle-eventos {
+    background: #6c757d;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-toggle-eventos:hover {
+    background: #5a6268;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
 .btn-crear-evento {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;
@@ -121,8 +147,8 @@
     border-top: 1px solid #e9ecef;
 }
 
-.btn-editar,
-.btn-eliminar {
+.eventos-btn-editar,
+.eventos-btn-eliminar {
     flex: 1;
     padding: 10px 15px;
     border: none;
@@ -138,24 +164,24 @@
     text-align: center;
 }
 
-.btn-editar {
+.eventos-btn-editar {
     background-color: #1a4d7a;
     color: white;
 }
 
-.btn-editar:hover {
+.eventos-btn-editar:hover {
     background-color: #0d2d4a;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(26, 77, 122, 0.3);
     color: white;
 }
 
-.btn-eliminar {
+.eventos-btn-eliminar {
     background-color: #e74c3c;
     color: white;
 }
 
-.btn-eliminar:hover {
+.eventos-btn-eliminar:hover {
     background-color: #c0392b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
@@ -198,8 +224,13 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @media (max-width: 768px) {
