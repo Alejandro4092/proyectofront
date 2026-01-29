@@ -51,7 +51,6 @@ export class CrearEventoComponent extends Component {
     }).replace(/(\d+)\/(\d+)\/(\d+),?\s+(\d+):(\d+):(\d+)/, '$3-$2-$1 $4:$5:$6');
     
     serviceEventos.crearEvento(fechaFormato, token).then(response => {
-      console.log(response.data);
       this.setState({
         mensaje: 'Evento creado exitosamente'
       });

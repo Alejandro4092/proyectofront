@@ -50,7 +50,6 @@ export class MaterialesSolicitadosComponent extends Component {
     obtenerMateriales = () => {
         MaterialesService.obtenerMateriales()
             .then(response => {
-                console.log('Materiales recibidos:', response.data);
                 this.setState({ 
                     materiales: response.data,
                     cargando: false 
@@ -129,7 +128,6 @@ export class MaterialesSolicitadosComponent extends Component {
             this.setState({ cargando: true });
             MaterialesService.getMaterialesPorActividad(idEventoActividad)
                 .then(response => {
-                    console.log('Materiales filtrados recibidos:', response.data);
                     this.setState({ 
                         materiales: response.data,
                         cargando: false 

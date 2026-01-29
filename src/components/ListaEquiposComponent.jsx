@@ -101,8 +101,6 @@ export class ListaEquiposComponent extends Component {
         let idActividad = this.props.idActividad;
         let idEvento = this.props.idEvento;
         serviceEquipos.getEquiposActividad(idActividad, idEvento).then(data =>{
-            console.log("EQUIPOS DESDE SERVICE")
-            console.log("EQUIPOS DESDE SERVICE", data)
             this.setState({
                 equipos: data
             })
@@ -137,7 +135,6 @@ export class ListaEquiposComponent extends Component {
                 let token = this.context.token;
                 serviceEquipos.eliminarEquipo(idEquipo, token)
                     .then(data => {
-                        console.log("Equipo eliminado:", data);
                         Swal.fire(
                             '¡Eliminado!',
                             'El equipo ha sido eliminado correctamente.',
@@ -180,7 +177,6 @@ render() {
                 }
             </div>
             <div className='equipos-grid'>
-                {console.log(this.state.equipos)}
                 {
                     this.state.equipos.map((equipo, index) => {
                         return (

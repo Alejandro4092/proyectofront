@@ -45,24 +45,18 @@ export class ActividadesComponent extends Component {
 
 	loadEvento = async () => {
 		if (!this.context.token) {
-			console.log("No hay token disponible");
 			return;
 		}
 
 		const token = this.context.token;
 		try {
 			const evento = await serviceEventos.getEvento(this.props.idEvento, token);
-			console.log("Evento cargado:", evento);
 			this.setState({ evento });
 
 			// Cargar el profesor si existe
 			if (evento.idProfesor) {
-				console.log("Cargando profesor con ID:", evento.idProfesor);
 				const profesor = await serviceProfesEventos.getProfesorById(evento.idProfesor, token);
-				console.log("Profesor cargado:", profesor);
 				this.setState({ nombreProfesor: profesor.usuario });
-			} else {
-				console.log("Este evento NO tiene profesor asignado");
 			}
 		} catch (error) {
 			console.error("Error al cargar evento:", error);
@@ -73,7 +67,6 @@ export class ActividadesComponent extends Component {
 		serviceActividades
 			.getActividadesEvento(this.props.idEvento)
 			.then((data) => {
-				console.log(data);
 				this.setState({
 					actividades: data,
 				});
@@ -308,9 +301,6 @@ export class ActividadesComponent extends Component {
 		this.cerrarModal();
 	};
 	render() {
-		console.log(this.context);
-		console.log("Estado nombreProfesor:", this.state.nombreProfesor);
-		console.log("Estado evento:", this.state.evento);
 		return (
 			<div className="actividades-wrapper">
 				<div className="actividades-head">

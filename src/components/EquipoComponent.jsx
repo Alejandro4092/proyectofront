@@ -58,8 +58,6 @@ export class EquipoComponent extends Component {
 	};
 
 	componentDidMount = async () => {
-		//console.log(this.getColorName(1))
-		console.log(this.context.usuario);
 		await this.loadEquipo();
 		await this.loadColores();
 		await this.loadPartidos();
@@ -107,7 +105,6 @@ export class EquipoComponent extends Component {
 				idEventoActividad,
 				token,
 			);
-			console.log(capitan);
 			let esCapi = false;
 			if (capitan.idUsuario == this.context.usuario.idUsuario) {
 				esCapi = true;
@@ -123,7 +120,6 @@ export class EquipoComponent extends Component {
 	getColorName = async (idColor) => {
 		try {
 			const colorName = await serviceColor.getColorName(idColor);
-			console.log("color", colorName);
 			return colorName;
 		} catch (error) {
 			console.error("Error al obtener color:", error);
@@ -134,7 +130,6 @@ export class EquipoComponent extends Component {
 	findJugadoresEquipo = async (idEquipo) => {
 		try {
 			const players = await serviceEquipos.getJugadoresEquipo(idEquipo);
-			console.log("jugadores", players);
 			return players;
 		} catch (error) {
 			console.error("Error al buscar jugadores:", error);
@@ -174,7 +169,7 @@ export class EquipoComponent extends Component {
 				serviceEquipos
 					.actualizarColorEquipo(idEquipo, idColor, this.context.token)
 					.then((data) => {
-						console.log("Color actualizado:", data);
+
 						Swal.fire(
 							"¡Actualizado!",
 							`El color del equipo se cambió a ${nombreColor}.`,
@@ -256,21 +251,17 @@ export class EquipoComponent extends Component {
 			if (result.isConfirmed) {
 				let idEquipo = this.props.idEquipo;
 				let idUsuario = this.context.usuario.idUsuario;
-				console.log("Equipo:", idEquipo, "Usuario:", idUsuario);
 
 				serviceEquipos
 					.salirseEquipo(idEquipo, idUsuario, this.context.token)
 					.then((data) => {
-						console.log("abandonado: " + data);
 						Swal.fire("¡Abandonaste!", "Has salido del equipo.", "success");
 						this.loadEquipo();
-						console.log("Saliendo del equipo...");
 					})
 					.catch((error) => {
 						console.error("Error al salir del equipo:", error);
 						Swal.fire("Error", "No se pudo salir del equipo.", "error");
 					});
-				console.log("Saliendo del equipo...");
 			}
 		});
 	};
@@ -296,22 +287,9 @@ export class EquipoComponent extends Component {
 
 			const idEventoActividadEquipo = this.state.equipo.idEventoActividad;
 
-			// Debug logs
-			console.log("ID Usuario:", idUsuario);
-			console.log("Inscripciones del usuario:", inscripciones);
-			console.log("ID EventoActividad del equipo:", idEventoActividadEquipo);
-
 			const estaInscrito = inscripciones.some((inscripcion) => {
-				console.log(
-					"Comparando:",
-					inscripcion.idEventoActividad,
-					"con",
-					idEventoActividadEquipo,
-				);
 				return inscripcion.idEventoActividad == idEventoActividadEquipo;
 			});
-
-			console.log("¿Está inscrito?", estaInscrito);
 
 			if (!estaInscrito) {
 				Swal.fire({
@@ -337,15 +315,12 @@ export class EquipoComponent extends Component {
 				if (result.isConfirmed) {
 					let idEquipo = this.props.idEquipo;
 					let token = this.context.token;
-					console.log(token);
 
 					serviceEquipos
 						.apuntarseEquipo(idEquipo, token)
 						.then((data) => {
-							console.log("insertado: " + data);
 							Swal.fire("¡Inscrito!", "Has entrado en el equipo.", "success");
 							this.loadEquipo();
-							console.log("Uniéndose al equipo...");
 						})
 						.catch((error) => {
 							console.error("Error al entrar al equipo:", error);
@@ -390,7 +365,6 @@ export class EquipoComponent extends Component {
 				serviceEquipos
 					.expulsarJugador(idMiembroEquipo, this.context.token)
 					.then((data) => {
-						console.log("borrado", data);
 						Swal.fire(
 							"¡Expulsado!",
 							"El jugador ha sido expulsado del equipo.",

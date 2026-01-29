@@ -6,7 +6,6 @@ export default class EquiposService {
         return new Promise(function(resolve){
             let request = Global.apiDeportes + "api/Equipos/EquiposActividadEvento/" + idActividad + "/" + idEvento
             axios.get(request).then(res => {
-                console.log(res.data)
                 resolve(res.data)
             })
         })

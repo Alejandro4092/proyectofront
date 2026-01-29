@@ -29,7 +29,6 @@ export class PerfilComponent extends Component {
     let token = this.context.token;
     try {
       const capitanes = await serviceCapitan.getCapitanes(token);
-      console.log(capitanes)
       const actividadesCapitan = [];
       this.state.actividades.forEach(actividad => {
         capitanes.forEach(capitan => {
@@ -52,10 +51,8 @@ export class PerfilComponent extends Component {
 
   loadActividadesUsuario = async () => {
     let token = this.context.token;
-    console.log(token)
     try {
       const actividades = await serviceActividades.getActividadesUsuario(token);
-      console.log(actividades)
       this.setState({
         actividades: actividades
       })
