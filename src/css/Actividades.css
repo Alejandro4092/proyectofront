@@ -32,6 +32,22 @@
     font-weight: bold;
 }
 
+.profesor-info {
+    font-size: 1.5rem !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 12px 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    margin: 0 !important;
+}
+
+.profesor-nombre {
+    color: #ffd700;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .btn-crear-evento {
     background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
     color: white;

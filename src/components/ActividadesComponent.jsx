@@ -8,10 +8,15 @@ import CapitanService from "../services/CapitanService";
 import ActividadesService from "../services/ActividadesService";
 import InscripcionesService from "../services/InscripcionesService";
 import PrecioActividadService from "../services/PrecioActividadService";
+import EventosService from "../services/EventosService";
+import ProfesEventosService from "../services/ProfesEventosService";
+
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
 const serviceInscripciones = new InscripcionesService();
 const servicePrecioActividad = new PrecioActividadService();
+const serviceEventos = new EventosService();
+const serviceProfesEventos = new ProfesEventosService();
 
 export class ActividadesComponent extends Component {
 	static contextType = AuthContext;
@@ -26,13 +31,42 @@ export class ActividadesComponent extends Component {
 		actividadSeleccionada: null,
 		esCapitan: false,
 		precios: [],
+		evento: null,
+		nombreProfesor: null,
 	};
 
 	componentDidMount = async () => {
+		await this.loadEvento();
 		await this.loadActividades();
 		await this.checkCapitan();
 		await this.loadActividadesInscritas();
 		await this.loadPrecios();
+	};
+
+	loadEvento = async () => {
+		if (!this.context.token) {
+			console.log("No hay token disponible");
+			return;
+		}
+
+		const token = this.context.token;
+		try {
+			const evento = await serviceEventos.getEvento(this.props.idEvento, token);
+			console.log("Evento cargado:", evento);
+			this.setState({ evento });
+
+			// Cargar el profesor si existe
+			if (evento.idProfesor) {
+				console.log("Cargando profesor con ID:", evento.idProfesor);
+				const profesor = await serviceProfesEventos.getProfesorById(evento.idProfesor, token);
+				console.log("Profesor cargado:", profesor);
+				this.setState({ nombreProfesor: profesor.usuario });
+			} else {
+				console.log("Este evento NO tiene profesor asignado");
+			}
+		} catch (error) {
+			console.error("Error al cargar evento:", error);
+		}
 	};
 
 	loadActividades = () => {
@@ -275,10 +309,17 @@ export class ActividadesComponent extends Component {
 	};
 	render() {
 		console.log(this.context);
+		console.log("Estado nombreProfesor:", this.state.nombreProfesor);
+		console.log("Estado evento:", this.state.evento);
 		return (
 			<div className="actividades-wrapper">
 				<div className="actividades-head">
 					<h1 className="actividades-title">Actividades</h1>
+					{this.state.nombreProfesor && (
+						<h1 className="profesor-info">
+							Profesor: <span className="profesor-nombre">{this.state.nombreProfesor}</span>
+						</h1>
+					)}
 					{this.context.esOrganizador && (
 						<Link
 							to={`/gestionar-actividades/${this.props.idEvento}`}
