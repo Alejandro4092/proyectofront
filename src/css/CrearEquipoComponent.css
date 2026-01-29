@@ -1,7 +1,7 @@
 .crear-equipo-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #1a1a1a;
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,7 +14,7 @@
     padding: 40px;
     max-width: 600px;
     width: 100%;
-    border: 2px solid #e0d4f7;
+    border: 2px solid #e8f0fe;
 }
 
 .crear-equipo-header {
@@ -23,13 +23,13 @@
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e0d4f7;
+    border-bottom: 2px solid #e8f0fe;
 }
 
 .crear-equipo-header h1 {
     font-size: 2.5rem;
     color: transparent;
-    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -39,7 +39,7 @@
 }
 
 .btn-volver {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
@@ -68,7 +68,7 @@
 .form-group label {
     display: block;
     font-weight: 600;
-    color: #2d1b69;
+    color: #9a7fd4;
     margin-bottom: 10px;
     font-size: 1.05rem;
 }
@@ -77,7 +77,7 @@
 .form-group select {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e0d4f7;
+    border: 2px solid #e8f0fe;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -88,7 +88,7 @@
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     background-color: #f9f7fc;
     box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
 }
@@ -122,7 +122,7 @@
 }
 
 .crear-equipo-btn-crear {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
 }
 

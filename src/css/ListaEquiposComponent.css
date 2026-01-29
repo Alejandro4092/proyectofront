@@ -1,6 +1,6 @@
 .equipos-container {
     padding: 30px;
-    color: #ffffff;
+    color: #2c3e50;
 }
 
 .equipos-header {
@@ -40,7 +40,7 @@
 }
 
 .btn-crear-equipo {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 12px 24px;
     border-radius: 8px;
@@ -58,7 +58,7 @@
 }
 
 .equipos-container h1 {
-    color: #b8a4e8;
+    color: #9a7fd4;
     margin-bottom: 30px;
     font-size: 2.5rem;
     font-weight: bold;
@@ -68,7 +68,7 @@
 .capitan-info {
     font-size: 1.5rem !important;
     color: #ffffff !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     padding: 12px 24px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
@@ -105,7 +105,7 @@
 }
 
 .cardEquipo {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -117,11 +117,11 @@
 
 .cardEquipo:hover {
     box-shadow: 0 8px 15px rgba(184, 164, 232, 0.4);
-    border-color: #b8a4e8;
+    border-color: #9a7fd4;
 }
 
 .cardEquipo h1 {
-    color: #e0d4f7;
+    color: #e8f0fe;
     font-size: 1.8rem;
     margin-bottom: 15px;
     font-weight: bold;
@@ -157,7 +157,7 @@
 
 .no-equipos {
     text-align: center;
-    color: #b8a4e8;
+    color: #9a7fd4;
     font-size: 1.5rem;
     margin-top: 50px;
     padding: 40px;
@@ -181,7 +181,7 @@
 }
 
 .equipos-modal-content {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     padding: 40px;
     border-radius: 15px;
     max-width: 600px;
@@ -190,11 +190,11 @@
     overflow-y: auto;
     position: relative;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    border: 2px solid #b8a4e8;
+    border: 2px solid #9a7fd4;
 }
 
 .equipos-modal-content h2 {
-    color: #e0d4f7;
+    color: #e8f0fe;
     margin-bottom: 25px;
     font-size: 1.8rem;
     text-align: center;
@@ -219,7 +219,7 @@
 }
 
 .equipos-modal-close:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f8f9fa;
     transform: rotate(90deg);
 }
 
@@ -244,9 +244,9 @@
 .equipos-form-group input,
 .equipos-form-group select {
     padding: 12px;
-    border: 2px solid #b8a4e8;
+    border: 2px solid #9a7fd4;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f8f9fa;
     color: #ffffff;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -256,12 +256,12 @@
 .equipos-form-group select:focus {
     outline: none;
     border-color: #f093fb;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: #f1f3f5;
     box-shadow: 0 0 10px rgba(240, 147, 251, 0.3);
 }
 
 .equipos-form-group select option {
-    background-color: #2d1b69;
+    background-color: #9a7fd4;
     color: #ffffff;
 }
 
@@ -275,7 +275,7 @@
     flex: 1;
     padding: 12px 24px;
     border-radius: 8px;
-    border: 2px solid #b8a4e8;
+    border: 2px solid #9a7fd4;
     background-color: transparent;
     color: #ffffff;
     font-weight: 600;

@@ -7,7 +7,7 @@
 .partidos-container h1 {
     text-align: center;
     color: transparent;
-    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -56,14 +56,14 @@
 }
 
 .partidos-filtros .form-group select:hover {
-    border-color: #667eea;
+    border-color: #9a7fd4;
     background-color: white;
 }
 
 .partidos-filtros .form-group select:focus {
     outline: none;
     background-color: white;
-    border-color: #667eea;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
@@ -99,7 +99,7 @@
 }
 
 .partido-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 15px;
     text-align: center;
@@ -109,7 +109,7 @@
 
 .evento-actividad {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
+    background: #e9ecef;
     padding: 5px 10px;
     border-radius: 20px;
 }
@@ -140,24 +140,24 @@
 
 .equipo.ganador {
     background: #a3e07f;
-    border: 2px solid #667eea;
+    border: 2px solid #9a7fd4;
     font-weight: 600;
 }
 
 .equipo.local.ganador {
     background: #a3e07f;
-    border: 2px solid #667eea;
+    border: 2px solid #9a7fd4;
 }
 
 .equipo.visitante.ganador {
     background: #a3e07f;
-    border: 2px solid #667eea;
+    border: 2px solid #9a7fd4;
 }
 
 .partido-card.local .equipo,
 .partido-card.visitante .equipo,
 .partido-card.empate .equipo {
-    border: 2px solid #667eea;
+    border: 2px solid #9a7fd4;
 }
 
 .partido-card.empate .equipo {
@@ -209,7 +209,7 @@
 .resultado-ganador {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #667eea;
+    color: #9a7fd4;
 }
 
 .resultado-empate {
@@ -312,7 +312,7 @@
 }
 
 .btn-crear-resultado {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -335,7 +335,7 @@
     padding: 30px;
     margin-bottom: 30px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 2px solid #667eea;
+    border: 2px solid #9a7fd4;
 }
 
 .formulario-resultado h2 {
@@ -343,7 +343,7 @@
     margin-bottom: 25px;
     font-size: 1.8rem;
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -381,7 +381,7 @@
 .formulario-resultado .form-group select:focus,
 .formulario-resultado .form-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #9a7fd4;
     background-color: white;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
@@ -411,7 +411,7 @@
 }
 
 .btn-guardar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
 }

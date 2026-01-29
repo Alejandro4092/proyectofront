@@ -1,7 +1,7 @@
 .eventos-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #1a1a1a;
+    background: #ffffff;
 }
 
 .eventos-header {
@@ -10,13 +10,13 @@
     align-items: center;
     margin-bottom: 40px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #b8a4e8;
+    border-bottom: 2px solid #9a7fd4;
 }
 
 .eventos-header h1 {
     font-size: 3rem;
     color: transparent;
-    background: linear-gradient(135deg, #b8a4e8 0%, #e0d4f7 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -52,7 +52,7 @@
 }
 
 .eventos-btn-crear {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 12px 30px;
     border-radius: 25px;
@@ -68,8 +68,8 @@
 
 .eventos-btn-crear:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    color: #e0d4f7;
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+    color: white;
 }
 
 .eventos-grid {
@@ -84,17 +84,17 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid #e9ecef;
 }
 
 .evento-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(45, 27, 105, 0.15);
-    border-color: #2d1b69;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    border-color: #9a7fd4;
 }
 
 .evento-card-header {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 20px;
     display: flex;
@@ -109,7 +109,7 @@
 }
 
 .evento-id {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #e9ecef;
     padding: 4px 12px;
     border-radius: 15px;
     font-size: 0.9rem;
@@ -138,7 +138,7 @@
 }
 
 .evento-valor {
-    color: #2d1b69;
+    color: #9a7fd4;
     font-size: 1.1rem;
     font-weight: 500;
     margin: 0;
@@ -173,7 +173,7 @@
 }
 
 .eventos-btn-editar {
-    background-color: #1a4d7a;
+    background-color: #9a7fd4;
     color: white;
 }
 
@@ -196,7 +196,7 @@
 }
 
 .btn-apuntarse {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     width: 100%;
 }
@@ -256,13 +256,13 @@
 .loading-container p {
     font-size: 1.2rem;
     margin-top: 20px;
-    color: #b8a4e8;
+    color: #9a7fd4;
 }
 
 .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.1);
+    border: 4px solid #f8f9fa;
     border-radius: 50%;
-    border-top: 4px solid #2d1b69;
+    border-top: 4px solid #9a7fd4;
     width: 50px;
     height: 50px;
     animation: spin 1s linear infinite;

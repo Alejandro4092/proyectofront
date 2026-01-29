@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: #2b2d42;
+    background: #f8f9fa;
 }
 
 .login-card {
@@ -19,7 +19,7 @@
 
 .login-illustration {
     flex: 1;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,7 +43,7 @@
 }
 
 .login-title {
-    color: #667eea;
+    color: #9a7fd4;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 40px;
@@ -83,7 +83,7 @@
 }
 
 .email-input-group:focus-within {
-    border-color: #667eea;
+    border-color: #9a7fd4;
 }
 
 .email-username {
@@ -121,7 +121,7 @@
 
 .password-input-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #9a7fd4;
 }
 
 .toggle-password {
@@ -154,7 +154,7 @@
 }
 
 .btn-login {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     border: none;
     padding: 16px;
@@ -191,11 +191,11 @@
     font-weight: 700;
     text-decoration: underline;
     cursor: pointer;
-    color: #667eea;
+    color: #9a7fd4;
 }
 
 .link-text:hover {
-    color: #764ba2;
+    color: #9a7fd4;
 }
 
 /* Responsive */

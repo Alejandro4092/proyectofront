@@ -14,7 +14,7 @@
 
 .materiales-header h1 {
     color: transparent;
-    background: linear-gradient(135deg, #b8a4e8 0%, #e0d4f7 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -25,7 +25,7 @@
 }
 
 .btn-solicitar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -73,13 +73,13 @@
 }
 
 .materiales-filtros .mat-form-group select:hover {
-    border-color: #667eea;
+    border-color: #9a7fd4;
     background-color: white;
 }
 
 .materiales-filtros .mat-form-group select:focus {
     background-color: white;
-    border-color: #667eea;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
@@ -107,7 +107,7 @@
 
 .material-header {
     padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -130,7 +130,7 @@
 }
 
 .estado.pendiente {
-    background: rgba(255, 255, 255, 0.3);
+    background: #dee2e6;
     color: #fff;
 }
 
@@ -247,7 +247,7 @@
 
 .mat-modal-header {
     padding: 25px 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     display: flex;
     justify-content: space-between;
@@ -262,7 +262,7 @@
 }
 
 .mat-close-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: #e9ecef;
     border: none;
     color: white;
     font-size: 1.8rem;
@@ -278,7 +278,7 @@
 }
 
 .mat-close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: #dee2e6;
 }
 
 .mat-modal-body {
@@ -323,7 +323,7 @@
 .mat-form-group input:focus,
 .mat-form-group select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #9a7fd4;
     background-color: white !important;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
@@ -399,7 +399,7 @@
 }
 
 .mat-btn-confirmar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
 }
 

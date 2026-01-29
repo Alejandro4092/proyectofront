@@ -1,14 +1,14 @@
 .actividades-wrapper {
     min-height: 100vh;
     padding: 32px 40px 48px;
-    background: #1a1a1a;
+    background: #ffffff;
 }
 
 .actividades-head {
     max-width: 900px;
     margin: 0 auto 30px auto;
     padding-bottom: 20px;
-    border-bottom: 2px solid #b8a4e8;
+    border-bottom: 2px solid #9a7fd4;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,7 +28,7 @@
     margin: 10px 0 6px 0;
     font-size: 3rem;
     color: transparent;
-    background: linear-gradient(135deg, #b8a4e8 0%, #e0d4f7 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -39,7 +39,7 @@
 .profesor-info {
     font-size: 1.5rem !important;
     color: #ffffff !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     padding: 12px 24px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
@@ -53,7 +53,7 @@
 }
 
 .actividades-btn-crear {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 12px 30px;
     border-radius: 25px;
@@ -69,12 +69,12 @@
 
 .actividades-btn-crear:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    color: #e0d4f7;
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+    color: white;
 }
 
 .btn-gestionar-actividades {
-    background: linear-gradient(135deg, #6b46c1 0%, #4a2f8a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 12px 30px;
     border-radius: 25px;
@@ -90,13 +90,13 @@
 
 .btn-gestionar-actividades:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    color: #e0d4f7;
+    box-shadow: 0 6px 12px rgba(118, 75, 162, 0.3);
+    color: white;
 }
 
 .actividades-sub {
     margin: 0;
-    color: #b0b0b0;
+    color: #6c757d;
     max-width: 720px;
 }
 
@@ -158,7 +158,7 @@
 .actividad-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(45, 27, 105, 0.15);
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
 }
 
 .actividad-title {
@@ -234,7 +234,7 @@
 }
 
 .btn-inscribirse {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: #ffffff;
     border: none;
     border-radius: 25px;
@@ -249,7 +249,7 @@
 .btn-inscribirse:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    color: #e0d4f7;
+    color: #e8f0fe;
 }
 
 .btn-desinscribirse {
@@ -388,7 +388,7 @@
 
 .input-precio:focus {
     outline: none;
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
 }
 
@@ -411,7 +411,7 @@
 
 .form-input:focus {
     outline: none;
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
 }
 
@@ -449,7 +449,7 @@ textarea.form-input {
 }
 
 .actividades-btn-submit {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -502,7 +502,7 @@ textarea.form-input {
 }
 
 .custom-switch input:checked+.slider {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
 }
 
 .custom-switch input:checked+.slider::before {
@@ -522,7 +522,7 @@ textarea.form-input {
 
 /* Estilos para botón crear resultado */
 .btn-crear-resultado {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     border: none;
     padding: 12px 30px;
@@ -578,7 +578,7 @@ textarea.form-input {
 .actividades-form-group select:focus,
 .actividades-form-group input[type="number"]:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #9a7fd4;
     background-color: white;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
@@ -610,7 +610,7 @@ textarea.form-input {
 .profesor-info {
     font-size: 1.5rem !important;
     color: #ffffff !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     padding: 12px 24px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
