@@ -56,7 +56,6 @@ export class CrearEventoComponent extends Component {
 			);
 
 		serviceEventos.crearEvento(fechaFormato, token).then((response) => {
-			console.log(response.data);
 			this.setState({
 				mensaje: "Evento creado exitosamente",
 			});

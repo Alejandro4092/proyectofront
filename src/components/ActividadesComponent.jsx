@@ -42,7 +42,6 @@ export class ActividadesComponent extends Component {
 		serviceActividades
 			.getActividadesEvento(this.props.idEvento)
 			.then((data) => {
-				console.log(data);
 				this.setState({
 					actividades: data,
 				});
@@ -371,7 +370,6 @@ export class ActividadesComponent extends Component {
 		this.cerrarModal();
 	};
 	render() {
-		console.log(this.context);
 		return (
 			<div className="actividades-wrapper">
 				<div className="actividades-head">

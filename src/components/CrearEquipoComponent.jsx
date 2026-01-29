@@ -43,7 +43,6 @@ export class CrearEquipoComponent extends Component {
 			});
 			return;
 		}
-		console.log(this.context.usuario);
 		this.loadColores();
 	};
 
@@ -84,8 +83,6 @@ export class CrearEquipoComponent extends Component {
 				idEventoActividad,
 				token,
 			);
-			console.log(this.context.usuario);
-			console.log(capitan);
 			if (this.context.usuario.idUsuario == capitan.idUsuario) {
 				return true;
 			}
@@ -101,8 +98,6 @@ export class CrearEquipoComponent extends Component {
 
 		const idEventoActividadParam = await this.getEventoActividad();
 		let esCapitan = await this.checkCapitan(idEventoActividadParam);
-		console.log(esCapitan);
-		console.log(idEventoActividadParam);
 		if (esCapitan == false) {
 			Swal.fire({
 				title: "Error",
@@ -153,7 +148,6 @@ export class CrearEquipoComponent extends Component {
 				nuevoEquipo,
 				this.context.token,
 			);
-			console.log("Equipo creado:", data);
 
 			Swal.fire({
 				title: "¡Éxito!",
