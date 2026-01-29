@@ -1,0 +1,161 @@
+.alumnos-container {
+    padding: 30px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.alumnos-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #b8a4e8;
+}
+
+.alumnos-header h1 {
+    margin: 0;
+    color: transparent;
+    background: linear-gradient(135deg, #b8a4e8 0%, #e0d4f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.alumnos-header p {
+    margin: 10px 0 0 0;
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.alumnos-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Selector de Curso */
+.curso-selector {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.curso-selector label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    white-space: nowrap;
+    font-size: 1.05rem;
+}
+
+.select-curso {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.select-curso:hover {
+    border-color: #b8a4e8;
+}
+
+.select-curso:focus {
+    outline: none;
+    border-color: #b8a4e8;
+    box-shadow: 0 0 0 3px rgba(184, 164, 232, 0.15);
+}
+
+.select-curso:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.alumnos-list {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tabla-alumnos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.tabla-alumnos thead {
+    background-color: #7a4fa1;
+    color: white;
+}
+
+.tabla-alumnos th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #b8a4e8;
+}
+
+.tabla-alumnos td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #2c3e50;
+    vertical-align: middle;
+}
+
+.tabla-alumnos tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.tabla-alumnos tbody tr:hover {
+    background-color: #f8f7fc;
+}
+
+.tabla-alumnos tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Foto del alumno */
+.foto-alumno {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b8a4e8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading-text {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 40px;
+    font-size: 1.05rem;
+}
+
+.no-data-text {
+    text-align: center;
+    color: #95a5a6;
+    padding: 40px;
+    font-style: italic;
+    font-size: 1.05rem;
+}
+
+.error-message {
+    color: #e74c3c;
+    padding: 15px;
+    background-color: #fadbd8;
+    border: 1px solid #f5b7b1;
+    border-radius: 8px;
+    margin: 0;
+}
