@@ -76,4 +76,19 @@ export default class PagosService {
             })
         })
     }
+
+    createPago = async (pagoData, token) => {
+        return new Promise(function (resolve, reject) {
+            let request = Global.apiDeportes + "api/Pagos/create"
+            axios.post(request, pagoData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }

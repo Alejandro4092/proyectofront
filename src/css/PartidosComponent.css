@@ -7,7 +7,7 @@
 .partidos-container h1 {
     text-align: center;
     color: transparent;
-    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    background: linear-gradient(135deg, #cabdf7 0%, #798ff3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -177,7 +177,7 @@
 
 .equipo.ganador .nombre-equipo {
     color: #333;
-}   
+}
 
 .puntos-equipo {
     font-size: 2.5rem;
@@ -466,6 +466,7 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

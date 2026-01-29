@@ -293,7 +293,7 @@ export class ListaEquiposComponent extends Component {
 						{this.state.eresCapitan && (
 							<>
 								<button
-									className="btn-crear-resultado"
+									className="equipos-btn-crear-resultado"
 									onClick={this.abrirFormularioResultado}
 								>
 									⚽ Crear Resultado

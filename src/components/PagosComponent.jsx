@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import AuthContext from "../context/AuthContext";
 import PagosService from "../services/PagosService";
 import GestionEventoService from "../services/GestionEventoService";
+import EventosService from "../services/EventosService";
 import PrecioActividadService from "../services/PrecioActividadService";
+import ActividadesService from "../services/ActividadesService";
 import TablaPagosAgrupadosComponent from "./TablaPagosAgrupadosComponent";
 import Swal from "sweetalert2";
 import "../css/PagosComponent.css";
 
 const servicePagos = new PagosService();
 const serviceGestionEvento = new GestionEventoService();
+const serviceEventos = new EventosService();
 const servicePrecioActividad = new PrecioActividadService();
+const serviceActividades = new ActividadesService();
 
 export class PagosComponent extends Component {
 	static contextType = AuthContext;
@@ -26,10 +30,24 @@ export class PagosComponent extends Component {
 		preciosActividades: {},
 		modoEdicion: false,
 		estadoPago: "Pendiente",
+		// Estados para filtros
+		eventosLista: [],
+		actividadesLista: [],
+		filtroEvento: "",
+		filtroActividad: "",
+		// Estados para crear pago
+		mostrarModalCrearPago: false,
+		preciosActividadesLista: [],
+		nuevoPago: {
+			cantidad: "",
+			estado: "PENDIENTE",
+		},
 	};
 
 	componentDidMount = async () => {
 		await this.loadCursos();
+		await this.loadPreciosActividades();
+		await this.cargarEventos();
 	};
 
 	loadCursos = async () => {
@@ -64,10 +82,173 @@ export class PagosComponent extends Component {
 		}
 	};
 
+	loadPreciosActividades = async () => {
+		try {
+			const precios = await servicePrecioActividad.getPreciosActividades();
+			this.setState({ preciosActividadesLista: precios });
+		} catch (error) {
+			console.error("Error al cargar precios de actividades:", error);
+		}
+	};
+
+	cargarEventos = async () => {
+		try {
+			let token = this.context.token;
+			const eventos = await serviceEventos.getEventosCursoEscolar(token);
+			this.setState({ eventosLista: eventos });
+		} catch (error) {
+			console.error("Error al cargar eventos:", error);
+		}
+	};
+
+	cargarActividadesPorEvento = async (idEvento) => {
+		if (!idEvento) {
+			this.setState({ actividadesLista: [], filtroActividad: "" });
+			return;
+		}
+
+		try {
+			const actividades = await serviceActividades.getActividadesEvento(
+				parseInt(idEvento),
+			);
+			const precios = await servicePrecioActividad.getPreciosActividades();
+
+			const actividadesConPrecio = actividades
+				.map((actividad) => {
+					const precioActividad = precios.find(
+						(p) =>
+							p.idEvento === parseInt(idEvento) &&
+							p.idActividad === actividad.idActividad,
+					);
+					if (precioActividad) {
+						return {
+							idEventoActividad: precioActividad.idEventoActividad,
+							idPrecioActividad: precioActividad.idPrecioActividad,
+							nombreActividad: actividad.nombre,
+							precioTotal: precioActividad.precioTotal,
+						};
+					}
+					return null;
+				})
+				.filter((act) => act !== null);
+
+			this.setState({ actividadesLista: actividadesConPrecio });
+		} catch (error) {
+			console.error("Error al cargar actividades:", error);
+			this.setState({ actividadesLista: [] });
+		}
+	};
+
+	handleFiltroEventoChange = async (e) => {
+		const idEvento = e.target.value;
+		this.setState({
+			filtroEvento: idEvento,
+			filtroActividad: "",
+			cargando: true,
+		});
+		if (idEvento) {
+			try {
+				let token = this.context.token;
+				// Cargar pagos del evento específico
+				const pagosPorEvento = await servicePagos.getPagosEvento(
+					idEvento,
+					token,
+				);
+				this.setState({ pagos: pagosPorEvento });
+
+				// Extraer actividades únicas de los pagos
+				const actividadesUnicas = [];
+				const idsVistos = new Set();
+
+				pagosPorEvento.forEach((pago) => {
+					if (
+						pago.idEventoActividad &&
+						!idsVistos.has(pago.idEventoActividad)
+					) {
+						idsVistos.add(pago.idEventoActividad);
+						actividadesUnicas.push({
+							idEventoActividad: pago.idEventoActividad,
+							idPrecioActividad: pago.idPrecioActividad,
+							nombreActividad: pago.actividad,
+							precioTotal: pago.precioTotal,
+						});
+					}
+				});
+
+				this.setState({ actividadesLista: actividadesUnicas });
+			} catch (error) {
+				console.error("Error al cargar datos del evento:", error);
+			} finally {
+				this.setState({ cargando: false });
+			}
+		} else {
+			// Si no hay evento seleccionado, cargar todos los pagos del curso
+			const { cursoSeleccionado } = this.state;
+			if (cursoSeleccionado) {
+				await this.loadPagos(cursoSeleccionado);
+			}
+			this.setState({ actividadesLista: [], cargando: false });
+		}
+	};
+
+	handleFiltroActividadChange = (e) => {
+		this.setState({ filtroActividad: e.target.value });
+	};
+
 	handleCursoChange = async (e) => {
 		const idCurso = parseInt(e.target.value);
-		this.setState({ cursoSeleccionado: idCurso });
+		this.setState({
+			cursoSeleccionado: idCurso,
+			filtroEvento: "",
+			filtroActividad: "",
+			actividadesLista: [],
+		});
 		await this.loadPagos(idCurso);
+	};
+
+	recargarPagos = async () => {
+		const { filtroEvento, cursoSeleccionado } = this.state;
+
+		if (filtroEvento) {
+			// Si hay un evento seleccionado, recargar los pagos de ese evento
+			this.setState({ cargando: true });
+			try {
+				let token = this.context.token;
+				const pagosPorEvento = await servicePagos.getPagosEvento(
+					filtroEvento,
+					token,
+				);
+				this.setState({ pagos: pagosPorEvento });
+
+				// Actualizar actividades únicas
+				const actividadesUnicas = [];
+				const idsVistos = new Set();
+
+				pagosPorEvento.forEach((pago) => {
+					if (
+						pago.idEventoActividad &&
+						!idsVistos.has(pago.idEventoActividad)
+					) {
+						idsVistos.add(pago.idEventoActividad);
+						actividadesUnicas.push({
+							idEventoActividad: pago.idEventoActividad,
+							idPrecioActividad: pago.idPrecioActividad,
+							nombreActividad: pago.actividad,
+							precioTotal: pago.precioTotal,
+						});
+					}
+				});
+
+				this.setState({ actividadesLista: actividadesUnicas });
+			} catch (error) {
+				console.error("Error al recargar pagos del evento:", error);
+			} finally {
+				this.setState({ cargando: false });
+			}
+		} else {
+			// Si no hay evento seleccionado, recargar todos los pagos del curso
+			await this.loadPagos(cursoSeleccionado);
+		}
 	};
 
 	cambiarPestana = (pestana) => {
@@ -75,24 +256,38 @@ export class PagosComponent extends Component {
 	};
 
 	getPagosFiltrados = () => {
-		const { pagos, pestanaActiva } = this.state;
+		const { pagos, pestanaActiva, filtroActividad } = this.state;
 
+		let pagosFiltrados = pagos;
+
+		// Filtrar por pestaña activa
 		if (pestanaActiva === "pagados") {
-			return pagos.filter(
+			pagosFiltrados = pagosFiltrados.filter(
 				(pago) => pago.estado && pago.estado.toLowerCase() === "pagado",
 			);
 		} else {
-			return pagos.filter(
+			pagosFiltrados = pagosFiltrados.filter(
 				(pago) => pago.estado && pago.estado.toLowerCase() !== "pagado",
 			);
 		}
+
+		// Filtrar por actividad si está seleccionada (el evento ya viene filtrado del servidor)
+		if (filtroActividad) {
+			pagosFiltrados = pagosFiltrados.filter(
+				(pago) => pago.idEventoActividad === parseInt(filtroActividad),
+			);
+		}
+
+		return pagosFiltrados;
 	};
 
 	getPagosAgrupadosPagados = async () => {
-		const { pagos } = this.state;
-		const pagosPagados = pagos.filter(
-			(pago) => pago.estado && pago.estado.toLowerCase() === "pagado",
-		);
+		// Usar getPagosFiltrados para obtener los pagos ya filtrados por evento y actividad
+		const pagosFiltrados = this.getPagosFiltrados();
+
+		// Como getPagosFiltrados ya filtra por pestaña, solo obtenemos los pagados
+		// (si estamos en la pestaña de pagados, ya vendrán filtrados)
+		const pagosPagados = pagosFiltrados;
 
 		// Agrupar por idEventoActividad
 		const agrupados = {};
@@ -184,7 +379,11 @@ export class PagosComponent extends Component {
 		} = this.state;
 
 		if (!cantidadPago || parseFloat(cantidadPago) <= 0) {
-			alert("Por favor, ingresa una cantidad válida");
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "Por favor, ingresa una cantidad válida",
+			});
 			return;
 		}
 
@@ -199,7 +398,13 @@ export class PagosComponent extends Component {
 					estadoPago,
 					token,
 				);
-				alert("¡Pago actualizado exitosamente!");
+				Swal.fire({
+					icon: "success",
+					title: "¡Éxito!",
+					text: "Pago actualizado exitosamente",
+					timer: 2000,
+					showConfirmButton: false,
+				});
 			} else {
 				await servicePagos.crearPago(
 					pagoSeleccionado.idEventoActividad,
@@ -207,14 +412,122 @@ export class PagosComponent extends Component {
 					cantidad,
 					token,
 				);
-				alert("¡Pago registrado exitosamente!");
+				Swal.fire({
+					icon: "success",
+					title: "¡Éxito!",
+					text: "Pago registrado exitosamente",
+					timer: 2000,
+					showConfirmButton: false,
+				});
 			}
 
 			this.cerrarModalPago();
-			await this.loadPagos(cursoSeleccionado);
+			await this.recargarPagos();
 		} catch (error) {
 			console.error("Error al procesar pago:", error);
-			alert("Error al procesar el pago. Inténtalo de nuevo.");
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "Error al procesar el pago. Inténtalo de nuevo.",
+			});
+		}
+	};
+
+	abrirModalCrearPago = () => {
+		if (!this.state.filtroEvento || !this.state.filtroActividad) {
+			Swal.fire({
+				icon: "warning",
+				title: "Atención",
+				text: "Primero selecciona un evento y una actividad",
+			});
+			return;
+		}
+
+		this.setState({
+			mostrarModalCrearPago: true,
+			nuevoPago: {
+				cantidad: "",
+				estado: "PENDIENTE",
+			},
+		});
+	};
+
+	cerrarModalCrearPago = () => {
+		this.setState({
+			mostrarModalCrearPago: false,
+			nuevoPago: {
+				cantidad: "",
+				estado: "PENDIENTE",
+			},
+		});
+	};
+
+	handleNuevoPagoChange = (e) => {
+		const { name, value } = e.target;
+		this.setState({
+			nuevoPago: {
+				...this.state.nuevoPago,
+				[name]: value,
+			},
+		});
+	};
+
+	crearNuevoPago = async (e) => {
+		e.preventDefault();
+		const { nuevoPago, cursoSeleccionado, filtroActividad, actividadesLista } =
+			this.state;
+
+		if (!nuevoPago.cantidad || parseFloat(nuevoPago.cantidad) <= 0) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "Por favor, ingresa una cantidad válida",
+			});
+			return;
+		}
+
+		// Obtener idPrecioActividad de la actividad seleccionada en el filtro
+		const actividadSeleccionada = actividadesLista.find(
+			(act) => act.idEventoActividad === parseInt(filtroActividad),
+		);
+
+		if (!actividadSeleccionada) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "No se pudo obtener la información de la actividad",
+			});
+			return;
+		}
+
+		try {
+			let token = this.context.token;
+			const pagoData = {
+				idPago: 0,
+				idCurso: cursoSeleccionado,
+				idPrecioActividad: actividadSeleccionada.idPrecioActividad,
+				cantidad: parseInt(parseFloat(nuevoPago.cantidad)),
+				estado: nuevoPago.estado,
+			};
+
+			await servicePagos.createPago(pagoData, token);
+			Swal.fire({
+				icon: "success",
+				title: "¡Éxito!",
+				text: "Pago creado correctamente",
+				timer: 2000,
+				showConfirmButton: false,
+			});
+
+			this.cerrarModalCrearPago();
+			await this.recargarPagos();
+		} catch (error) {
+			console.error("Error al crear pago:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "No se pudo crear el pago. Inténtalo de nuevo.",
+			});
 		}
 	};
 
@@ -248,6 +561,51 @@ export class PagosComponent extends Component {
 							)}
 						</select>
 					</div>
+
+					<div className="filter-group">
+						<label className="filter-label">Evento:</label>
+						<select
+							className="filter-select"
+							value={this.state.filtroEvento}
+							onChange={this.handleFiltroEventoChange}
+						>
+							<option value="">Todos los eventos</option>
+							{this.state.eventosLista.map((evento) => (
+								<option key={evento.idEvento} value={evento.idEvento}>
+									Evento: {evento.idEvento} -{" "}
+									{new Date(evento.fechaEvento).toLocaleDateString()}
+								</option>
+							))}
+						</select>
+					</div>
+
+					<div className="filter-group">
+						<label className="filter-label">Actividad:</label>
+						<select
+							className="filter-select"
+							value={this.state.filtroActividad}
+							onChange={this.handleFiltroActividadChange}
+							disabled={!this.state.filtroEvento}
+						>
+							<option value="">
+								{this.state.filtroEvento
+									? "Todas las actividades"
+									: "Selecciona un evento primero"}
+							</option>
+							{this.state.actividadesLista.map((actividad) => (
+								<option
+									key={actividad.idEventoActividad}
+									value={actividad.idEventoActividad}
+								>
+									{actividad.nombreActividad} - {actividad.precioTotal}€
+								</option>
+							))}
+						</select>
+					</div>
+
+					<button className="btn-crear-pago" onClick={this.abrirModalCrearPago}>
+						+ Crear Pago
+					</button>
 				</div>
 
 				<div className="tabs-container">
@@ -329,24 +687,12 @@ export class PagosComponent extends Component {
 														}}
 													>
 														{pago.estado?.toLowerCase() !== "pagado" && (
-															<>
-																<button
-																	className="btn-pagar"
-																	onClick={() =>
-																		this.abrirModalPago(pago, false)
-																	}
-																>
-																	Pagar
-																</button>
-																<button
-																	className="pagos-btn-editar"
-																	onClick={() =>
-																		this.abrirModalPago(pago, true)
-																	}
-																>
-																	Editar
-																</button>
-															</>
+															<button
+																className="pagos-btn-editar"
+																onClick={() => this.abrirModalPago(pago, true)}
+															>
+																Editar
+															</button>
 														)}
 													</div>
 												</td>
@@ -438,6 +784,90 @@ export class PagosComponent extends Component {
 										{this.state.modoEdicion
 											? "Actualizar Pago"
 											: "Confirmar Pago"}
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				)}
+				{this.state.mostrarModalCrearPago && (
+					<div className="modal-overlay" onClick={this.cerrarModalCrearPago}>
+						<div
+							className="modal-content-pago"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<button
+								className="modal-close"
+								onClick={this.cerrarModalCrearPago}
+							>
+								&times;
+							</button>
+							<h2>Crear Nuevo Pago</h2>
+							<div className="pago-info">
+								<p>
+									<strong>Evento:</strong>{" "}
+									{this.state.eventosLista.find(
+										(e) => e.idEvento === parseInt(this.state.filtroEvento),
+									)?.nombre || "-"}
+								</p>
+								<p>
+									<strong>Actividad:</strong>{" "}
+									{this.state.actividadesLista.find(
+										(a) =>
+											a.idEventoActividad ===
+											parseInt(this.state.filtroActividad),
+									)?.nombreActividad || "-"}
+								</p>
+								<p>
+									<strong>Precio Total:</strong>{" "}
+									{this.state.actividadesLista.find(
+										(a) =>
+											a.idEventoActividad ===
+											parseInt(this.state.filtroActividad),
+									)?.precioTotal || 0}
+									€
+								</p>
+							</div>
+							<form onSubmit={this.crearNuevoPago}>
+								<div className="form-group-pago">
+									<label>Cantidad a pagar (€):</label>
+									<input
+										type="number"
+										step="0.01"
+										min="0.01"
+										className="input-cantidad"
+										name="cantidad"
+										value={this.state.nuevoPago.cantidad}
+										onChange={this.handleNuevoPagoChange}
+										placeholder="Ingrese la cantidad"
+										required
+									/>
+								</div>
+
+								<div className="form-group-pago">
+									<label>Estado del pago:</label>
+									<select
+										className="input-cantidad"
+										name="estado"
+										value={this.state.nuevoPago.estado}
+										onChange={this.handleNuevoPagoChange}
+										required
+									>
+										<option value="PENDIENTE">Pendiente</option>
+										<option value="PAGADO">Pagado</option>
+									</select>
+								</div>
+
+								<div className="modal-actions-pago">
+									<button
+										type="button"
+										className="btn-cancel-pago"
+										onClick={this.cerrarModalCrearPago}
+									>
+										Cancelar
+									</button>
+									<button type="submit" className="btn-submit-pago">
+										Crear Pago
 									</button>
 								</div>
 							</form>

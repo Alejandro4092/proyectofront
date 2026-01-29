@@ -70,6 +70,30 @@
     box-shadow: 0 0 0 3px rgba(184, 164, 232, 0.2);
 }
 
+.btn-crear-pago {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #b8a4e8 0%, #9b7ed6 100%);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(184, 164, 232, 0.3);
+}
+
+.btn-crear-pago:hover {
+    background: linear-gradient(135deg, #9b7ed6 0%, #b8a4e8 100%);
+    box-shadow: 0 6px 16px rgba(184, 164, 232, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-crear-pago:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(184, 164, 232, 0.3);
+}
+
 .tabs-container {
     max-width: 1200px;
     margin: 0 auto 20px auto;

@@ -3,7 +3,7 @@ import Global from "../Global"
 
 export default class EventosService {
     getTodosEventos = async () => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos"
             axios.get(request).then(res => {
                 resolve(res.data)
@@ -14,7 +14,7 @@ export default class EventosService {
     }
 
     getEventosCursoEscolar = async (token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos/EventosCursoEscolar"
             axios.get(request, {
                 headers: {
@@ -29,7 +29,7 @@ export default class EventosService {
     }
 
     eliminarEvento = async (idEvento, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos/" + idEvento
             axios.delete(request, {
                 headers: {
@@ -44,7 +44,7 @@ export default class EventosService {
     }
 
     getEvento = async (idEvento, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos/" + idEvento
             axios.get(request, {
                 headers: {
@@ -59,7 +59,7 @@ export default class EventosService {
     }
 
     actualizarEvento = async (evento, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos/update"
             axios.put(request, evento, {
                 headers: {
@@ -74,7 +74,7 @@ export default class EventosService {
     }
 
     crearEvento = async (fecha, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "api/Eventos/create/" + encodeURIComponent(fecha) + "?datofecha=" + encodeURIComponent(fecha)
             axios.post(request, {}, {
                 headers: {
@@ -88,7 +88,7 @@ export default class EventosService {
         })
     }
     eliminarEventoCompleto = async (idEvento, token) => {
-        return new Promise(function(resolve, reject){
+        return new Promise(function (resolve, reject) {
             let request = Global.apiDeportes + "/api/ActividadesEvento/DeleteEventoActividadPanic/" + idEvento
             axios.delete(request, {
                 headers: {
@@ -102,4 +102,3 @@ export default class EventosService {
         })
     }
 }
- 

@@ -30,6 +30,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
+    border-bottom: 2px solid #b8a4e8;
     max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
@@ -43,7 +44,7 @@
     align-items: center;
 }
 
-.btn-crear-resultado {
+.equipos-btn-crear-resultado {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
     padding: 12px 24px;
@@ -56,7 +57,7 @@
     font-size: 1rem;
 }
 
-.btn-crear-resultado:hover {
+.equipos-btn-crear-resultado:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(240, 147, 251, 0.5);
 }
