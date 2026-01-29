@@ -14,7 +14,7 @@
     padding: 20px;
     max-width: 1200px;
     width: 100%;
-    border: 2px solid #e8f0fe;
+    border: 2px solid #9a7fd4;
 }
 
 .gestionar-actividades-header {
@@ -23,7 +23,7 @@
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e8f0fe;
+    border-bottom: 2px solid #9a7fd4;
 }
 
 .gestionar-actividades-header h1 {
@@ -54,7 +54,8 @@
 .ga-btn-volver:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #e8f0fe;
+    color: white;
+    background: linear-gradient(135deg, #7d5fb2 0%, #6d4fa0 100%);
 }
 
 .gestionar-actividades-content {
@@ -68,7 +69,7 @@
     background: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
-    border: 1px solid #e8f0fe;
+    border: 1px solid #9a7fd4;
 }
 
 .asociar-actividad-section h2 {
@@ -91,14 +92,14 @@
 
 .form-group label {
     font-weight: 600;
-    color: #333;
+    color: #2c3e50;
     margin-bottom: 8px;
     font-size: 0.95rem;
 }
 
 .form-control {
     padding: 12px 15px;
-    border: 2px solid #e8f0fe;
+    border: 2px solid #9a7fd4;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -144,7 +145,7 @@
     background: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
-    border: 1px solid #e8f0fe;
+    border: 1px solid #9a7fd4;
     display: flex;
     flex-direction: column;
     max-height: 600px;
@@ -160,7 +161,7 @@
 
 .no-actividades {
     text-align: center;
-    color: #666;
+    color: #757575;
     font-style: italic;
     padding: 30px 0;
 }
@@ -195,7 +196,7 @@
     background: white;
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #e8f0fe;
+    border: 2px solid #9a7fd4;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -221,8 +222,8 @@
 }
 
 .detalle-badge {
-    background: linear-gradient(135deg, #e8f0fe 0%, #c8b7f0 100%);
-    color: #9a7fd4;
+    background: linear-gradient(135deg, #9a7fd4 0%, #7d5fb2 100%);
+    color: white;
     padding: 6px 12px;
     border-radius: 15px;
     font-size: 0.85rem;

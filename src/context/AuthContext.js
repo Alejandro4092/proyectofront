@@ -51,7 +51,7 @@ export class AuthProvider extends Component {
                 // Verificar si es organizador
                 await this.checkOrganizador(usuario.idUsuario);
             } catch (error) {
-                console.error('Error al parsear usuario:', error);
+                // Error handled
                 this.cerrarSesion();
             }
         } else {
@@ -106,7 +106,7 @@ export class AuthProvider extends Component {
             return { success: true, usuario };
 
         } catch (error) {
-            console.error('Error en login:', error);
+            // Error handled
             return { 
                 success: false, 
                 error: 'Usuario o contraseña incorrectos' 
@@ -148,7 +148,7 @@ export class AuthProvider extends Component {
             const esOrganizador = idsOrganizadores.some(id => id === idUsuario);
             this.setState({ esOrganizador });
         } catch (error) {
-            console.error('Error al verificar organizador:', error);
+            // Error handled
             this.setState({ esOrganizador: false });
         }
     }

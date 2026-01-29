@@ -14,7 +14,7 @@
     padding: 40px;
     max-width: 600px;
     width: 100%;
-    border: 2px solid #e8f0fe;
+    border: 2px solid #9a7fd4;
 }
 
 .crear-evento-header {
@@ -23,7 +23,7 @@
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e8f0fe;
+    border-bottom: 2px solid #9a7fd4;
 }
 
 .crear-evento-header h1 {
@@ -86,7 +86,7 @@
 .form-input {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e8f0fe;
+    border: 2px solid #9a7fd4;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -103,7 +103,7 @@
 
 .form-help {
     display: block;
-    color: #666;
+    color: #757575;
     font-size: 0.9rem;
     margin-top: 5px;
     font-style: italic;

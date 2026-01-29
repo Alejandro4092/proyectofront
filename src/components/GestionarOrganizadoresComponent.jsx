@@ -33,7 +33,7 @@ class GestionarOrganizadoresComponent extends Component {
 				loadingUsuarios: false,
 			});
 		} catch (error) {
-			console.error("Error al cargar usuarios:", error);
+			// Error handled
 			this.setState({ loadingUsuarios: false });
 			Swal.fire({
 				title: "Error",
@@ -53,7 +53,7 @@ class GestionarOrganizadoresComponent extends Component {
 				loading: false,
 			});
 		} catch (error) {
-			console.error("Error al cargar organizadores:", error);
+			// Error handled
 			this.setState({ loading: false });
 			Swal.fire({
 				title: "Error",
@@ -102,7 +102,7 @@ class GestionarOrganizadoresComponent extends Component {
 			this.cargarOrganizadores(); // Recargar la lista
 			this.cargarTodosUsuarios(); // Recargar usuarios disponibles
 		} catch (error) {
-			console.error("Error al crear organizador:", error);
+			// Error handled
 			Swal.fire({
 				title: "Error",
 				text:
@@ -146,7 +146,7 @@ class GestionarOrganizadoresComponent extends Component {
 				this.cargarOrganizadores(); // Recargar la lista
 				this.cargarTodosUsuarios(); // Recargar usuarios disponibles
 			} catch (error) {
-				console.error("Error al eliminar organizador:", error);
+				// Error handled
 				Swal.fire({
 					title: "Error",
 					text:

@@ -101,7 +101,7 @@
 }
 
 .perfil-info-item:hover {
-  background: #e9ecef;
+  background: #f0ebe8;
   transform: translateX(5px);
 }
 
@@ -118,7 +118,7 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: #2c3e50;
   word-wrap: break-word;
   text-align: center;
 }
@@ -148,7 +148,7 @@
 }
 
 .perfil-error p {
-  color: #666;
+  color: #757575;
   font-size: 1.1rem;
 }
 
@@ -264,7 +264,7 @@
 }
 
 .actividad-fecha.inscripcion {
-  color: #3b96eb;
+  color: #9a7fd4;
 }
 
 .actividad-fecha.evento {
@@ -284,7 +284,7 @@
   font-weight: 600;
   margin-top: 8px;
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #333;
+  color: #2c3e50;
   box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
 }
 

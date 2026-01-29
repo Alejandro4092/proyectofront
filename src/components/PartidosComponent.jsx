@@ -58,7 +58,7 @@ export class PartidosComponent extends Component {
                 });
             })
             .catch(error => {
-                console.error('Error al obtener eventos para filtro:', error);
+                // Error handled
             });
     }   
 
@@ -81,7 +81,7 @@ export class PartidosComponent extends Component {
                 });
             })
             .catch(error => {
-                console.error('Error al obtener actividades para filtro:', error);
+                // Error handled
                 this.setState({ actividadesFiltroLista: [] });
             });
     }
@@ -107,14 +107,14 @@ export class PartidosComponent extends Component {
                     this.setState({ cargando: false });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    // Error handled
                     this.setState({
                         error: 'Error al cargar los partidos',
                         cargando: false
                     });
                 });
         } catch (error) {
-            console.error('Error al obtener idEventoActividad:', error);
+            // Error handled
             this.setState({ cargando: false });
         }
     }
@@ -127,7 +127,7 @@ export class PartidosComponent extends Component {
                 this.setState({ cargando: false });
             })
             .catch(error => {
-                console.error('Error:', error);
+                // Error handled
                 this.setState({
                     error: 'Error al cargar los partidos',
                     cargando: false
@@ -160,7 +160,7 @@ export class PartidosComponent extends Component {
                     }
                 })
                 .catch(error => {
-                    console.error(`Error al obtener equipo ${idEquipo}:`, error);
+                    // Error handled
                     equiposCargados++;
                     if (equiposCargados === equiposUnicos.size) {
                         this.setState({ equipos: equiposData });
@@ -184,7 +184,7 @@ export class PartidosComponent extends Component {
                 this.setState({ equiposDisponibles: data });
             })
             .catch(error => {
-                console.error('Error al obtener equipos:', error);
+                // Error handled
             });
     }
 
@@ -258,7 +258,7 @@ export class PartidosComponent extends Component {
             }, 1500);
 
         } catch (error) {
-            console.error('Error al crear resultado:', error);
+            // Error handled
             this.setState({
                 mensajeError: error.response?.data?.message || 'Error al crear el resultado del partido',
                 guardandoResultado: false
@@ -391,7 +391,7 @@ export class PartidosComponent extends Component {
                                                         this.setState({ actividadesFiltroLista: data });
                                                     })
                                                     .catch(error => {
-                                                        console.error('Error al obtener actividades:', error);
+                                                        // Error handled
                                                     });
                                             }
                                         }}
@@ -428,7 +428,7 @@ export class PartidosComponent extends Component {
                                                         }
                                                     }));
                                                 } catch (error) {
-                                                    console.error('Error al obtener idEventoActividad:', error);
+                                                    // Error handled
                                                 }
                                             }
                                         }}

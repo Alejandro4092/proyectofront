@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import '../css/PerfilComponent.css'
 import Global from '../Global';
-import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
@@ -41,7 +40,7 @@ export class PerfilComponent extends Component {
         actividadesCapitan: actividadesCapitan
       })
     } catch (error) {
-      console.error('Error al cargar capitanes:', error);
+      // Error handling
     }
   }
 
@@ -57,7 +56,7 @@ export class PerfilComponent extends Component {
         actividades: actividades
       })
     } catch (error) {
-      console.error('Error al cargar actividades del usuario:', error);
+      // Error handling
     }
   }
 

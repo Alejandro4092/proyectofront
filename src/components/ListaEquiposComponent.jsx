@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Global from '../Global.js';
-import axios from 'axios';
 import Equipo from './EquipoComponent.jsx';
 import { NavLink } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -34,42 +33,7 @@ export class ListaEquiposComponent extends Component {
         },
         guardandoResultado: false,
         mensajeExitoResultado: '',
-        mensajeErrorResultado: '',
-        equiposPrueba: [
-            {
-                "idEquipo": 4444,
-                "idEventoActividad": 1,
-                "nombreEquipo": "pruebaPablo",
-                "minimoJugadores": 4,
-                "idColor": 1,
-                "idCurso": 3430
-            },
-            {
-                "idEquipo": 1,
-                "idEventoActividad": 1,
-                "nombreEquipo": "Equipo2",
-                "minimoJugadores": 5,
-                "idColor": 3,
-                "idCurso": 3430
-            },
-            {
-                "idEquipo": 5000,
-                "idEventoActividad": 2,
-                "nombreEquipo": "Equipo3",
-                "minimoJugadores": 4,
-                "idColor": 1,
-                "idCurso": 3430
-            },
-            {
-                "idEquipo": 6000,
-                "idEventoActividad": 3,
-                "nombreEquipo": "pruebaEQUIPO4",
-                "minimoJugadores": 10,
-                "idColor": 2,
-                "idCurso": 3440
-            },
-
-        ]
+        mensajeErrorResultado: ''
     }
 
     componentDidMount = async () => {
@@ -81,7 +45,7 @@ export class ListaEquiposComponent extends Component {
         try {
             return await serviceActividades.getEventoActividad(this.props.idEvento, this.props.idActividad);
         } catch (error) {
-            console.error("Error al obtener el id:", error);
+            // Error handled
             throw error;
         }
     }
@@ -104,7 +68,7 @@ export class ListaEquiposComponent extends Component {
                 eresCapitan: esCapi
             });
         } catch (error) {
-            console.error('Error al verificar capitán:', error);
+            // Error handled
         }
     
 
@@ -157,7 +121,7 @@ export class ListaEquiposComponent extends Component {
                         this.loadEquipos();
                     })
                     .catch(error => {
-                        console.error("Error al eliminar equipo:", error);
+                        // Error handled
                         Swal.fire(
                             'Error',
                             error.response?.status === 404
@@ -251,7 +215,7 @@ export class ListaEquiposComponent extends Component {
             }, 1500);
 
         } catch (error) {
-            console.error('Error al guardar resultado:', error);
+            // Error handled
             this.setState({ 
                 mensajeErrorResultado: 'Error al guardar el resultado',
                 guardandoResultado: false

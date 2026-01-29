@@ -121,7 +121,7 @@
 }
 
 .cardEquipo h1 {
-    color: #e8f0fe;
+    color: white;
     font-size: 1.8rem;
     margin-bottom: 15px;
     font-weight: bold;
@@ -194,7 +194,7 @@
 }
 
 .equipos-modal-content h2 {
-    color: #e8f0fe;
+    color: white;
     margin-bottom: 25px;
     font-size: 1.8rem;
     text-align: center;

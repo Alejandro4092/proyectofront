@@ -66,13 +66,13 @@
 }
 
 .custom-navbar .nav-link:hover {
-    background-color: #e8f0fe;
+    background-color: #ede9fe;
     color: #9a7fd4 !important;
     transform: translateY(-2px);
 }
 
 .custom-navbar .nav-link.active {
-    background-color: #e8f0fe;
+    background-color: #ede9fe;
     color: #9a7fd4 !important;
     font-weight: 600;
 }
@@ -124,7 +124,7 @@
 }
 
 .user-profile:hover {
-    background-color: #e8f0fe;
+    background-color: #ede9fe;
     border-color: #9a7fd4;
     transform: translateY(-2px);
 }

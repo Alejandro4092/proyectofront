@@ -63,12 +63,12 @@
 .materiales-filtros .mat-form-group label {
     margin-bottom: 8px;
     font-size: 0.9rem;
-    color: #555;
+    color: #757575;
 }
 
 .materiales-filtros .mat-form-group select {
     background-color: #f8f9fa;
-    border: 2px solid #ddd;
+    border: 2px solid #e0e0e0;
     transition: all 0.3s ease;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .material-card {
-    background: white;
+    background: #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -159,19 +159,19 @@
 
 .material-info .label {
     font-weight: 600;
-    color: #555;
+    color: #757575;
     font-size: 0.9rem;
 }
 
 .material-info .valor {
-    color: #333;
+    color: #2c3e50;
     font-size: 0.9rem;
 }
 
 .material-footer {
     padding: 15px 20px;
     background: #f9f9f9;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #9a7fd4;
 }
 
 .btn-aportar {
@@ -198,7 +198,7 @@
     text-align: center;
     padding: 40px 20px;
     font-size: 1.1rem;
-    color: #666;
+    color: #757575;
 }
 
 .error {
@@ -305,7 +305,7 @@
 .mat-form-group select {
     width: 100%;
     padding: 13px 16px;
-    border: 2px solid #999;
+    border: 2px solid #9a7fd4;
     border-radius: 6px;
     font-size: 0.97rem;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
@@ -343,15 +343,15 @@
     padding: 12px 14px;
     background: white;
     border-radius: 6px;
-    color: #333;
+    color: #2c3e50;
     font-size: 0.95rem;
-    border: 2px solid #999;
+    border: 2px solid #9a7fd4;
     word-break: break-word;
 }
 
 .confirmation-message {
     background: white;
-    border: 2px solid #999;
+    border: 2px solid #9a7fd4;
     border-radius: 6px;
     padding: 15px;
     margin-top: 15px;
@@ -360,7 +360,7 @@
 
 .confirmation-message p {
     margin: 0;
-    color: #333;
+    color: #2c3e50;
     font-weight: 500;
     font-size: 0.95rem;
 }
@@ -390,7 +390,7 @@
 
 .mat-btn-cancelar {
     background: #e8e8e8;
-    color: #333;
+    color: #2c3e50;
 }
 
 .mat-btn-cancelar:hover {

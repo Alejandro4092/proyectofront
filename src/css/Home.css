@@ -34,11 +34,11 @@
 
 /* Calendario */
 .calendar {
-    background: #f8f9fa;
+    background: #e5e7eb;
     border-radius: 15px;
     padding: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    border: 1px solid #9a7fd4;
     height: fit-content;
     position: sticky;
     top: 0;
@@ -101,7 +101,7 @@
     align-items: center;
     justify-content: center;
     background: #ffffff;
-    border: 1px solid #e9ecef;
+    border: 1px solid #9a7fd4;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
@@ -160,8 +160,8 @@
 
 /* Eventos del día */
 .eventos-del-dia {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: #e5e7eb;
+    border: 1px solid #9a7fd4;
     border-radius: 15px;
     padding: 16px;
     height: fit-content;
@@ -184,7 +184,7 @@
 
 .evento-item {
     background: #ffffff;
-    border: 1px solid #dee2e6;
+    border: 1px solid #9a7fd4;
     border-radius: 10px;
     padding: 12px;
     display: flex;

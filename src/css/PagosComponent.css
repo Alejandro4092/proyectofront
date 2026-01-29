@@ -82,7 +82,7 @@
     padding: 12px 24px;
     border: none;
     background: transparent;
-    color: #b0b0b0;
+    color: #9a7fd4;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
@@ -93,11 +93,11 @@
 }
 
 .tab-button:hover {
-    color: #ffffff;
+    color: #7d5fb2;
 }
 
 .tab-button.active {
-    color: #ffffff;
+    color: #9a7fd4;
     border-bottom-color: #9a7fd4;
 }
 
@@ -107,7 +107,7 @@
 }
 
 .pagos-table-container {
-    background: #ffffff;
+    background: #e5e7eb;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -148,7 +148,7 @@
 
 .pagos-table td {
     padding: 14px 16px;
-    color: #374151;
+    color: #757575;
     font-size: 0.95rem;
 }
 
@@ -200,7 +200,7 @@
 .empty-state-text {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #374151;
+    color: #757575;
     margin-bottom: 8px;
 }
 
@@ -289,7 +289,7 @@
 }
 
 .modal-close:hover {
-    color: #374151;
+    color: #757575;
 }
 
 .modal-content-pago h2 {
@@ -308,7 +308,7 @@
 
 .pago-info p {
     margin: 8px 0;
-    color: #374151;
+    color: #757575;
     font-size: 0.95rem;
 }
 
@@ -324,7 +324,7 @@
 .form-group-pago label {
     display: block;
     margin-bottom: 8px;
-    color: #374151;
+    color: #757575;
     font-weight: 600;
     font-size: 0.95rem;
 }
@@ -352,7 +352,7 @@
 
 .btn-cancel-pago {
     background: #e5e7eb;
-    color: #374151;
+    color: #757575;
     border: none;
     border-radius: 8px;
     padding: 12px 24px;

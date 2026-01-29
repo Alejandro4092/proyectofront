@@ -1,7 +1,7 @@
 .eventos-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #ffffff;
+    background: #f5f7fa;
 }
 
 .eventos-header {
@@ -9,14 +9,17 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #9a7fd4;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #9a7fd4;
 }
 
 .eventos-header h1 {
     font-size: 3rem;
     color: transparent;
-    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
+    background: linear-gradient(135deg, #7c3aed 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -33,26 +36,26 @@
 }
 
 .btn-toggle-eventos {
-    background: #6c757d;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
     color: white;
     padding: 12px 30px;
     border-radius: 25px;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2);
     cursor: pointer;
     border: none;
 }
 
 .btn-toggle-eventos:hover {
-    background: #5a6268;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(100, 116, 139, 0.3);
 }
 
 .eventos-btn-crear {
-    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #7c3aed 100%);
     color: white;
     padding: 12px 30px;
     border-radius: 25px;
@@ -60,15 +63,16 @@
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(154, 127, 212, 0.3);
     cursor: pointer;
     border: none;
     display: inline-block;
 }
 
 .eventos-btn-crear:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, #7c3aed 0%, #6b21a8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(154, 127, 212, 0.4);
     color: white;
 }
 
@@ -79,18 +83,20 @@
 }
 
 .evento-card {
-    background: white;
+    background: #fafbfc;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     transition: all 0.3s ease;
-    border: 2px solid #e9ecef;
+    border: 1px solid #e5e7eb;
+    border-top: 3px solid #9a7fd4;
 }
 
 .evento-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-    border-color: #9a7fd4;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(154, 127, 212, 0.15);
+    border-top-color: #7c3aed;
+    background: #ffffff;
 }
 
 .evento-card-header {
@@ -109,15 +115,17 @@
 }
 
 .evento-id {
-    background-color: #e9ecef;
+    background-color: #9a7fd4;
     padding: 4px 12px;
     border-radius: 15px;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
+    color: white;
 }
 
 .evento-card-body {
     padding: 25px;
+    background-color: #e5e7eb;
 }
 
 .evento-info {
@@ -129,7 +137,7 @@
 }
 
 .evento-label {
-    color: #666;
+    color: #757575;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -138,7 +146,7 @@
 }
 
 .evento-valor {
-    color: #9a7fd4;
+    color: #2c3e50;
     font-size: 1.1rem;
     font-weight: 500;
     margin: 0;
@@ -148,8 +156,8 @@
     display: flex;
     gap: 10px;
     padding: 15px 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #e9ecef;
+    background-color: #f1f3f5;
+    border-top: 1px solid #e5e7eb;
 }
 
 .eventos-btn-editar,
@@ -236,7 +244,7 @@
     grid-column: 1 / -1;
     text-align: center;
     padding: 60px 20px;
-    color: #ffffff;
+    color: #757575;
 }
 
 .no-eventos p {
@@ -250,7 +258,7 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    color: #ffffff;
+    color: #757575;
 }
 
 .loading-container p {
@@ -315,13 +323,13 @@
 
 .swal2-popup {
     background: white !important;
-    color: #333 !important;
+    color: #2c3e50 !important;
 }
 
 .swal2-title {
-    color: #333 !important;
+    color: #2c3e50 !important;
 }
 
 .swal2-html-container {
-    color: #666 !important;
+    color: #757575 !important;
 }

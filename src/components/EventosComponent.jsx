@@ -67,7 +67,7 @@ export class EventosComponent extends Component {
 				}
 			})
 			.catch((error) => {
-				console.error("Error al cargar eventos:", error);
+				// Error handled
 				this.setState({ loading: false });
 			});
 	};
