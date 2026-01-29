@@ -13,10 +13,14 @@
 
 .pagos-title {
     margin: 10px 0 6px 0;
-    font-size: 2.5rem;
-    color: #ffffff;
-    letter-spacing: -0.4px;
-    font-weight: bold;
+    font-size: 3rem;
+    color: transparent;
+    background: linear-gradient(135deg, #b8a4e8 0%, #e0d4f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    font-weight: 800;
     text-align: center;
 }
 

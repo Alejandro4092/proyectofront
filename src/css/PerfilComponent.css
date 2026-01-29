@@ -39,8 +39,10 @@
 
 .perfil-header h1 {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .perfil-content {

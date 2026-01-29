@@ -6,10 +6,15 @@
 
 .partidos-container h1 {
     text-align: center;
-    color: #333;
+    color: transparent;
+    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 30px;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
 
 /* Filtros */
