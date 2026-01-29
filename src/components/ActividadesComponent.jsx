@@ -28,7 +28,7 @@ export class ActividadesComponent extends Component {
 		precios: [],
 		mostrarModalPrecio: false,
 		precioActual: 0,
-		actividadPrecio: null,
+		actividadPrecio: null
 	};
 
 	componentDidMount = async () => {
@@ -369,19 +369,22 @@ export class ActividadesComponent extends Component {
 		await this.inscribirse();
 		this.cerrarModal();
 	};
+
 	render() {
 		return (
 			<div className="actividades-wrapper">
 				<div className="actividades-head">
 					<h1 className="actividades-title">Actividades</h1>
-					{this.context.esOrganizador && (
-						<Link
-							to={`/gestionar-actividades/${this.props.idEvento}`}
-							className="btn-gestionar-actividades"
-						>
-							Gestionar Actividades
-						</Link>
-					)}
+					<div className="actividades-actions">
+						{this.context.esOrganizador && (
+							<Link
+								to={`/gestionar-actividades/${this.props.idEvento}`}
+								className="btn-gestionar-actividades"
+							>
+								Gestionar Actividades
+							</Link>
+						)}
+					</div>
 				</div>
 				<div className="actividades-grid">
 					{this.state.actividades.map((actividad) => (

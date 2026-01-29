@@ -515,3 +515,117 @@ textarea.form-input {
     font-size: 16px;
     line-height: 28px;
 }
+
+/* Estilos para botón crear resultado */
+.btn-crear-resultado {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    display: inline-block;
+}
+
+.btn-crear-resultado:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+}
+
+.actividad-resultado-admin {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+}
+
+/* Modal de resultado más ancho */
+.actividades-modal-resultado {
+    max-width: 600px !important;
+}
+
+/* Form row para dos columnas */
+.actividades-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.actividades-form-row .actividades-form-group {
+    margin-bottom: 0;
+}
+
+.actividades-form-group select,
+.actividades-form-group input[type="number"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.actividades-form-group select:focus,
+.actividades-form-group input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+/* Mensajes de éxito/error */
+.mensaje-exito {
+    background: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    animation: slideDown 0.3s ease;
+}
+
+.mensaje-error {
+    background: #f44336;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .actividades-form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .actividades-modal-resultado {
+        max-width: 90% !important;
+    }
+
+    .btn-crear-resultado {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}

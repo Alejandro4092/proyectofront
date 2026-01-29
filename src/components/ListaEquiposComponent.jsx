@@ -9,10 +9,12 @@ import EquiposService from '../services/EquiposService.js';
 import AuthContext from '../context/AuthContext.js';
 import CapitanService from '../services/CapitanService.js';
 import ActividadesService from '../services/ActividadesService.js';
+import PartidosService from '../services/PartidosService.js';
 
 const serviceEquipos = new EquiposService();
 const serviceCapitan = new CapitanService();
 const serviceActividades = new ActividadesService();
+const servicePartidos = new PartidosService();
 export class ListaEquiposComponent extends Component {
     url = Global.apiDeportes
     static contextType = AuthContext;
@@ -22,6 +24,17 @@ export class ListaEquiposComponent extends Component {
         equipos: [],
         capitan: {},
         eresCapitan: false,
+        // Formulario de resultados
+        mostrarFormularioResultado: false,
+        formularioResultado: {
+            idEquipoLocal: '',
+            idEquipoVisitante: '',
+            puntosLocal: 0,
+            puntosVisitante: 0
+        },
+        guardandoResultado: false,
+        mensajeExitoResultado: '',
+        mensajeErrorResultado: '',
         equiposPrueba: [
             {
                 "idEquipo": 4444,
@@ -157,6 +170,96 @@ export class ListaEquiposComponent extends Component {
         });
     }
 
+    abrirFormularioResultado = () => {
+        this.setState({
+            mostrarFormularioResultado: true,
+            formularioResultado: {
+                idEquipoLocal: '',
+                idEquipoVisitante: '',
+                puntosLocal: 0,
+                puntosVisitante: 0
+            },
+            mensajeExitoResultado: '',
+            mensajeErrorResultado: ''
+        });
+    }
+
+    cerrarFormularioResultado = () => {
+        this.setState({
+            mostrarFormularioResultado: false,
+            formularioResultado: {
+                idEquipoLocal: '',
+                idEquipoVisitante: '',
+                puntosLocal: 0,
+                puntosVisitante: 0
+            },
+            mensajeExitoResultado: '',
+            mensajeErrorResultado: ''
+        });
+    }
+
+    handleInputResultadoChange = (e) => {
+        const { name, value } = e.target;
+        this.setState({
+            formularioResultado: {
+                ...this.state.formularioResultado,
+                [name]: value
+            }
+        });
+    }
+
+    guardarResultado = async (e) => {
+        e.preventDefault();
+
+        const { idEquipoLocal, idEquipoVisitante, puntosLocal, puntosVisitante } = this.state.formularioResultado;
+
+        // Validaciones
+        if (!idEquipoLocal || !idEquipoVisitante) {
+            this.setState({ mensajeErrorResultado: 'Debes seleccionar ambos equipos' });
+            setTimeout(() => this.setState({ mensajeErrorResultado: '' }), 1500);
+            return;
+        }
+
+        if (idEquipoLocal === idEquipoVisitante) {
+            this.setState({ mensajeErrorResultado: 'Los equipos deben ser diferentes' });
+            setTimeout(() => this.setState({ mensajeErrorResultado: '' }), 1500);
+            return;
+        }
+
+        try {
+            this.setState({ guardandoResultado: true });
+
+            const idEventoActividad = await this.getEventoActividad();
+
+            const partidoResultado = {
+                idEventoActividad: idEventoActividad,
+                idEquipoLocal: parseInt(idEquipoLocal),
+                idEquipoVisitante: parseInt(idEquipoVisitante),
+                puntosLocal: parseInt(puntosLocal),
+                puntosVisitante: parseInt(puntosVisitante)
+            };
+
+            await servicePartidos.createPartidoResultado(partidoResultado, this.context.token);
+
+            this.setState({ 
+                mensajeExitoResultado: 'Resultado guardado correctamente',
+                guardandoResultado: false
+            });
+
+            setTimeout(() => {
+                this.cerrarFormularioResultado();
+            }, 1500);
+
+        } catch (error) {
+            console.error('Error al guardar resultado:', error);
+            this.setState({ 
+                mensajeErrorResultado: 'Error al guardar el resultado',
+                guardandoResultado: false
+            });
+            setTimeout(() => this.setState({ mensajeErrorResultado: '' }), 1500);
+        }
+    }
+
 
 render() {
     return (
@@ -166,15 +269,25 @@ render() {
                 <h1 className='capitan-info'>
                     Capitán: <span className='capitan-nombre'>{this.state.capitan.usuario}</span>
                 </h1>
-                {
-                    this.state.eresCapitan && 
-                    <NavLink
-                        to={`/crear-equipo/${this.props.idEvento}/${this.props.idActividad}`}
-                        className='btn-crear-equipo'
-                    >
-                        + Crear Equipo
-                    </NavLink>
-                }
+                <div className='equipos-actions'>
+                    {
+                        this.state.eresCapitan && 
+                        <>
+                            <button
+                                className='btn-crear-resultado'
+                                onClick={this.abrirFormularioResultado}
+                            >
+                                ⚽ Crear Resultado
+                            </button>
+                            <NavLink
+                                to={`/crear-equipo/${this.props.idEvento}/${this.props.idActividad}`}
+                                className='btn-crear-equipo'
+                            >
+                                + Crear Equipo
+                            </NavLink>
+                        </>
+                    }
+                </div>
             </div>
             <div className='equipos-grid'>
                 {
@@ -204,6 +317,115 @@ render() {
                     })
                 }
             </div>
+
+            {/* Modal formulario de resultados */}
+            {this.state.mostrarFormularioResultado && (
+                <div className="equipos-modal-overlay" onClick={this.cerrarFormularioResultado}>
+                    <div className="equipos-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="equipos-modal-close" onClick={this.cerrarFormularioResultado}>
+                            &times;
+                        </button>
+                        <h2>Crear Resultado de Partido</h2>
+
+                        {this.state.mensajeExitoResultado && (
+                            <div className="mensaje-exito">{this.state.mensajeExitoResultado}</div>
+                        )}
+
+                        {this.state.mensajeErrorResultado && (
+                            <div className="mensaje-error">{this.state.mensajeErrorResultado}</div>
+                        )}
+
+                        <form onSubmit={this.guardarResultado}>
+                            <div className="equipos-form-row">
+                                <div className="equipos-form-group">
+                                    <label htmlFor="equipoLocal">Equipo Local *</label>
+                                    <select
+                                        id="equipoLocal"
+                                        name="idEquipoLocal"
+                                        value={this.state.formularioResultado.idEquipoLocal}
+                                        onChange={this.handleInputResultadoChange}
+                                        required
+                                    >
+                                        <option value="">Selecciona equipo local</option>
+                                        {this.state.equipos
+                                            .filter(equipo => equipo.idEquipo !== parseInt(this.state.formularioResultado.idEquipoVisitante))
+                                            .map((equipo) => (
+                                                <option key={equipo.idEquipo} value={equipo.idEquipo}>
+                                                    {equipo.nombreEquipo}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <div className="equipos-form-group">
+                                    <label htmlFor="puntosLocal">Puntos Local *</label>
+                                    <input
+                                        type="number"
+                                        id="puntosLocal"
+                                        name="puntosLocal"
+                                        value={this.state.formularioResultado.puntosLocal}
+                                        onChange={this.handleInputResultadoChange}
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="equipos-form-row">
+                                <div className="equipos-form-group">
+                                    <label htmlFor="equipoVisitante">Equipo Visitante *</label>
+                                    <select
+                                        id="equipoVisitante"
+                                        name="idEquipoVisitante"
+                                        value={this.state.formularioResultado.idEquipoVisitante}
+                                        onChange={this.handleInputResultadoChange}
+                                        required
+                                    >
+                                        <option value="">Selecciona equipo visitante</option>
+                                        {this.state.equipos
+                                            .filter(equipo => equipo.idEquipo !== parseInt(this.state.formularioResultado.idEquipoLocal))
+                                            .map((equipo) => (
+                                                <option key={equipo.idEquipo} value={equipo.idEquipo}>
+                                                    {equipo.nombreEquipo}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <div className="equipos-form-group">
+                                    <label htmlFor="puntosVisitante">Puntos Visitante *</label>
+                                    <input
+                                        type="number"
+                                        id="puntosVisitante"
+                                        name="puntosVisitante"
+                                        value={this.state.formularioResultado.puntosVisitante}
+                                        onChange={this.handleInputResultadoChange}
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="equipos-modal-actions">
+                                <button
+                                    type="button"
+                                    className="equipos-btn-cancel"
+                                    onClick={this.cerrarFormularioResultado}
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="equipos-btn-submit"
+                                    disabled={this.state.guardandoResultado}
+                                >
+                                    {this.state.guardandoResultado ? 'Guardando...' : 'Guardar Resultado'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Global from '../Global';
 import '../css/PartidosComponent.css';
 import { NavLink } from 'react-router-dom';
@@ -27,7 +26,20 @@ export class PartidosComponent extends Component {
             filtroEvento: '',
             filtroActividad: '',
             eventosFiltroLista: [],
-            actividadesFiltroLista: []
+            actividadesFiltroLista: [],
+            // Formulario de creación
+            mostrarFormulario: false,
+            formulario: {
+                idEventoActividad: '',
+                idEquipoLocal: '',
+                idEquipoVisitante: '',
+                puntosLocal: 0,
+                puntosVisitante: 0
+            },
+            equiposDisponibles: [],
+            guardandoResultado: false,
+            mensajeExito: '',
+            mensajeError: ''
         };
         this.url = Global.apiDeportes;
     }
@@ -35,6 +47,7 @@ export class PartidosComponent extends Component {
     componentDidMount() {
         this.obtenerPartidos();
         this.obtenerEventosFiltro();
+        this.obtenerTodosLosEquipos();
     }
 
     obtenerEventosFiltro = () => {
@@ -165,6 +178,94 @@ export class PartidosComponent extends Component {
         return 'empate';
     }
 
+    obtenerTodosLosEquipos = () => {
+        serviceEquipos.getEquipos()
+            .then(data => {
+                this.setState({ equiposDisponibles: data });
+            })
+            .catch(error => {
+                console.error('Error al obtener equipos:', error);
+            });
+    }
+
+    toggleFormulario = () => {
+        this.setState(prevState => ({
+            mostrarFormulario: !prevState.mostrarFormulario,
+            mensajeExito: '',
+            mensajeError: ''
+        }));
+    }
+
+    handleInputChange = (e) => {
+        const { name, value } = e.target;
+        this.setState(prevState => ({
+            formulario: {
+                ...prevState.formulario,
+                [name]: name.includes('puntos') ? parseInt(value) || 0 : value
+            }
+        }));
+    }
+
+    handleSubmitResultado = async (e) => {
+        e.preventDefault();
+        
+        const { formulario } = this.state;
+        
+        // Validaciones
+        if (!formulario.idEventoActividad || !formulario.idEquipoLocal || !formulario.idEquipoVisitante) {
+            this.setState({ mensajeError: 'Por favor completa todos los campos requeridos' });
+            return;
+        }
+
+        if (formulario.idEquipoLocal === formulario.idEquipoVisitante) {
+            this.setState({ mensajeError: 'El equipo local y visitante deben ser diferentes' });
+            return;
+        }
+
+        this.setState({ guardandoResultado: true, mensajeError: '' });
+
+        try {
+            const nuevoResultado = {
+                idPartidoResultado: 0,
+                idEventoActividad: parseInt(formulario.idEventoActividad),
+                idEquipoLocal: parseInt(formulario.idEquipoLocal),
+                idEquipoVisitante: parseInt(formulario.idEquipoVisitante),
+                puntosLocal: parseInt(formulario.puntosLocal),
+                puntosVisitante: parseInt(formulario.puntosVisitante)
+            };
+
+            await servicePartidos.createPartidoResultado(nuevoResultado, this.context.token);
+            
+            this.setState({
+                mensajeExito: '¡Resultado creado exitosamente!',
+                guardandoResultado: false,
+                formulario: {
+                    idEventoActividad: '',
+                    idEquipoLocal: '',
+                    idEquipoVisitante: '',
+                    puntosLocal: 0,
+                    puntosVisitante: 0
+                }
+            });
+
+            // Recargar partidos después de 1.5 segundos
+            setTimeout(() => {
+                this.obtenerPartidos();
+                this.setState({ 
+                    mostrarFormulario: false,
+                    mensajeExito: '' 
+                });
+            }, 1500);
+
+        } catch (error) {
+            console.error('Error al crear resultado:', error);
+            this.setState({
+                mensajeError: error.response?.data?.message || 'Error al crear el resultado del partido',
+                guardandoResultado: false
+            });
+        }
+    }
+
     render() {
         const { partidos, equipos, cargando, error } = this.state;
 
@@ -242,6 +343,189 @@ export class PartidosComponent extends Component {
         return (
             <div className="partidos-container">
                 <h1>Resultados de Partidos</h1>
+                
+                {/* Botón para mostrar/ocultar formulario */}
+                {this.context.user && (this.context.user.role === 'CAPITAN' || this.context.user.role === 'ADMIN') && (
+                    <div className="acciones-partidos">
+                        <button 
+                            className="btn-crear-resultado"
+                            onClick={this.toggleFormulario}
+                        >
+                            {this.state.mostrarFormulario ? 'Ocultar Formulario' : '+ Crear Nuevo Resultado'}
+                        </button>
+                    </div>
+                )}
+
+                {/* Formulario de creación */}
+                {this.state.mostrarFormulario && (
+                    <div className="formulario-resultado">
+                        <h2>Crear Resultado de Partido</h2>
+                        
+                        {this.state.mensajeExito && (
+                            <div className="mensaje-exito">{this.state.mensajeExito}</div>
+                        )}
+                        
+                        {this.state.mensajeError && (
+                            <div className="mensaje-error">{this.state.mensajeError}</div>
+                        )}
+
+                        <form onSubmit={this.handleSubmitResultado}>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Evento *</label>
+                                    <select
+                                        name="filtroEventoForm"
+                                        value={this.state.formulario.filtroEventoForm || ''}
+                                        onChange={(e) => {
+                                            const idEvento = e.target.value;
+                                            this.setState(prevState => ({
+                                                formulario: {
+                                                    ...prevState.formulario,
+                                                    filtroEventoForm: idEvento,
+                                                    idEventoActividad: ''
+                                                }
+                                            }));
+                                            if (idEvento) {
+                                                serviceActividades.getActividadesEvento(idEvento)
+                                                    .then(data => {
+                                                        this.setState({ actividadesFiltroLista: data });
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Error al obtener actividades:', error);
+                                                    });
+                                            }
+                                        }}
+                                        required
+                                    >
+                                        <option value="">Selecciona un evento</option>
+                                        {this.state.eventosFiltroLista.map((evento) => (
+                                            <option key={evento.idEvento} value={evento.idEvento}>
+                                                Evento {evento.idEvento} - {new Date(evento.fechaEvento).toLocaleDateString('es-ES')}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Actividad *</label>
+                                    <select
+                                        name="idEventoActividad"
+                                        value={this.state.formulario.idEventoActividad}
+                                        onChange={async (e) => {
+                                            const idActividad = e.target.value;
+                                            const idEvento = this.state.formulario.filtroEventoForm;
+                                            
+                                            if (idEvento && idActividad) {
+                                                try {
+                                                    const idEventoActividad = await serviceActividades.getEventoActividad(
+                                                        parseInt(idEvento),
+                                                        parseInt(idActividad)
+                                                    );
+                                                    this.setState(prevState => ({
+                                                        formulario: {
+                                                            ...prevState.formulario,
+                                                            idEventoActividad: idEventoActividad
+                                                        }
+                                                    }));
+                                                } catch (error) {
+                                                    console.error('Error al obtener idEventoActividad:', error);
+                                                }
+                                            }
+                                        }}
+                                        required
+                                        disabled={!this.state.formulario.filtroEventoForm}
+                                    >
+                                        <option value="">Selecciona una actividad</option>
+                                        {this.state.actividadesFiltroLista.map((actividad) => (
+                                            <option key={actividad.idActividad} value={actividad.idActividad}>
+                                                {actividad.nombreActividad}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Equipo Local *</label>
+                                    <select
+                                        name="idEquipoLocal"
+                                        value={this.state.formulario.idEquipoLocal}
+                                        onChange={this.handleInputChange}
+                                        required
+                                    >
+                                        <option value="">Selecciona equipo local</option>
+                                        {this.state.equiposDisponibles.map((equipo) => (
+                                            <option key={equipo.idEquipo} value={equipo.idEquipo}>
+                                                {equipo.nombreEquipo}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Puntos Local *</label>
+                                    <input
+                                        type="number"
+                                        name="puntosLocal"
+                                        value={this.state.formulario.puntosLocal}
+                                        onChange={this.handleInputChange}
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Equipo Visitante *</label>
+                                    <select
+                                        name="idEquipoVisitante"
+                                        value={this.state.formulario.idEquipoVisitante}
+                                        onChange={this.handleInputChange}
+                                        required
+                                    >
+                                        <option value="">Selecciona equipo visitante</option>
+                                        {this.state.equiposDisponibles.map((equipo) => (
+                                            <option key={equipo.idEquipo} value={equipo.idEquipo}>
+                                                {equipo.nombreEquipo}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Puntos Visitante *</label>
+                                    <input
+                                        type="number"
+                                        name="puntosVisitante"
+                                        value={this.state.formulario.puntosVisitante}
+                                        onChange={this.handleInputChange}
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-actions">
+                                <button 
+                                    type="submit" 
+                                    className="btn-guardar"
+                                    disabled={this.state.guardandoResultado}
+                                >
+                                    {this.state.guardandoResultado ? 'Guardando...' : 'Guardar Resultado'}
+                                </button>
+                                <button 
+                                    type="button" 
+                                    className="btn-cancelar"
+                                    onClick={this.toggleFormulario}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
                 
                 {/* Filtros */}
                 <div className="partidos-filtros">

@@ -2,6 +2,17 @@ import axios from "axios"
 import Global from "../Global"
 
 export default class EquiposService {
+    getEquipos = async () => {
+        return new Promise(function(resolve, reject){
+            let request = Global.apiDeportes + "api/Equipos"
+            axios.get(request).then(res => {
+                resolve(res.data)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
     getEquiposActividad = async (idActividad, idEvento) => {
         return new Promise(function(resolve){
             let request = Global.apiDeportes + "api/Equipos/EquiposActividadEvento/" + idActividad + "/" + idEvento
