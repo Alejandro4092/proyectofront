@@ -142,7 +142,7 @@ export class ActividadesComponent extends Component {
 	esEventoPasado = (fechaEvento) => {
 		const fechaActual = new Date();
 		const fecha = new Date(fechaEvento);
-		return fecha >= fechaActual;
+		return fecha > fechaActual;
 	};
 
 	loadPrecios = async () => {
@@ -414,16 +414,14 @@ export class ActividadesComponent extends Component {
 						</h1>
 					)}
 					<div className="actividades-actions">
-						{this.context.esOrganizador &&
-							this.state.evento &&
-							this.esEventoPasado(this.state.evento.fechaEvento) && (
-								<Link
-									to={`/gestionar-actividades/${this.props.idEvento}`}
-									className="btn-gestionar-actividades"
-								>
-									Gestionar Actividades
-								</Link>
-							)}
+						{this.context.esOrganizador && (
+							<Link
+								to={`/gestionar-actividades/${this.props.idEvento}`}
+								className="btn-gestionar-actividades"
+							>
+								Gestionar Actividades
+							</Link>
+						)}
 					</div>
 				</div>
 				<div className="actividades-grid">
@@ -437,13 +435,13 @@ export class ActividadesComponent extends Component {
 								{this.getPrecioActividad(actividad.idEventoActividad) && (
 									<div className="actividad-precio-badge">
 										<span className="chip chip-precio">
-											Precio Total:{" "}
+											Precio:{" "}
 											{this.getPrecioActividad(actividad.idEventoActividad)}€
 										</span>
 									</div>
 								)}
 								{this.context.esOrganizador &&
-									this.esEventoPasado(actividad.fechaEvento) && (
+									!this.esEventoPasado(actividad.fechaEvento) && (
 										<div className="actividad-precio-admin">
 											<button
 												className="btn-precio"
@@ -472,8 +470,7 @@ export class ActividadesComponent extends Component {
 									{this.estaInscrito(actividad.idEventoActividad) && (
 										<span className="chip chip-inscrito">✓ Inscrito</span>
 									)}
-									{this.estaInscrito(actividad.idEventoActividad) &&
-									this.esEventoPasado(actividad.fechaEvento) ? (
+									{this.estaInscrito(actividad.idEventoActividad) ? (
 										<button
 											className="btn-desinscribirse"
 											onClick={(e) => {
@@ -485,7 +482,7 @@ export class ActividadesComponent extends Component {
 										</button>
 									) : (
 										!this.estaInscritoEnEvento() &&
-										this.esEventoPasado(actividad.fechaEvento) && (
+										!this.esEventoPasado(actividad.fechaEvento) && (
 											<button
 												className="btn-inscribirse"
 												onClick={(e) => {

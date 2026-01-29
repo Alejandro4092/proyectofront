@@ -3,7 +3,7 @@ import Global from "../Global"
 
 export default class InscripcionesService {
     inscribirse = async (idEventoActividad, quiereSerCapitan, token) => {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/UsuariosDeportes/InscribirmeEvento/" + idEventoActividad + "/" + quiereSerCapitan
             axios.post(request, {}, {
                 headers: {
@@ -18,7 +18,7 @@ export default class InscripcionesService {
     }
 
     obtenerInscripciones = async () => {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Inscripciones"
             axios.get(request).then(res => {
                 resolve(res.data)
@@ -29,7 +29,7 @@ export default class InscripcionesService {
     }
 
     desinscribirse = async (idInscripcion, token) => {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Inscripciones/" + idInscripcion
             axios.delete(request, {
                 headers: {
@@ -44,29 +44,8 @@ export default class InscripcionesService {
     }
 
     getInscripcionesUsuario = async (idUsuario) => {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject){
             let request = Global.apiDeportes + "api/Inscripciones/FindInscripcionesUser/" + idUsuario
-            axios.get(request).then(res => {
-                resolve(res.data)
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    }
-
-    getInscripcionesQuierenSerCapitan = async (idEvento) => {
-        return new Promise(function (resolve, reject) {
-            let request = Global.apiDeportes + "api/Inscripciones/InscripcionesUsuariosQuierenSerCapitan/" + idEvento
-            axios.get(request).then(res => {
-                resolve(res.data)
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    }
-    getInscripcionesQuierenSerCapitanPorActividad = async (idEvento, idActividad) => {
-        return new Promise(function (resolve, reject) {
-            let request = Global.apiDeportes + "api/Inscripciones/InscripcionesUsuariosEventoCapitanActividad/" + idEvento + "?idactividad=" + idActividad
             axios.get(request).then(res => {
                 resolve(res.data)
             }).catch(error => {
