@@ -139,7 +139,7 @@
 .equipo {
     flex: 0 0 auto;
     width: 130px;
-    min-height: 120px;
+    height: 150px;
     text-align: center;
     padding: 15px 10px;
     border-radius: 8px;
