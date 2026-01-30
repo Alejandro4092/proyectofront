@@ -36,6 +36,14 @@
     font-weight: 800;
     margin: 0;
     letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gestionar-actividades-header h1 svg {
+    color: #9a7fd4;
+    font-size: 2rem;
 }
 
 .ga-btn-volver {
@@ -47,8 +55,14 @@
     font-weight: 600;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     border: none;
+}
+
+.ga-btn-volver svg {
+    font-size: 0.9rem;
 }
 
 .ga-btn-volver:hover {
@@ -128,6 +142,14 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.ga-btn-asociar svg {
+    font-size: 1rem;
 }
 
 .ga-btn-asociar:hover:not(:disabled) {
@@ -215,6 +237,12 @@
     font-weight: 600;
 }
 
+.actividad-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .actividad-detalles {
     display: flex;
     gap: 10px;
@@ -241,12 +269,49 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ga-btn-eliminar svg {
+    font-size: 0.85rem;
 }
 
 .ga-btn-eliminar:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+}
+
+.ga-btn-eliminar-todo {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ga-btn-eliminar-todo svg {
+    font-size: 0.9rem;
+}
+
+.ga-btn-eliminar-todo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
+    background: linear-gradient(135deg, #ee5a24 0%, #d63031 100%);
+}
+
+.ga-btn-eliminar-todo:active {
+    transform: translateY(0);
 }
 
 /* Responsive */
@@ -281,7 +346,14 @@
         align-items: flex-start;
     }
 
-    .ga-btn-eliminar {
+    .actividad-buttons {
         width: 100%;
+        flex-direction: column;
+    }
+
+    .ga-btn-eliminar,
+    .ga-btn-eliminar-todo {
+        width: 100%;
+        justify-content: center;
     }
 }

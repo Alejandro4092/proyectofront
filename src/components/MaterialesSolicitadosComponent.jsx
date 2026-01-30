@@ -5,6 +5,13 @@ import Swal from "sweetalert2";
 import MaterialesService from "../services/MaterialesService";
 import ActividadesService from "../services/ActividadesService";
 import EventosService from "../services/EventosService";
+import {
+	FaPlus,
+	FaClock,
+	FaCheckCircle,
+	FaTimes,
+	FaCheck,
+} from "react-icons/fa";
 
 const serviceActividades = new ActividadesService();
 const serviceEventos = new EventosService();
@@ -347,7 +354,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				<div className="materiales-header">
 					<h1>Materiales</h1>
 					<button className="btn-solicitar" onClick={this.abrirModalSolicitar}>
-						+ Solicitar Material
+						<FaPlus /> Solicitar Material
 					</button>
 				</div>
 
@@ -363,13 +370,13 @@ export class MaterialesSolicitadosComponent extends Component {
 						className={`btn-filtro-estado ${this.state.filtroEstado === "pendientes" ? "activo" : ""}`}
 						onClick={() => this.setState({ filtroEstado: "pendientes" })}
 					>
-						⏳ Pendientes
+						<FaClock /> Pendientes
 					</button>
 					<button
 						className={`btn-filtro-estado ${this.state.filtroEstado === "aportados" ? "activo" : ""}`}
 						onClick={() => this.setState({ filtroEstado: "aportados" })}
 					>
-						✓ Aportados
+						<FaCheckCircle /> Aportados
 					</button>
 				</div>
 
@@ -449,7 +456,15 @@ export class MaterialesSolicitadosComponent extends Component {
 											<span
 												className={`estado ${material.pendiente ? "pendiente" : "aportado"}`}
 											>
-												{material.pendiente ? "⏳ Pendiente" : "✓ Aportado"}
+												{material.pendiente ? (
+													<>
+														<FaClock /> Pendiente
+													</>
+												) : (
+													<>
+														<FaCheckCircle /> Aportado
+													</>
+												)}
 											</span>
 										</div>
 
@@ -512,7 +527,7 @@ export class MaterialesSolicitadosComponent extends Component {
 									className="mat-close-btn"
 									onClick={this.cerrarModalSolicitar}
 								>
-									✕
+									<FaTimes />
 								</button>
 							</div>
 
@@ -605,7 +620,7 @@ export class MaterialesSolicitadosComponent extends Component {
 									className="mat-close-btn"
 									onClick={this.cerrarModalAportar}
 								>
-									✕
+									<FaTimes />
 								</button>
 							</div>
 

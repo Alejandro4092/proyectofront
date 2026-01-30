@@ -55,6 +55,13 @@
     color: #9a7fd4;
     margin: 0;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendar-header h2 svg {
+    font-size: 16px;
 }
 
 .month-btn {
@@ -67,6 +74,13 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-btn svg {
+    font-size: 14px;
 }
 
 .month-btn:hover {
@@ -225,10 +239,19 @@
     transition: background 0.3s;
     font-size: 12px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-ver-detalle svg {
+    font-size: 11px;
 }
 
 .btn-ver-detalle:hover {
     background: #9a7fd4;
+    color: white;
 }
 
 .no-eventos {
@@ -244,7 +267,7 @@
     .home-content-wrapper {
         grid-template-columns: 1fr;
     }
-    
+
     .calendar {
         max-width: 400px;
         margin: 0 auto;
@@ -255,17 +278,17 @@
     .calendar-grid {
         gap: 4px;
     }
-    
+
     .day-number {
         font-size: 10px;
     }
-    
+
     .event-indicator {
         width: 14px;
         height: 14px;
         font-size: 8px;
     }
-    
+
     .evento-item {
         flex-direction: column;
         align-items: flex-start;

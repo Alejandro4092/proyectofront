@@ -15,6 +15,15 @@
     font-size: 3rem;
     font-weight: 800;
     letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.partidos-container h1 svg {
+    color: #9a7fd4;
+    font-size: 2.5rem;
 }
 
 /* Filtros */
@@ -182,11 +191,20 @@
     overflow-wrap: break-word;
     hyphens: auto;
     max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.nombre-equipo svg {
+    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 .equipo.ganador .nombre-equipo {
     color: white;
-}   
+}
 
 .puntos-equipo {
     font-size: 2.5rem;
@@ -219,6 +237,15 @@
     font-size: 0.9rem;
     font-weight: 600;
     color: #9a7fd4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.resultado-ganador svg {
+    color: #ffd700;
+    font-size: 1rem;
 }
 
 .resultado-empate {
@@ -331,6 +358,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-crear-resultado svg {
+    font-size: 0.95rem;
 }
 
 .btn-crear-resultado:hover {
@@ -417,6 +451,14 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-guardar svg,
+.btn-cancelar svg {
+    font-size: 0.95rem;
 }
 
 .btn-guardar {

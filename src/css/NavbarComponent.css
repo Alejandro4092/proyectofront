@@ -44,6 +44,15 @@
     white-space: nowrap;
 }
 
+.custom-navbar .nav-link svg {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover svg {
+    transform: scale(1.2) rotate(5deg);
+}
+
 .custom-navbar .nav-link::before {
     font-size: 1.3rem;
     display: inline-flex;
@@ -238,14 +247,23 @@
     background: white;
     color: #2d2d2d;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    margin-bottom: 6px;
     transition: all 0.2s ease;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    border-radius: 12px;
-    text-align: center;
+    font-weight: 500;
+}
+
+.dropdown-item-button svg {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-item-button:hover svg {
+    transform: scale(1.1);
 }
 
 .dropdown-item-button:last-child {

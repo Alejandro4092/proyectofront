@@ -3,6 +3,19 @@ import { NavLink, Navigate } from "react-router-dom";
 import "../css/NavbarComponent.css";
 import tajamarLogo from "../assets/images/logo-tajamar-blanco-01.png";
 import { AuthContext } from "../context/AuthContext";
+import {
+	FaHome,
+	FaCalendarAlt,
+	FaMoneyBillWave,
+	FaFutbol,
+	FaBox,
+	FaUser,
+	FaChevronDown,
+	FaSignOutAlt,
+	FaUserShield,
+	FaUserTie,
+	FaUserGraduate,
+} from "react-icons/fa";
 
 export class NavbarComponent extends Component {
 	static contextType = AuthContext;
@@ -73,27 +86,27 @@ export class NavbarComponent extends Component {
 						<ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
 							<li className="nav-item">
 								<NavLink className="nav-link" aria-current="page" to="/">
-									<span>Home</span>
+									<FaHome /> <span>Home</span>
 								</NavLink>
 							</li>
 							<li className="nav-item">
 								<NavLink className="nav-link" to="/eventos">
-									<span>Eventos</span>
+									<FaCalendarAlt /> <span>Eventos</span>
 								</NavLink>
 							</li>
 							<li className="nav-item">
 								<NavLink className="nav-link" to="/pagos">
-									<span>Pagos</span>
+									<FaMoneyBillWave /> <span>Pagos</span>
 								</NavLink>
 							</li>
 							<li className="nav-item">
 								<NavLink className="nav-link" to="/partidos">
-									<span>Partidos</span>
+									<FaFutbol /> <span>Partidos</span>
 								</NavLink>
 							</li>
 							<li className="nav-item">
 								<NavLink className="nav-link" to="/materialesSolicitados">
-									<span>Materiales</span>
+									<FaBox /> <span>Materiales</span>
 								</NavLink>
 							</li>
 						</ul>
@@ -117,7 +130,7 @@ export class NavbarComponent extends Component {
 									<span
 										className={`dropdown-arrow ${this.state.dropdownOpen ? "open" : ""}`}
 									>
-										▼
+										<FaChevronDown />
 									</span>
 								</div>
 
@@ -136,14 +149,16 @@ export class NavbarComponent extends Component {
 											<span className="user-name-dropdown">
 												{usuario?.nombre}
 											</span>
-											<span className="dropdown-arrow-small"> ▼</span>
+											<span className="dropdown-arrow-small">
+												<FaChevronDown />
+											</span>
 										</div>
 										<NavLink
 											to="/perfil"
 											className="dropdown-item-button"
 											onClick={() => this.setState({ dropdownOpen: false })}
 										>
-											<span> Mi Perfil</span>
+											<FaUser /> <span> Mi Perfil</span>
 										</NavLink>
 										{rol === "ADMINISTRADOR" && (
 											<NavLink
@@ -151,7 +166,7 @@ export class NavbarComponent extends Component {
 												to="/gestionarOrganizadores"
 												onClick={() => this.setState({ dropdownOpen: false })}
 											>
-												<span> Gestionar Organizadores</span>
+												<FaUserShield /> <span> Gestionar Organizadores</span>
 											</NavLink>
 										)}
 										{(rol === "ADMINISTRADOR" || esOrganizador) && (
@@ -160,7 +175,7 @@ export class NavbarComponent extends Component {
 												to="/inscripcionesCapitan"
 												onClick={() => this.setState({ dropdownOpen: false })}
 											>
-												<span> Solicitudes de Capitanía</span>
+												<FaUserTie /> <span> Solicitudes de Capitanía</span>
 											</NavLink>
 										)}
 										{rol === "ADMINISTRADOR" && (
@@ -169,7 +184,7 @@ export class NavbarComponent extends Component {
 												to="/alumnos"
 												onClick={() => this.setState({ dropdownOpen: false })}
 											>
-												<span>Alumnos</span>
+												<FaUserGraduate /> <span>Alumnos</span>
 											</NavLink>
 										)}
 										<div className="dropdown-divider"></div>
@@ -177,7 +192,7 @@ export class NavbarComponent extends Component {
 											className="dropdown-item-button"
 											onClick={this.cerrarSesion}
 										>
-											<span> Cerrar sesión</span>
+											<FaSignOutAlt /> <span> Cerrar sesión</span>
 										</div>
 									</div>
 								)}
@@ -191,4 +206,3 @@ export class NavbarComponent extends Component {
 }
 
 export default NavbarComponent;
-

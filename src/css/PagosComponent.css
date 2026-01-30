@@ -81,6 +81,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(184, 164, 232, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-crear-pago svg {
+    font-size: 1.1rem;
 }
 
 .btn-crear-pago:hover {
@@ -114,6 +121,13 @@
     border-bottom: 3px solid transparent;
     position: relative;
     bottom: -2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button svg {
+    font-size: 1.1rem;
 }
 
 .tab-button:hover {
@@ -262,6 +276,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pagos-btn-editar svg {
+    font-size: 1rem;
 }
 
 .pagos-btn-editar:hover {

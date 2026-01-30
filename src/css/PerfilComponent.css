@@ -24,6 +24,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -43,6 +44,14 @@
   font-weight: 800;
   letter-spacing: -0.5px;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.perfil-header h1 svg {
+  font-size: 2.2rem;
 }
 
 .perfil-content {
@@ -112,6 +121,13 @@
   margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.perfil-info-item label svg {
+  font-size: 1rem;
 }
 
 .perfil-info-item p {
@@ -203,6 +219,14 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.actividades-header h2 svg {
+  font-size: 1.4rem;
 }
 
 .actividades-content {
@@ -216,7 +240,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
-  background: linear-gradient(135deg,  #7b40b6 0%, #354381 100%);
+  background: linear-gradient(135deg, #7b40b6 0%, #354381 100%);
   border-radius: 15px;
   transition: all 0.3s ease;
   gap: 20px;
@@ -263,6 +287,11 @@
   gap: 8px;
 }
 
+.actividad-fecha svg {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
 .actividad-fecha.inscripcion {
   color: #9a7fd4;
 }
@@ -286,6 +315,13 @@
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
   color: #2c3e50;
   box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.capitan-badge svg {
+  font-size: 0.9rem;
 }
 
 .capitan-badge.es-capitan {
@@ -294,6 +330,7 @@
   box-shadow: 0 2px 8px rgba(255, 107, 107, 0.5);
   font-weight: 700;
   animation: pulse 2s infinite;
+  display: inline-flex;
 }
 
 
@@ -301,6 +338,7 @@
   background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+  display: inline-flex;
 }
 
 .badges-container {

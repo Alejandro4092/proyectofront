@@ -35,6 +35,13 @@
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-solicitar svg {
+    font-size: 1.1rem;
 }
 
 .btn-solicitar:hover {
@@ -61,6 +68,13 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-filtro-estado svg {
+    font-size: 1.1rem;
 }
 
 .btn-filtro-estado:hover {
@@ -162,10 +176,17 @@
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.estado svg {
+    font-size: 1rem;
 }
 
 .estado.pendiente {
-    background: #dee2e6;
+    background: #838586;
     color: #fff;
 }
 

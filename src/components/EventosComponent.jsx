@@ -6,7 +6,16 @@ import Swal from "sweetalert2";
 import "../css/EventosComponent.css";
 import EventosService from "../services/EventosService";
 import ProfesEventosService from "../services/ProfesEventosService";
-
+import {
+	FaCalendarAlt,
+	FaPlus,
+	FaEdit,
+	FaTrash,
+	FaUserPlus,
+	FaUserMinus,
+	FaClock,
+	FaEye,
+} from "react-icons/fa";
 const serviceEventos = new EventosService();
 const serviceProfesEventos = new ProfesEventosService();
 export class EventosComponent extends Component {
@@ -294,6 +303,7 @@ export class EventosComponent extends Component {
 							className="btn-toggle-eventos"
 							onClick={this.alternarEventosPasados}
 						>
+							<FaClock />
 							{this.state.verEventosPasados
 								? "Ver Eventos Futuros"
 								: "Ver Eventos Pasados"}
@@ -301,10 +311,10 @@ export class EventosComponent extends Component {
 						{this.context.esOrganizador && (
 							<>
 								<NavLink to="/crear-evento" className="eventos-btn-crear">
-									+ Crear Evento
+									<FaPlus /> Crear Evento
 								</NavLink>
 								<NavLink to="/crear-actividad" className="eventos-btn-crear">
-									+ Crear Actividad
+									<FaPlus /> Crear Actividad
 								</NavLink>
 							</>
 						)}
@@ -327,7 +337,9 @@ export class EventosComponent extends Component {
 									style={{ textDecoration: "none", color: "inherit" }}
 								>
 									<div className="evento-card-header">
-										<h3>Evento #{evento.idEvento}</h3>
+										<h3>
+											<FaCalendarAlt /> Evento #{evento.idEvento}
+										</h3>
 									</div>
 									<div className="evento-card-body">
 										<div className="evento-info">
@@ -345,7 +357,7 @@ export class EventosComponent extends Component {
 													className="eventos-btn-editar"
 													onClick={(e) => e.stopPropagation()}
 												>
-													Editar
+													<FaEdit /> Editar
 												</NavLink>
 												<button
 													className="eventos-btn-eliminar"
@@ -355,7 +367,7 @@ export class EventosComponent extends Component {
 														this.deleteEvento(evento.idEvento);
 													}}
 												>
-													Eliminar
+													<FaTrash /> Eliminar
 												</button>
 											</>
 										) : this.context.esProfesor ? (
@@ -368,7 +380,7 @@ export class EventosComponent extends Component {
 														this.desapuntarseEvento(evento.idEvento);
 													}}
 												>
-													Desapuntarme
+													<FaUserMinus /> Desapuntarme
 												</button>
 											) : (
 												<button
@@ -379,7 +391,7 @@ export class EventosComponent extends Component {
 														this.apuntarseEvento(evento.idEvento);
 													}}
 												>
-													Apuntarme
+													<FaUserPlus /> Apuntarme
 												</button>
 											)
 										) : null}

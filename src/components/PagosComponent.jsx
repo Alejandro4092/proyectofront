@@ -7,6 +7,17 @@ import PrecioActividadService from "../services/PrecioActividadService";
 import ActividadesService from "../services/ActividadesService";
 import TablaPagosAgrupadosComponent from "./TablaPagosAgrupadosComponent";
 import Swal from "sweetalert2";
+import {
+	FaPlus,
+	FaCheckCircle,
+	FaClock,
+	FaExclamationTriangle,
+	FaEdit,
+	FaTimes,
+	FaCalendarAlt,
+	FaTasks,
+	FaMoneyBillWave,
+} from "react-icons/fa";
 import "../css/PagosComponent.css";
 
 const servicePagos = new PagosService();
@@ -380,10 +391,10 @@ export class PagosComponent extends Component {
 
 		if (!cantidadPago || parseFloat(cantidadPago) <= 0) {
 			Swal.fire({
-				icon: 'warning',
-				title: 'Cantidad inválida',
-				text: 'Por favor, ingresa una cantidad válida',
-				confirmButtonColor: '#9a7fd4'
+				icon: "warning",
+				title: "Cantidad inválida",
+				text: "Por favor, ingresa una cantidad válida",
+				confirmButtonColor: "#9a7fd4",
 			});
 			return;
 		}
@@ -400,10 +411,10 @@ export class PagosComponent extends Component {
 					token,
 				);
 				Swal.fire({
-					icon: 'success',
-					title: '¡Éxito!',
-					text: 'Pago actualizado exitosamente',
-					confirmButtonColor: '#9a7fd4'
+					icon: "success",
+					title: "¡Éxito!",
+					text: "Pago actualizado exitosamente",
+					confirmButtonColor: "#9a7fd4",
 				});
 			} else {
 				await servicePagos.crearPago(
@@ -413,10 +424,10 @@ export class PagosComponent extends Component {
 					token,
 				);
 				Swal.fire({
-					icon: 'success',
-					title: '¡Éxito!',
-					text: 'Pago registrado exitosamente',
-					confirmButtonColor: '#9a7fd4'
+					icon: "success",
+					title: "¡Éxito!",
+					text: "Pago registrado exitosamente",
+					confirmButtonColor: "#9a7fd4",
 				});
 			}
 
@@ -603,7 +614,7 @@ export class PagosComponent extends Component {
 					</div>
 
 					<button className="btn-crear-pago" onClick={this.abrirModalCrearPago}>
-						+ Crear Pago
+						<FaPlus /> Crear Pago
 					</button>
 				</div>
 
@@ -612,13 +623,13 @@ export class PagosComponent extends Component {
 						className={`tab-button ${pestanaActiva === "pagados" ? "active" : ""}`}
 						onClick={() => this.cambiarPestana("pagados")}
 					>
-						Actividades Pagadas
+						<FaCheckCircle /> Actividades Pagadas
 					</button>
 					<button
 						className={`tab-button ${pestanaActiva === "pendientes" ? "active" : ""}`}
 						onClick={() => this.cambiarPestana("pendientes")}
 					>
-						Actividades Pendientes
+						<FaClock /> Actividades Pendientes
 					</button>
 				</div>
 
@@ -690,7 +701,7 @@ export class PagosComponent extends Component {
 																className="pagos-btn-editar"
 																onClick={() => this.abrirModalPago(pago, true)}
 															>
-																Editar
+																<FaEdit /> Editar
 															</button>
 														)}
 													</div>
@@ -711,7 +722,7 @@ export class PagosComponent extends Component {
 							onClick={(e) => e.stopPropagation()}
 						>
 							<button className="modal-close" onClick={this.cerrarModalPago}>
-								&times;
+								<FaTimes />
 							</button>
 							<h2>
 								{this.state.modoEdicion ? "Editar Pago" : "Registrar Pago"}
@@ -799,7 +810,7 @@ export class PagosComponent extends Component {
 								className="modal-close"
 								onClick={this.cerrarModalCrearPago}
 							>
-								&times;
+								<FaTimes />
 							</button>
 							<h2>Crear Nuevo Pago</h2>
 							<div className="pago-info">
@@ -853,6 +864,7 @@ export class PagosComponent extends Component {
 										required
 									>
 										<option value="PENDIENTE">Pendiente</option>
+										<option value="EXENTO">Exento</option>
 										<option value="PAGADO">Pagado</option>
 									</select>
 								</div>

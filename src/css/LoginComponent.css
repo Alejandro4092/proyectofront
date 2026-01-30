@@ -66,6 +66,14 @@
     color: #2c3e50;
     font-weight: 600;
     font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label svg {
+    color: #9a7fd4;
+    font-size: 1.1rem;
 }
 
 .required {
@@ -133,6 +141,14 @@
     font-size: 1.2rem;
     padding: 5px;
     transition: all 0.2s;
+    color: #9a7fd4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password svg {
+    font-size: 1.1rem;
 }
 
 .toggle-password:hover {
@@ -140,7 +156,6 @@
 }
 
 .toggle-password.visible {
-    text-decoration: line-through;
     opacity: 0.6;
 }
 
@@ -164,6 +179,14 @@
     cursor: pointer;
     transition: all 0.3s;
     margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-login svg {
+    font-size: 1.2rem;
 }
 
 .btn-login:hover:not(:disabled) {
@@ -232,7 +255,8 @@
         font-size: 1.8rem;
     }
 
-    .email-username, .email-domain {
+    .email-username,
+    .email-domain {
         padding: 12px 14px;
         font-size: 0.9rem;
     }
