@@ -5,13 +5,7 @@ import Swal from "sweetalert2";
 import MaterialesService from "../services/MaterialesService";
 import ActividadesService from "../services/ActividadesService";
 import EventosService from "../services/EventosService";
-import {
-	FaPlus,
-	FaClock,
-	FaCheckCircle,
-	FaTimes,
-	FaCheck,
-} from "react-icons/fa";
+import { FaPlus, FaClock, FaCheckCircle, FaTimes } from "react-icons/fa";
 
 const serviceActividades = new ActividadesService();
 const serviceEventos = new EventosService();

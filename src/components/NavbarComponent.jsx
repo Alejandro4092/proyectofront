@@ -66,11 +66,9 @@ export class NavbarComponent extends Component {
 		return (
 			<nav className="navbar navbar-expand-lg custom-navbar">
 				<div className="container-fluid">
-					<a className="navbar-brand" href="#">
-						<NavLink to="/">
-							<img src={tajamarLogo} alt="Tajamar" className="navbar-logo" />
-						</NavLink>
-					</a>
+					<NavLink to="/" className="navbar-brand">
+						<img src={tajamarLogo} alt="Tajamar" className="navbar-logo" />
+					</NavLink>
 					<button
 						className="navbar-toggler"
 						type="button"

@@ -14,7 +14,6 @@ import {
 	FaUserPlus,
 	FaUserMinus,
 	FaClock,
-	FaEye,
 } from "react-icons/fa";
 const serviceEventos = new EventosService();
 const serviceProfesEventos = new ProfesEventosService();

@@ -11,12 +11,8 @@ import {
 	FaPlus,
 	FaCheckCircle,
 	FaClock,
-	FaExclamationTriangle,
 	FaEdit,
 	FaTimes,
-	FaCalendarAlt,
-	FaTasks,
-	FaMoneyBillWave,
 } from "react-icons/fa";
 import "../css/PagosComponent.css";
 

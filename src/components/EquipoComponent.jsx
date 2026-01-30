@@ -559,16 +559,18 @@ export class EquipoComponent extends Component {
 										alt={jugador.usuario}
 									/>
 									<h1 style={{ color: "#71d5f3" }}>Curso: {jugador.curso}</h1>
-									{this.state.eresCapitan && (
-										<button
-											className="btn-expulsar"
-											onClick={() =>
-												this.expulsarJugador(jugador.idMiembroEquipo)
-											}
-										>
-											Expulsar jugador
-										</button>
-									)}
+									{this.state.eresCapitan &&
+										jugador.idMiembroEquipo !==
+											this.state.usuarioMiembroEquipo.idMiembroEquipo && (
+											<button
+												className="btn-expulsar"
+												onClick={() =>
+													this.expulsarJugador(jugador.idMiembroEquipo)
+												}
+											>
+												Expulsar jugador
+											</button>
+										)}
 								</div>
 							);
 						})}
