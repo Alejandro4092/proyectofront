@@ -485,7 +485,8 @@ export class ActividadesComponent extends Component {
 											<span className="chip chip-inscrito">✓ Inscrito</span>
 										)}
 										{this.estaInscrito(actividad.idEventoActividad) &&
-										this.esEventoPasado(actividad.fechaEvento) ? (
+										this.esEventoPasado(actividad.fechaEvento) &&
+										!this.esCapitanActividad(actividad.idEventoActividad) ? (
 											<button
 												className="btn-desinscribirse"
 												onClick={(e) => {
