@@ -66,7 +66,7 @@ export class EventosComponent extends Component {
 				}
 			})
 			.catch((error) => {
-				console.error("Error al cargar eventos:", error);
+				// Error handled
 				this.setState({ loading: false });
 			});
 	};
@@ -368,7 +368,7 @@ export class EventosComponent extends Component {
 														this.desapuntarseEvento(evento.idEvento);
 													}}
 												>
-													❌ Desapuntarme
+													Desapuntarme
 												</button>
 											) : (
 												<button
@@ -379,7 +379,7 @@ export class EventosComponent extends Component {
 														this.apuntarseEvento(evento.idEvento);
 													}}
 												>
-													📋 Apuntarme
+													Apuntarme
 												</button>
 											)
 										) : null}

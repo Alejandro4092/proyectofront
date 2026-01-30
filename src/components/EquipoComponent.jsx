@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { Component } from "react";
 import Global from "../Global";
 import "../css/EquipoComponent.css";
@@ -29,37 +28,11 @@ export class EquipoComponent extends Component {
 		usuarioMiembroEquipo: {},
 		equipo: {},
 		fechaEvento: null,
-		equipoPrueba: {
-			idEquipo: 1,
-			idEventoActividad: 2,
-			nombreEquipo: "prueba",
-			minimoJugadores: 3,
-			idColor: 1,
-			idCurso: 3430,
-		},
 		colorName: "",
-		colorNamePrueba: "rojo",
 		jugadores: [],
 		colores: [],
 		mostrarColores: false,
 		partidos: [],
-		jugadoresPrueba: [
-			{
-				idMiembroEquipo: 1,
-				idEquipo: 1,
-				idUsuario: 1,
-			},
-			{
-				idMiembroEquipo: 2,
-				idEquipo: 1,
-				idUsuario: 2,
-			},
-			{
-				idMiembroEquipo: 3,
-				idEquipo: 1,
-				idUsuario: 3,
-			},
-		],
 	};
 
 	componentDidMount = async () => {
@@ -96,7 +69,7 @@ export class EquipoComponent extends Component {
 				},
 			);
 		} catch (error) {
-			console.error("Error al cargar equipo:", error);
+			// Error handled
 		}
 	};
 
@@ -118,7 +91,7 @@ export class EquipoComponent extends Component {
 				eresCapitan: esCapi,
 			});
 		} catch (error) {
-			console.error("Error al verificar capitán:", error);
+			// Error handled
 		}
 	};
 
@@ -143,7 +116,7 @@ export class EquipoComponent extends Component {
 				this.setState({ fechaEvento: evento.fechaEvento });
 			}
 		} catch (error) {
-			console.error("Error al cargar fecha del evento:", error);
+			// Error handled
 		}
 	};
 
@@ -159,7 +132,7 @@ export class EquipoComponent extends Component {
 			const colorName = await serviceColor.getColorName(idColor);
 			return colorName;
 		} catch (error) {
-			console.error("Error al obtener color:", error);
+			// Error handled
 			return "";
 		}
 	};
@@ -169,7 +142,7 @@ export class EquipoComponent extends Component {
 			const players = await serviceEquipos.getJugadoresEquipo(idEquipo);
 			return players;
 		} catch (error) {
-			console.error("Error al buscar jugadores:", error);
+			// Error handled
 			return [];
 		}
 	};
@@ -181,7 +154,7 @@ export class EquipoComponent extends Component {
 				this.setState({ colores: data });
 			})
 			.catch((error) => {
-				console.error("Error al cargar colores:", error);
+				// Error handled
 			});
 	};
 
@@ -219,7 +192,7 @@ export class EquipoComponent extends Component {
 						this.loadEquipo();
 					})
 					.catch((error) => {
-						console.error("Error al cambiar color:", error);
+						// Error handled
 						this.setState({ mostrarColores: false });
 						Swal.fire(
 							"Error",
@@ -295,7 +268,7 @@ export class EquipoComponent extends Component {
 						this.loadEquipo();
 					})
 					.catch((error) => {
-						console.error("Error al salir del equipo:", error);
+						// Error handled
 						Swal.fire("Error", "No se pudo salir del equipo.", "error");
 					});
 			}
@@ -385,7 +358,7 @@ export class EquipoComponent extends Component {
 								this.loadEquipo();
 							})
 							.catch((error) => {
-								console.error("Error al entrar al equipo:", error);
+								// Error handled
 								Swal.fire("Error", "No se pudo entrar al equipo.", "error");
 							});
 					} catch (error) {
@@ -400,7 +373,7 @@ export class EquipoComponent extends Component {
 				}
 			});
 		} catch (error) {
-			console.error("Error al verificar inscripción:", error);
+			// Error handled
 			Swal.fire({
 				title: "Error",
 				text: "No se pudo verificar tu inscripción. Por favor, intenta de nuevo.",
@@ -444,7 +417,7 @@ export class EquipoComponent extends Component {
 						this.loadEquipo();
 					})
 					.catch((error) => {
-						console.error("Error al expulsar jugador:", error);
+						// Error handled
 						Swal.fire(
 							"Error",
 							"No se pudo expulsar al jugador del equipo.",
@@ -460,7 +433,7 @@ export class EquipoComponent extends Component {
 			const equipo = await serviceEquipos.getEquipo(idEquipo);
 			return equipo;
 		} catch (error) {
-			console.error("Error al obtener equipo:", error);
+			// Error handled
 			return { nombreEquipo: "Equipo no encontrado", idEquipo: idEquipo };
 		}
 	};
@@ -487,7 +460,7 @@ export class EquipoComponent extends Component {
 
 			this.setState({ partidos: partidosConEquipos });
 		} catch (error) {
-			console.error("Error al cargar partidos:", error);
+			// Error handled
 			this.setState({ partidos: [] });
 		}
 	};

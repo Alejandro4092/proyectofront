@@ -1,12 +1,12 @@
 .main-container {
-    background-color: #1a1a1a;
+    background-color: #ffffff;
     min-height: calc(100vh - 56px);
     padding: 0;
-    color:#ffffff;
+    color: #2c3e50;
 }
 
 .content-wrapper {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #2c3e50;
     min-height: calc(100vh - 56px);
 }

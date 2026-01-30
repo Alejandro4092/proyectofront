@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import '../css/PerfilComponent.css'
 import Global from '../Global';
-import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import CapitanService from '../services/CapitanService';
 import ActividadesService from '../services/ActividadesService';
@@ -41,7 +40,7 @@ export class PerfilComponent extends Component {
         actividadesCapitan: actividadesCapitan
       })
     } catch (error) {
-      console.error('Error al cargar capitanes:', error);
+      // Error handling
     }
   }
 
@@ -57,7 +56,7 @@ export class PerfilComponent extends Component {
         actividades: actividades
       })
     } catch (error) {
-      console.error('Error al cargar actividades del usuario:', error);
+      // Error handling
     }
   }
 
@@ -157,7 +156,7 @@ export class PerfilComponent extends Component {
                         Inscrito desde: {this.formatearFecha(actividad.fechaInscripcion)}
                       </p>
                       <p className="actividad-fecha evento">
-                        <span className="fecha-icon">🎯</span>
+                        <span className="fecha-icon"></span>
                         Fecha del Evento: {this.formatearFecha(actividad.fechaEvento)}
                       </p>
                       <div className="badges-container">
@@ -167,7 +166,7 @@ export class PerfilComponent extends Component {
                         }
                         {
                           actividad.quiereSerCapitan ? 
-                          <span className="capitan-badge">⭐ Quieres ser capitán</span>
+                          <span className="capitan-badge">Quieres ser capitán</span>
                           :
                           <span className="capitan-badge no-capitan">👤 No quieres ser capitán</span>
                         }

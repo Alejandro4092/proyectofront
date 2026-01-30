@@ -1,7 +1,7 @@
 .gestionar-actividades-container {
     padding: 30px 40px;
     min-height: calc(100vh - 100px);
-    background: #1a1a1a;
+    background: #ffffff;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -14,7 +14,7 @@
     padding: 20px;
     max-width: 1200px;
     width: 100%;
-    border: 2px solid #e0d4f7;
+    border: 2px solid #9a7fd4;
 }
 
 .gestionar-actividades-header {
@@ -23,13 +23,13 @@
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #e0d4f7;
+    border-bottom: 2px solid #9a7fd4;
 }
 
 .gestionar-actividades-header h1 {
     font-size: 2.5rem;
     color: transparent;
-    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -39,7 +39,7 @@
 }
 
 .ga-btn-volver {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 10px 20px;
     border-radius: 20px;
@@ -54,7 +54,8 @@
 .ga-btn-volver:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #e0d4f7;
+    color: white;
+    background: linear-gradient(135deg, #7d5fb2 0%, #6d4fa0 100%);
 }
 
 .gestionar-actividades-content {
@@ -68,11 +69,11 @@
     background: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
-    border: 1px solid #e0d4f7;
+    border: 1px solid #9a7fd4;
 }
 
 .asociar-actividad-section h2 {
-    color: #2d1b69;
+    color: #9a7fd4;
     font-size: 1.5rem;
     margin-bottom: 20px;
     font-weight: 600;
@@ -91,14 +92,14 @@
 
 .form-group label {
     font-weight: 600;
-    color: #333;
+    color: #2c3e50;
     margin-bottom: 8px;
     font-size: 0.95rem;
 }
 
 .form-control {
     padding: 12px 15px;
-    border: 2px solid #e0d4f7;
+    border: 2px solid #9a7fd4;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -107,7 +108,7 @@
 }
 
 .form-control:focus {
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
 }
 
@@ -116,7 +117,7 @@
 }
 
 .ga-btn-asociar {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
     padding: 14px 30px;
     border-radius: 25px;
@@ -144,14 +145,14 @@
     background: #f9f9f9;
     padding: 25px;
     border-radius: 10px;
-    border: 1px solid #e0d4f7;
+    border: 1px solid #9a7fd4;
     display: flex;
     flex-direction: column;
     max-height: 600px;
 }
 
 .actividades-asociadas-section h2 {
-    color: #2d1b69;
+    color: #9a7fd4;
     font-size: 1.5rem;
     margin-bottom: 20px;
     font-weight: 600;
@@ -160,7 +161,7 @@
 
 .no-actividades {
     text-align: center;
-    color: #666;
+    color: #757575;
     font-style: italic;
     padding: 30px 0;
 }
@@ -178,24 +179,24 @@
 }
 
 .actividades-lista::-webkit-scrollbar-track {
-    background: #e0d4f7;
+    background: #e8f0fe;
     border-radius: 10px;
 }
 
 .actividades-lista::-webkit-scrollbar-thumb {
-    background: #2d1b69;
+    background: #9a7fd4;
     border-radius: 10px;
 }
 
 .actividades-lista::-webkit-scrollbar-thumb:hover {
-    background: #1a4d7a;
+    background: #9a7fd4;
 }
 
 .actividad-item {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #e0d4f7;
+    border: 2px solid #9a7fd4;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -203,12 +204,12 @@
 }
 
 .actividad-item:hover {
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .actividad-info h3 {
-    color: #2d1b69;
+    color: #9a7fd4;
     font-size: 1.2rem;
     margin: 0 0 10px 0;
     font-weight: 600;
@@ -221,8 +222,8 @@
 }
 
 .detalle-badge {
-    background: linear-gradient(135deg, #e0d4f7 0%, #c8b7f0 100%);
-    color: #2d1b69;
+    background: linear-gradient(135deg, #9a7fd4 0%, #7d5fb2 100%);
+    color: white;
     padding: 6px 12px;
     border-radius: 15px;
     font-size: 0.85rem;

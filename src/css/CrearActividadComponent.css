@@ -1,6 +1,6 @@
 .crear-actividad-container {
     min-height: 100vh;
-    background: #1a1a1a;
+    background: #ffffff;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
@@ -20,7 +20,7 @@
     font-size: 2.5rem;
     font-weight: 800;
     color: transparent;
-    background: linear-gradient(135deg, #2d1b69 0%, #667eea 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -30,7 +30,7 @@
 }
 
 .crear-actividad-subtitle {
-    color: #666;
+    color: #757575;
     text-align: center;
     margin: 0 0 30px 0;
     font-size: 1rem;
@@ -50,13 +50,13 @@
 
 .form-group label {
     font-weight: 600;
-    color: #333;
+    color: #2c3e50;
     font-size: 0.95rem;
 }
 
 .form-input {
     padding: 12px 16px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #9a7fd4;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -64,16 +64,16 @@
 }
 
 .form-input:focus {
-    border-color: #2d1b69;
+    border-color: #9a7fd4;
     box-shadow: 0 0 0 3px rgba(45, 27, 105, 0.1);
 }
 
 .form-input::placeholder {
-    color: #999;
+    color: #9a7fd4;
 }
 
 .form-help {
-    color: #666;
+    color: #757575;
     font-size: 0.85rem;
     margin-top: -4px;
 }
@@ -97,7 +97,7 @@
 }
 
 .crear-actividad-btn-crear {
-    background: linear-gradient(135deg, #2d1b69 0%, #1a4d7a 100%);
+    background: linear-gradient(135deg, #9a7fd4 0%, #9a7fd4 100%);
     color: white;
 }
 
@@ -113,8 +113,8 @@
 
 .crear-actividad-btn-cancelar {
     background: #f5f5f5;
-    color: #333;
-    border: 2px solid #e0e0e0;
+    color: #2c3e50;
+    border: 2px solid #9a7fd4;
 }
 
 .crear-actividad-btn-cancelar:hover:not(:disabled) {

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Link, NavLink, Navigate, useNavigate } from "react-router-dom";
 import Global from "../Global";
 import { AuthContext } from "../context/AuthContext";
@@ -37,7 +36,7 @@ export class EditarEventoComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al cargar evento:", error);
+				// Error handled
 				this.setState({
 					error: "Error al cargar el evento",
 					cargando: false,
@@ -86,7 +85,7 @@ export class EditarEventoComponent extends Component {
 				}, 1500);
 			})
 			.catch((error) => {
-				console.error("Error al actualizar evento:", error);
+				// Error handled
 				Swal.fire({
 					title: "Error",
 					text: "No se pudo actualizar el evento",

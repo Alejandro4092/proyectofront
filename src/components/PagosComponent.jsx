@@ -63,7 +63,7 @@ export class PagosComponent extends Component {
 				await this.loadPagos(cursos[0].idCurso);
 			}
 		} catch (error) {
-			console.error("Error al cargar cursos:", error);
+			// Error handled
 			this.setState({ cargando: false });
 		}
 	};
@@ -77,7 +77,7 @@ export class PagosComponent extends Component {
 			const pagos = await servicePagos.getPagosCompletoCurso(idCurso, token);
 			this.setState({ pagos, cargando: false });
 		} catch (error) {
-			console.error("Error al cargar pagos:", error);
+			// Error handled
 			this.setState({ cargando: false });
 		}
 	};
@@ -316,7 +316,7 @@ export class PagosComponent extends Component {
 					grupo.precioReal = precioData.precioTotal;
 				}
 			} catch (error) {
-				console.error("Error al obtener precio de actividad:", error);
+				// Error handled
 			}
 			resultado.push(grupo);
 		}
@@ -380,9 +380,10 @@ export class PagosComponent extends Component {
 
 		if (!cantidadPago || parseFloat(cantidadPago) <= 0) {
 			Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: "Por favor, ingresa una cantidad válida",
+				icon: 'warning',
+				title: 'Cantidad inválida',
+				text: 'Por favor, ingresa una cantidad válida',
+				confirmButtonColor: '#9a7fd4'
 			});
 			return;
 		}
@@ -399,11 +400,10 @@ export class PagosComponent extends Component {
 					token,
 				);
 				Swal.fire({
-					icon: "success",
-					title: "¡Éxito!",
-					text: "Pago actualizado exitosamente",
-					timer: 2000,
-					showConfirmButton: false,
+					icon: 'success',
+					title: '¡Éxito!',
+					text: 'Pago actualizado exitosamente',
+					confirmButtonColor: '#9a7fd4'
 				});
 			} else {
 				await servicePagos.crearPago(
@@ -413,11 +413,10 @@ export class PagosComponent extends Component {
 					token,
 				);
 				Swal.fire({
-					icon: "success",
-					title: "¡Éxito!",
-					text: "Pago registrado exitosamente",
-					timer: 2000,
-					showConfirmButton: false,
+					icon: 'success',
+					title: '¡Éxito!',
+					text: 'Pago registrado exitosamente',
+					confirmButtonColor: '#9a7fd4'
 				});
 			}
 

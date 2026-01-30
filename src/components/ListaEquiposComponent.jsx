@@ -82,7 +82,7 @@ export class ListaEquiposComponent extends Component {
 				this.props.idActividad,
 			);
 		} catch (error) {
-			console.error("Error al obtener el id:", error);
+			// Error handled
 			throw error;
 		}
 	};
@@ -159,7 +159,7 @@ export class ListaEquiposComponent extends Component {
 						this.loadEquipos();
 					})
 					.catch((error) => {
-						console.error("Error al eliminar equipo:", error);
+						// Error handled
 						Swal.fire(
 							"Error",
 							error.response?.status === 404
@@ -486,3 +486,4 @@ export class ListaEquiposComponent extends Component {
 }
 
 export default ListaEquiposComponent;
+

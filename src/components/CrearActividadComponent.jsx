@@ -81,7 +81,7 @@ export class CrearActividadComponent extends Component {
 
 			this.setState({ redirect: true });
 		} catch (error) {
-			console.error("Error al crear actividad:", error);
+			// Error handled
 			this.setState({ loading: false });
 
 			Swal.fire({

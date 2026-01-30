@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Global from '../Global';
 import { Link, Navigate } from 'react-router-dom'
-import axios from 'axios'
 import '../css/GestionarActividadesComponent.css'
 import AuthContext from '../context/AuthContext';
 import Swal from 'sweetalert2';
@@ -40,7 +39,7 @@ export class GestionarActividadesComponent extends Component {
                 });
             })
             .catch(error => {
-                console.error('Error al cargar actividades disponibles:', error);
+                // Error handled
             });
     };
 
@@ -52,7 +51,7 @@ export class GestionarActividadesComponent extends Component {
                 });
             })
             .catch(error => {
-                console.error('Error al cargar actividades asociadas:', error);
+                // Error handled
             });
     };
 

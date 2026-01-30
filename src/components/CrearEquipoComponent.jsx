@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Global from "../Global";
 import { Navigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -53,7 +52,7 @@ export class CrearEquipoComponent extends Component {
 				this.setState({ colores: data });
 			})
 			.catch((error) => {
-				console.error("Error al cargar colores:", error);
+				// Error handled
 			});
 	};
 
@@ -64,7 +63,7 @@ export class CrearEquipoComponent extends Component {
 				this.props.idActividad,
 			);
 		} catch (error) {
-			console.error("Error al obtener el id:", error);
+			// Error handled
 			throw error;
 		}
 	};
@@ -87,7 +86,7 @@ export class CrearEquipoComponent extends Component {
 				return true;
 			}
 		} catch (error) {
-			console.error("Error al verificar capitán:", error);
+			// Error handled
 			return false;
 		}
 		return false;
@@ -162,7 +161,7 @@ export class CrearEquipoComponent extends Component {
 				});
 			});
 		} catch (error) {
-			console.error("Error al crear equipo:", error);
+			// Error handled
 			this.setState({ loading: false });
 			Swal.fire({
 				title: "Error",

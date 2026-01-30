@@ -36,7 +36,7 @@ export default class AlumnosComponent extends Component {
                 }
             });
         } catch (error) {
-            console.error('Error al cargar cursos:', error);
+            // Error handled
             this.setState({ error: 'Error al cargar los cursos', loading: false });
             Swal.fire({
                 title: 'Error',
@@ -57,7 +57,7 @@ export default class AlumnosComponent extends Component {
             });
             this.setState({ alumnos: alumnosOrdenados, alumnosFiltrados: alumnosOrdenados, loading: false });
         } catch (error) {
-            console.error('Error al cargar alumnos:', error);
+            // Error handled
             this.setState({ error: 'Error al cargar los alumnos', loading: false, alumnos: [], alumnosFiltrados: [] });
             Swal.fire({
                 title: 'Error',

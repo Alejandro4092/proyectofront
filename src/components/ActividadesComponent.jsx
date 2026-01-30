@@ -64,7 +64,7 @@ export class ActividadesComponent extends Component {
 				this.setState({ nombreProfesor: profesor.usuario });
 			}
 		} catch (error) {
-			console.error("Error al cargar evento:", error);
+			// Error handled
 		}
 	};
 
@@ -77,7 +77,7 @@ export class ActividadesComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al cargar actividades:", error);
+				// Error handled
 			});
 	};
 
@@ -101,7 +101,7 @@ export class ActividadesComponent extends Component {
 				actividadesCapitan: actividadesCapitan,
 			});
 		} catch (error) {
-			console.error("Error al verificar capitán:", error);
+			// Error handled
 		}
 	};
 
@@ -123,7 +123,7 @@ export class ActividadesComponent extends Component {
 				datosInscritos: actividadesDelEvento,
 			});
 		} catch (error) {
-			console.error("Error al cargar actividades inscritas:", error);
+			// Error handled
 		}
 	};
 
@@ -150,7 +150,7 @@ export class ActividadesComponent extends Component {
 			const precios = await servicePrecioActividad.getPreciosActividades();
 			this.setState({ precios });
 		} catch (error) {
-			console.error("Error al cargar precios:", error);
+			// Error handled
 		}
 	};
 
@@ -240,7 +240,7 @@ export class ActividadesComponent extends Component {
 			await this.loadPrecios();
 			this.cerrarModalPrecio();
 		} catch (error) {
-			console.error("Error al guardar precio:", error);
+			// Error handled
 			Swal.fire({
 				icon: "error",
 				title: "Error",

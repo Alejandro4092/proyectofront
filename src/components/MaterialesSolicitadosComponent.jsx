@@ -76,7 +76,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error:", error);
+				// Error handled
 				this.setState({
 					error: "Error al cargar los materiales",
 					cargando: false,
@@ -93,7 +93,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al obtener eventos:", error);
+				// Error handled
 			});
 	};
 
@@ -106,7 +106,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al obtener eventos para filtro:", error);
+				// Error handled
 			});
 	};
 
@@ -130,7 +130,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al obtener actividades para filtro:", error);
+				// Error handled
 				this.setState({ actividadesFiltroLista: [] });
 			});
 	};
@@ -157,14 +157,14 @@ export class MaterialesSolicitadosComponent extends Component {
 					});
 				})
 				.catch((error) => {
-					console.error("Error:", error);
+					// Error handled
 					this.setState({
 						error: "Error al cargar los materiales",
 						cargando: false,
 					});
 				});
 		} catch (error) {
-			console.error("Error al obtener idEventoActividad:", error);
+			// Error handled
 			this.setState({ cargando: false });
 		}
 	};
@@ -184,7 +184,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				});
 			})
 			.catch((error) => {
-				console.error("Error al obtener actividades:", error);
+				// Error handled
 				this.setState({ actividadesLista: [] });
 			});
 	};
@@ -271,11 +271,11 @@ export class MaterialesSolicitadosComponent extends Component {
 					this.setState({ ultimaActualizacion: Date.now() });
 				})
 				.catch((error) => {
-					console.error("Error:", error);
+					// Error handled
 					Swal.fire("Error", "Error al solicitar el material", "error");
 				});
 		} catch (error) {
-			console.error("Error al obtener idEventoActividad:", error);
+			// Error handled
 			Swal.fire("Error", "Error al procesar la solicitud", "error");
 		}
 	};
@@ -309,7 +309,7 @@ export class MaterialesSolicitadosComponent extends Component {
 				this.setState({ ultimaActualizacion: Date.now() });
 			})
 			.catch((error) => {
-				console.error("Error:", error);
+				// Error handled
 				Swal.fire("Error", "Error al aportar el material", "error");
 			});
 	};
