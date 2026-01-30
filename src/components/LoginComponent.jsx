@@ -148,9 +148,7 @@ export class LoginComponent extends Component {
               </button>
             </form>
 
-            <div className="register-link">
-              ¿No tienes cuenta? <span className="link-text">Regístrate</span>
-            </div>
+         
           </div>
         </div>
       </div>
