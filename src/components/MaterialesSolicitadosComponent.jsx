@@ -33,6 +33,8 @@ export class MaterialesSolicitadosComponent extends Component {
 			actividadesFiltroLista: [],
 			// Control de actualizaciones
 			ultimaActualizacion: null,
+			// Filtro de estado de materiales
+			filtroEstado: "todos", // "todos", "pendientes", "aportados"
 		};
 	}
 
@@ -349,6 +351,28 @@ export class MaterialesSolicitadosComponent extends Component {
 					</button>
 				</div>
 
+				{/* Botones de filtro por estado */}
+				<div className="filtro-estado-container">
+					<button
+						className={`btn-filtro-estado ${this.state.filtroEstado === "todos" ? "activo" : ""}`}
+						onClick={() => this.setState({ filtroEstado: "todos" })}
+					>
+						Todos
+					</button>
+					<button
+						className={`btn-filtro-estado ${this.state.filtroEstado === "pendientes" ? "activo" : ""}`}
+						onClick={() => this.setState({ filtroEstado: "pendientes" })}
+					>
+						⏳ Pendientes
+					</button>
+					<button
+						className={`btn-filtro-estado ${this.state.filtroEstado === "aportados" ? "activo" : ""}`}
+						onClick={() => this.setState({ filtroEstado: "aportados" })}
+					>
+						✓ Aportados
+					</button>
+				</div>
+
 				{/* Filtros */}
 				<div className="materiales-filtros">
 					<div className="mat-form-group">
@@ -403,63 +427,72 @@ export class MaterialesSolicitadosComponent extends Component {
 					<div className="sin-materiales">No hay materiales registrados</div>
 				) : (
 					<div className="materiales-grid">
-						{materiales.map((item) => {
-							const { material, usuarioMaterial, usuarioAportacionMaterial } =
-								item;
-							return (
-								<div
-									key={material.idMaterial}
-									className={`material-card ${material.pendiente ? "pendiente" : "aportado"}`}
-								>
-									<div className="material-header">
-										<h3>{material.nombreMaterial}</h3>
-										<span
-											className={`estado ${material.pendiente ? "pendiente" : "aportado"}`}
-										>
-											{material.pendiente ? "⏳ Pendiente" : "✓ Aportado"}
-										</span>
-									</div>
-
-									<div className="material-body">
-										<div className="material-info">
-											<span className="label">Solicitado por:</span>
-											<span className="valor">
-												{usuarioMaterial
-													? usuarioMaterial.usuario
-													: `Usuario ${material.idUsuario}`}
+						{materiales
+							.filter((item) => {
+								if (this.state.filtroEstado === "todos") return true;
+								if (this.state.filtroEstado === "pendientes")
+									return item.material.pendiente === true;
+								if (this.state.filtroEstado === "aportados")
+									return item.material.pendiente === false;
+								return true;
+							})
+							.map((item) => {
+								const { material, usuarioMaterial, usuarioAportacionMaterial } =
+									item;
+								return (
+									<div
+										key={material.idMaterial}
+										className={`material-card ${material.pendiente ? "pendiente" : "aportado"}`}
+									>
+										<div className="material-header">
+											<h3>{material.nombreMaterial}</h3>
+											<span
+												className={`estado ${material.pendiente ? "pendiente" : "aportado"}`}
+											>
+												{material.pendiente ? "⏳ Pendiente" : "✓ Aportado"}
 											</span>
 										</div>
 
-										<div className="material-info">
-											<span className="label">Fecha solicitud:</span>
-											<span className="valor">
-												{this.formatearFecha(material.fechaSolicitud)}
-											</span>
-										</div>
-
-										{!material.pendiente && usuarioAportacionMaterial && (
+										<div className="material-body">
 											<div className="material-info">
-												<span className="label">Aportado por:</span>
+												<span className="label">Solicitado por:</span>
 												<span className="valor">
-													{usuarioAportacionMaterial.usuario}
+													{usuarioMaterial
+														? usuarioMaterial.usuario
+														: `Usuario ${material.idUsuario}`}
 												</span>
 											</div>
-										)}
-									</div>
 
-									<div className="material-footer">
-										{material.pendiente && (
-											<button
-												className="btn-aportar"
-												onClick={() => this.abrirModalAportar(material)}
-											>
-												Aportar Material
-											</button>
-										)}
+											<div className="material-info">
+												<span className="label">Fecha solicitud:</span>
+												<span className="valor">
+													{this.formatearFecha(material.fechaSolicitud)}
+												</span>
+											</div>
+
+											{!material.pendiente && usuarioAportacionMaterial && (
+												<div className="material-info">
+													<span className="label">Aportado por:</span>
+													<span className="valor">
+														{usuarioAportacionMaterial.usuario}
+													</span>
+												</div>
+											)}
+										</div>
+
+										<div className="material-footer">
+											{material.pendiente && (
+												<button
+													className="btn-aportar"
+													onClick={() => this.abrirModalAportar(material)}
+												>
+													Aportar Material
+												</button>
+											)}
+										</div>
 									</div>
-								</div>
-							);
-						})}
+								);
+							})}
 					</div>
 				)}
 
