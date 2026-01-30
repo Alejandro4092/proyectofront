@@ -497,7 +497,8 @@ export class ActividadesComponent extends Component {
 											</button>
 										) : (
 											!this.estaInscritoEnEvento() &&
-											this.esEventoPasado(actividad.fechaEvento) && (
+											this.esEventoPasado(actividad.fechaEvento) &&
+											!this.context.esProfesor && (
 												<button
 													className="btn-inscribirse"
 													onClick={(e) => {

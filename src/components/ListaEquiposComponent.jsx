@@ -164,7 +164,7 @@ export class ListaEquiposComponent extends Component {
 							"Error",
 							error.response?.status === 404
 								? "El equipo no fue encontrado."
-								: "No se pudo eliminar el equipo. Inténtalo de nuevo.",
+								: "No se pudo eliminar el equipo, revisa si tiene partidos. Inténtalo de nuevo.",
 							"error",
 						);
 					});

@@ -89,7 +89,7 @@ export default class EventosService {
     }
     eliminarEventoCompleto = async (idEvento, token) => {
         return new Promise(function (resolve, reject) {
-            let request = Global.apiDeportes + "/api/ActividadesEvento/DeleteEventoActividadPanic/" + idEvento
+            let request = Global.apiDeportes + "/api/Eventos/DeleteEventoPanic/" + idEvento
             axios.delete(request, {
                 headers: {
                     'Authorization': `Bearer ${token}`

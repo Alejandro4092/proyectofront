@@ -143,6 +143,7 @@ export class CrearEquipoComponent extends Component {
 				idCurso: this.context.usuario.idCurso,
 			};
 
+			console.log("Datos del nuevo equipo:", nuevoEquipo);
 			const data = await serviceEquipos.crearEquipo(
 				nuevoEquipo,
 				this.context.token,

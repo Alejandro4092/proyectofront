@@ -290,7 +290,7 @@
     border: 2px solid #9a7fd4;
     border-radius: 8px;
     background-color: #f8f9fa;
-    color: #ffffff;
+    color: #000000;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -319,7 +319,7 @@
     padding: 12px 24px;
     border-radius: 8px;
     border: 2px solid #9a7fd4;
-    background-color: transparent;
+    background-color: rgba(177, 5, 5, 0.842);
     color: #ffffff;
     font-weight: 600;
     cursor: pointer;
@@ -328,7 +328,7 @@
 }
 
 .equipos-btn-cancel:hover {
-    background-color: rgba(184, 164, 232, 0.2);
+    background-color: rgba(141, 8, 8, 0.842);
 }
 
 .equipos-btn-submit {

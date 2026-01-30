@@ -111,7 +111,7 @@ export class EventosComponent extends Component {
 		}
 		let token = this.context.token;
 		serviceEventos
-			.eliminarEvento(id, token)
+			.eliminarEventoCompleto(id, token)
 			.then((data) => {
 				Swal.fire({
 					title: "Eliminado",

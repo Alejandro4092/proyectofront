@@ -42,7 +42,6 @@
     align-items: center;
     gap: 8px;
     white-space: nowrap;
-    background-color: #423c92;
 }
 
 .custom-navbar .nav-link::before {
